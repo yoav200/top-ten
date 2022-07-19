@@ -23,15 +23,13 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
+                    <a class="nav-link" href="index">Select Player<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="#">Player</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
+                    <a class="nav-link" href="#">My List</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
@@ -43,23 +41,215 @@
 
 <div class="container">
 
-    <div class="row">
-        <div class="col-md-4 mt-5">
-            <form method="post" th:object="${homePageModel}">
+    <div class="jumbotron">
+        <h2 class="display-4">Hello, world!</h2>
+        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
+            featured content or information.</p>
+        <hr class="my-4">
+
+        <form method="post" id="select-player-form" th:object="${homePageModel}">
+            <div class="form-group">
+
+                <label for="player">Select Player</label>
+
+                <select id="player" class="form-control" th:field="*{playerItem}">
+                    <option value="">Search player</option>
+                </select>
+            </div>
+        </form>
 
 
-                <div class="form-group">
-                    <label for="player">Select player</label>
-                    <select id="player" class="form-control select2-single" th:field="*{playerItem}">
-                        <option value="">Search player</option>
-                    </select>
+        <div th:if="${player}">
+
+
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img th:if="${player.playerInfo.imageUrl}"
+                             class="img-fluid rounded-start"
+                             itemscope="image"
+                             th:src="${player.playerInfo.imageUrl}"
+                             alt="Photo of ${player.playerInfo.fullName}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title" th:text="${player.playerInfo.fullName}"></h3>
+                            <p class="card-text">
+                            <div><strong>Birthday:</strong> <span th:text="${player.playerInfo.DOB}"/></div>
+                            <div><strong>Years Active:</strong> <span th:text="${player.playerInfo.yearsActive}"/></div>
+                            <div><strong>Active:</strong> <span th:text="${player.playerInfo.active}"/></div>
+                            </p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
 
-                <button class="btn btn-primary" type="submit">Submit form</button>
-            </form>
+            <!--            <h2 class="mt-5">-->
+            <!--                <img th:if="${player.playerInfo.imageUrl}" itemscope="image" th:src="${player.playerInfo.imageUrl}" alt="Photo of ${player.playerInfo.fullName}">-->
+            <!--                <strong th:text="${player.playerInfo.fullName}"></strong>-->
+            <!--            </h2>-->
+
+            <table class="table table-hover">
+                <caption>Achievements</caption>
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Award</th>
+                    <th scope="col">#</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">Championships</th>
+                    <td th:if="${player.achievements.championshipsAba > 0}"
+                        th:text="${player.achievements.championships} + ' NBA ' + ${player.achievements.championshipsAba} + ' ABA'">
+                    </td>
+                    <td th:if="${player.achievements.championshipsAba == 0}"
+                        th:text="${player.achievements.championships}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Finals Mvp</th>
+                    <td th:text="${player.achievements.finalsMvp}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">MVP</th>
+                    <td th:text="${player.achievements.leagueMvp}"></td>
+                </tr>
+                <tr th:if="${player.achievements.scoringChamp > 0}">
+                    <th scope="row">Scoring Champ.</th>
+                    <td th:text="${player.achievements.scoringChamp}"></td>
+                </tr>
+                <tr th:if="${player.achievements.reboundChamp > 0}">
+                    <th scope="row">Rebound Champ.</th>
+                    <td th:text="${player.achievements.reboundChamp}"></td>
+                </tr>
+                <tr th:if="${player.achievements.assistChamp > 0}">
+                    <th scope="row">Assist Champ.</th>
+                    <td th:text="${player.achievements.assistChamp}"></td>
+                </tr>
+                <tr th:if="${player.achievements.stealsChamp > 0}">
+                    <th scope="row">Steal Champ.</th>
+                    <td th:text="${player.achievements.stealsChamp}"></td>
+                </tr>
+                <tr th:if="${player.achievements.blocksChamp > 0}">
+                    <th scope="row">Block Champ.</th>
+                    <td th:text="${player.achievements.blocksChamp}"></td>
+                </tr>
+                <tr th:if="${player.achievements.defensivePlayerOfTheYear > 0}">
+                    <th scope="row">DPY</th>
+                    <td th:text="${player.achievements.defensivePlayerOfTheYear}"></td>
+                </tr>
+                <tr th:if="${player.achievements.allNba > 0}">
+                    <th scope="row">All NBA</th>
+                    <td th:text="${player.achievements.allNba}"></td>
+                </tr>
+                <tr th:if="${player.achievements.allDefensive > 0}">
+                    <th scope="row">All Defensive</th>
+                    <td th:text="${player.achievements.allDefensive}"></td>
+                </tr>
+                <tr th:if="${player.achievements.allStar > 0}">
+                    <th scope="row">All Star</th>
+                    <td th:text="${player.achievements.allStar}"></td>
+                </tr>
+                <tr th:if="${player.achievements.allStarMvp > 0}">
+                    <th scope="row">All Star MVP</th>
+                    <td th:text="${player.achievements.allStarMvp}"></td>
+                </tr>
+                <tr th:if="${player.achievements.rookieOfTheYear > 0}">
+                    <th scope="row">ROY</th>
+                    <td th:text="${player.achievements.rookieOfTheYear}"></td>
+                </tr>
+                <tr th:if="${player.achievements.mostImprove > 0}">
+                    <th scope="row">Most Improved</th>
+                    <td th:text="${player.achievements.mostImprove}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <table class="table table-striped table-hover ">
+                <caption>Career stats</caption>
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Per Game</th>
+                    <th scope="col">Points</th>
+                    <th scope="col">Assists</th>
+                    <th scope="col">Rebounds</th>
+                    <th scope="col">Steels</th>
+                    <th scope="col">Blocks</th>
+                    <th scope="col">Turnovers</th>
+                    <th scope="col" title="Player Efficiency Rating">PER</th>
+                    <th scope="col" title="Win Shares /48 minutes">WS/48</th>
+                    <th scope="col" title="Box Plus/Minus">BPM</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">Regular season</th>
+                    <td th:text="${player.careerPerGame.ptsPerGame}"></td>
+                    <td th:text="${player.careerPerGame.trbPerGme}"></td>
+                    <td th:text="${player.careerPerGame.astPerGame}"></td>
+                    <td th:text="${player.careerPerGame.stlPerGame}"></td>
+                    <td th:text="${player.careerPerGame.blkPerGame}"></td>
+                    <td th:text="${player.careerPerGame.tovPerGame}"></td>
+                    <td th:text="${player.careerPerGame.per}"></td>
+                    <td th:text="${player.careerPerGame.wsPer48}"></td>
+                    <td th:text="${player.careerPerGame.bpm}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Playoff</th>
+                    <td th:text="${player.playoffsPerGame.ptsPerGame}"></td>
+                    <td th:text="${player.playoffsPerGame.trbPerGme}"></td>
+                    <td th:text="${player.playoffsPerGame.astPerGame}"></td>
+                    <td th:text="${player.playoffsPerGame.stlPerGame}"></td>
+                    <td th:text="${player.playoffsPerGame.blkPerGame}"></td>
+                    <td th:text="${player.playoffsPerGame.tovPerGame}"></td>
+                    <td th:text="${player.playoffsPerGame.per}"></td>
+                    <td th:text="${player.playoffsPerGame.wsPer48}"></td>
+                    <td th:text="${player.playoffsPerGame.bpm}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+
+
+            <table class="table table-striped table-hover ">
+                <caption>Shooting</caption>
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Per Game</th>
+                    <th scope="col" title="Field Goal Percentage">FG%</th>
+                    <th scope="col" title="Free Throws Percentage">FT%</th>
+                    <th scope="col" title="3-Point Field Goal Percentage">3P%</th>
+                    <th scope="col" title="Effective Field Goal Percentage">eFG%</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">Regular season</th>
+                    <td th:text="${player.careerPerGame.fgPct}"></td>
+                    <td th:text="${player.careerPerGame.ftPct}"></td>
+                    <td th:text="${player.careerPerGame.fg3Pct}"></td>
+                    <td th:text="${player.careerPerGame.efgPct}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Playoff</th>
+                    <td th:text="${player.playoffsPerGame.fgPct}"></td>
+                    <td th:text="${player.playoffsPerGame.ftPct}"></td>
+                    <td th:text="${player.playoffsPerGame.fg3Pct}"></td>
+                    <td th:text="${player.playoffsPerGame.efgPct}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+
+
         </div>
     </div>
+
 
 </div>
 
@@ -70,6 +260,7 @@
 <script th:src="@{assets/select2-develop/dist/js/select2.full.js}"></script>
 
 <script>
+
     $("#player").select2({
         theme: "bootstrap4",
         templateResult: formatPlayerItem,
@@ -84,6 +275,8 @@
             },
             cache: true
         }
+    }).change(function(){
+        $('#select-player-form').submit();
     });
 
 
@@ -93,6 +286,9 @@
       );
       return $player;
     };
+
+
+
 
 
 </script>

@@ -15,10 +15,6 @@ public class Player {
 
     private final PlayerStats playoffsPerGame;
 
-    private final PlayerAdvancedStats careerAdvanced;
-
-    private final PlayerAdvancedStats playoffsAdvanced;
-
     private final PlayerAchievements achievements;
 
 }

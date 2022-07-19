@@ -28,4 +28,8 @@ public class PlayerInfo {
 
     private final String yearsActive;
 
+    private final String experience;
+
+    private final boolean active;
+
 }

@@ -29,4 +29,14 @@ public class PlayerStats {
 
     private final double efgPct;
 
+    // advanced stats
+    private final double per;
+
+    private final double ws;
+
+    private final double wsPer48;
+
+    private final double bpm;
+
+
 }

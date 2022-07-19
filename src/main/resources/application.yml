@@ -56,3 +56,4 @@ management:
 service:
   scrapers:
     basketball-reference-url: "https://www.basketball-reference.com/"
+    nba-stats: "https://www.nba.com/stats/"

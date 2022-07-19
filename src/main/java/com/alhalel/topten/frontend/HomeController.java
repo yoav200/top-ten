@@ -37,7 +37,8 @@ public class HomeController {
         Player player = playersService.getPlayer(homePageModel.getPlayerItem());
         model.addAttribute("homePageModel", homePageModel);
         model.addAttribute("player", player);
-        return "player-card";
+        //return "player-card";
+        return "index";
     }
 
 }

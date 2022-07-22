@@ -1,4 +1,4 @@
-package com.alhalel.topten.frontend;
+package com.alhalel.topten.controllers;
 
 import com.alhalel.topten.model.PlayerItem;
 import com.alhalel.topten.services.PlayersService;

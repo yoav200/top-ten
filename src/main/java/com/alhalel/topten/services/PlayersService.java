@@ -2,6 +2,7 @@ package com.alhalel.topten.services;
 
 import com.alhalel.topten.enteties.Player;
 import com.alhalel.topten.model.PlayerItem;
+import com.alhalel.topten.repositories.PlayerRepository;
 import com.alhalel.topten.scrapers.BasketballReferenceScarper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -34,6 +35,7 @@ public class PlayersService {
 
     private final BasketballReferenceScarper scarper;
 
+    private final PlayerRepository playerRepository;
 
     @PostConstruct
     public void init() {
@@ -68,12 +70,15 @@ public class PlayersService {
     }
 
     public Player getPlayer(String uniqueName) {
-        return Optional.ofNullable(playersItems.get(uniqueName)).map(playerItem -> {
-            try {
-                return scarper.getPlayer(playerItem);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).orElseThrow(() -> new IllegalArgumentException("Player not found"));
+        return Optional.ofNullable(playersItems.get(uniqueName))
+                .map(playerItem ->
+                        playerRepository.findPlayerByUniqueName(uniqueName).orElseGet(() -> {
+                            try {
+                                Player player = scarper.getPlayer(playerItem);
+                                return playerRepository.save(player);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })).orElseThrow(() -> new IllegalArgumentException("Player not found"));
     }
 }

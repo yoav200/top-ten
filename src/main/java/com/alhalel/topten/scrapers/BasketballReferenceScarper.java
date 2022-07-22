@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,19 +46,22 @@ public class BasketballReferenceScarper {
 
         Document doc = Jsoup.connect(playerurl).get();
 
-        return Player.builder()
-                //.id()
-                .playerInfo(getPlayerInfo(playerItem, doc, "meta"))
-                .careerPerGame(getPlayerStats(doc, "per_game", "advanced"))
-                .playoffsPerGame(getPlayerStats(doc, "playoffs_per_game", "playoffs_advanced"))
-                .achievements(getPlayerAchievements(doc, "bling"))
-                .build();
+        Player player = new Player();
+        player.setUniqueName(playerItem.getUniqueName());
+        player.setPlayerInfo(getPlayerInfo(playerItem, doc, "meta"));
+        player.setAchievements(getPlayerAchievements(doc, "bling"));
+        player.setPlayerStats(Set.of(
+                getPlayerStats(doc, "per_game", "advanced", PlayerStats.StatsFor.REGULAR_SEASON),
+                getPlayerStats(doc, "playoffs_per_game", "playoffs_advanced", PlayerStats.StatsFor.PLAYOFFS)
+        ));
+
+        return player;
     }
 
     public PlayerInfo getPlayerInfo(PlayerItem playerItem, Document doc, String id) {
         PlayerInfo.PlayerInfoBuilder infoBuilder = PlayerInfo.builder()
                 .fullName(playerItem.getFullName())
-                .uniqueName(playerItem.getUniqueName())
+                //.uniqueName(playerItem.getUniqueName())
                 .yearsActive(playerItem.getYearsActive())
                 .active(playerItem.isActive());
 
@@ -143,8 +147,8 @@ public class BasketballReferenceScarper {
      * @param id  playoffs_per_game, per_game
      * @return PlayerStats if found
      */
-    private PlayerStats getPlayerStats(Document doc, String id, String id2) {
-        PlayerStats.PlayerStatsBuilder statsBuilder = PlayerStats.builder();
+    private PlayerStats getPlayerStats(Document doc, String id, String id2, PlayerStats.StatsFor statsFor) {
+        PlayerStats.PlayerStatsBuilder statsBuilder = PlayerStats.builder().statsFor(statsFor);
 
         // per game
         Optional.ofNullable(doc.getElementById(id))

@@ -16,12 +16,15 @@ import java.util.Objects;
 @Getter
 @ToString
 @Entity
-@Table(name = "player_achievements")
-public class PlayerAchievements {
+@Table(name = "rank_list_item",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"rank_list_id", "player_id"}),
+                @UniqueConstraint(columnNames = {"rank_list_id", "rank"})
+        })
+public class RankListItem {
 
     @Id
-    //@GeneratedValue
-    @Column(name = "player_id")
+    @GeneratedValue
     private Long id;
 
     @CreationTimestamp
@@ -30,48 +33,23 @@ public class PlayerAchievements {
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
 
-    @OneToOne
-    @MapsId
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
-    private int championships;
+    private int rank;
 
-    private int championshipsAba;
 
-    private int finalsMvp;
-
-    private int leagueMvp;
-
-    private int scoringChamp;
-
-    private int reboundChamp;
-
-    private int assistChamp;
-
-    private int stealsChamp;
-
-    private int blocksChamp;
-
-    private int defensivePlayerOfTheYear;
-
-    private int allNba;
-
-    private int allDefensive;
-
-    private int allStar;
-
-    private int allStarMvp;
-
-    private int rookieOfTheYear;
-
-    private int mostImprove;
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        PlayerAchievements that = (PlayerAchievements) o;
+        RankListItem that = (RankListItem) o;
         return id != null && Objects.equals(id, that.id);
     }
 

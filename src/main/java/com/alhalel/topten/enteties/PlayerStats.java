@@ -1,42 +1,83 @@
 package com.alhalel.topten.enteties;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Builder
-@Data
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Builder(toBuilder = true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Setter(value = AccessLevel.PACKAGE)
+@Getter
+@ToString
+@Entity
+@Table(name = "player_stats")
 public class PlayerStats {
 
-    private final double games;
+    public enum StatsFor {
+        REGULAR_SEASON, PLAYOFFS
+    }
 
-    private final double ptsPerGame;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    private final double trbPerGme;
+    @CreationTimestamp
+    private LocalDateTime createDateTime;
 
-    private final double astPerGame;
+    @UpdateTimestamp
+    private LocalDateTime updateDateTime;
 
-    private final double stlPerGame;
+    @Enumerated(EnumType.STRING)
+    private StatsFor statsFor;
 
-    private final double blkPerGame;
+    private double games;
 
-    private final double tovPerGame;
+    private double ptsPerGame;
 
-    private final double fgPct;
+    private double trbPerGme;
 
-    private final double fg3Pct;
+    private double astPerGame;
 
-    private final double ftPct;
+    private double stlPerGame;
 
-    private final double efgPct;
+    private double blkPerGame;
+
+    private double tovPerGame;
+
+    private double fgPct;
+
+    private double fg3Pct;
+
+    private double ftPct;
+
+    private double efgPct;
 
     // advanced stats
-    private final double per;
+    private double per;
 
-    private final double ws;
+    private double ws;
 
-    private final double wsPer48;
+    private double wsPer48;
 
-    private final double bpm;
+    private double bpm;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        PlayerStats that = (PlayerStats) o;
+        return id != null && Objects.equals(id, that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
+

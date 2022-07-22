@@ -4,9 +4,9 @@
     <meta charset="UTF-8"/>
     <title>Spring Boot Thymeleaf Application - Bootstrap Autocomplete</title>
 
-    <link th:rel="stylesheet" th:href="@{assets/select2-develop/dist/css/select2.css}"/>
-    <link th:rel="stylesheet" th:href="@{assets/select2-bootstrap4-theme-master/dist/select2-bootstrap4.css}"/>
-    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/assets/select2-develop/dist/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{/assets/select2-bootstrap4-theme-master/dist/select2-bootstrap4.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
 
 </head>
 <body>
@@ -14,25 +14,29 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
-        <a class="navbar-brand" href="/">Thymeleaf - Bootstrap Autocomplete</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        <a class="navbar-brand" href="#">Top Ten - Rank Greatest NBA Playes of ALL Time</a>
+        <button class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarResponsive"
                 aria-controls="navbarResponsive"
-                aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index">Select Player<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#">Rank<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Player</a>
+                    <a class="nav-link" href="/ranking">My Ranking</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">My List</a>
+                    <a class="nav-link" href="#">Social</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link" href="#">Login</a>
                 </li>
             </ul>
         </div>
@@ -42,56 +46,119 @@
 <div class="container">
 
     <div class="jumbotron">
-        <h2 class="display-4">Hello, world!</h2>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-            featured content or information.</p>
-        <hr class="my-4">
 
         <form method="post" id="select-player-form" th:object="${homePageModel}">
             <div class="form-group">
-
-                <label for="player">Select Player</label>
-
                 <select id="player" class="form-control" th:field="*{playerItem}">
                     <option value="">Search player</option>
                 </select>
             </div>
         </form>
 
+        <hr class="my-4">
 
         <div th:if="${player}">
 
-
             <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
+                <div class="row g-0 border">
+                    <div class="col-md-2">
                         <img th:if="${player.playerInfo.imageUrl}"
                              class="img-fluid rounded-start"
                              itemscope="image"
                              th:src="${player.playerInfo.imageUrl}"
                              alt="Photo of ${player.playerInfo.fullName}">
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-5">
                         <div class="card-body">
                             <h3 class="card-title" th:text="${player.playerInfo.fullName}"></h3>
-                            <p class="card-text">
-                            <div><strong>Birthday:</strong> <span th:text="${player.playerInfo.DOB}"/></div>
-                            <div><strong>Years Active:</strong> <span th:text="${player.playerInfo.yearsActive}"/></div>
-                            <div><strong>Active:</strong> <span th:text="${player.playerInfo.active}"/></div>
-                            </p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            <table class="table card-text">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Date of Birth</th>
+                                    <td><span th:text="${player.playerInfo.DOB}"/</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Years Active</th>
+                                    <td><span th:text="${player.playerInfo.yearsActive}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Active</th>
+                                    <td><span th:text="${player.playerInfo.active}"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <p class="card-text"><small class="text-muted">Last updated <span
+                                    th:text="${player.updateDateTime}"/></small></p>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card-body">
+                            <h3 class="card-title">Rank</h3>
+
+                            <table class="table card-text">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Average</th>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">High</th>
+                                    <td>9</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Low</th>
+                                    <td>22</td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <th scope="row">Yours</th>
+                                    <td>
+
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span th:if="${rankingItem}" th:text="${rankingItem.rank}"/>
+                                                <span th:unless="${rankingItem}" th:text="unranked"/>
+                                            </a>
+
+                                            <div class="dropdown-menu">
+                                                <div class="dropdown-header">Rank Player</div>
+                                                <div class="dropdown-item">
+                                                    <!-- Default value -->
+                                                    <span id="rangeval"
+                                                          th:text="${rankingItem!=null ? rankingItem.rank : '50'} "/>
+
+                                                    <input type="range" class="form-control-range"
+                                                           min="1"
+                                                           max="75"
+                                                           id="ranking-value"
+                                                           onInput="$('#rangeval').html($(this).val())">
+                                                </div>
+                                                <div class="dropdown-item">
+                                                    <button id="set-ranking" type="button"
+                                                            class="btn btn-link float-left">Set
+                                                    </button>
+                                                    <button id="remove-ranking" type="button"
+                                                            class="btn btn-link float-right">Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+
                         </div>
                     </div>
                 </div>
             </div>
 
-
-            <!--            <h2 class="mt-5">-->
-            <!--                <img th:if="${player.playerInfo.imageUrl}" itemscope="image" th:src="${player.playerInfo.imageUrl}" alt="Photo of ${player.playerInfo.fullName}">-->
-            <!--                <strong th:text="${player.playerInfo.fullName}"></strong>-->
-            <!--            </h2>-->
-
-            <table class="table table-hover">
+            <table class="table table-hover table-sm">
                 <caption>Achievements</caption>
                 <thead class="thead-dark">
                 <tr>
@@ -137,7 +204,7 @@
                     <td th:text="${player.achievements.blocksChamp}"></td>
                 </tr>
                 <tr th:if="${player.achievements.defensivePlayerOfTheYear > 0}">
-                    <th scope="row">DPY</th>
+                    <th scope="row">DPOY</th>
                     <td th:text="${player.achievements.defensivePlayerOfTheYear}"></td>
                 </tr>
                 <tr th:if="${player.achievements.allNba > 0}">
@@ -188,8 +255,8 @@
                 <tr>
                     <th scope="row">Regular season</th>
                     <td th:text="${player.careerPerGame.ptsPerGame}"></td>
-                    <td th:text="${player.careerPerGame.trbPerGme}"></td>
                     <td th:text="${player.careerPerGame.astPerGame}"></td>
+                    <td th:text="${player.careerPerGame.trbPerGme}"></td>
                     <td th:text="${player.careerPerGame.stlPerGame}"></td>
                     <td th:text="${player.careerPerGame.blkPerGame}"></td>
                     <td th:text="${player.careerPerGame.tovPerGame}"></td>
@@ -200,8 +267,8 @@
                 <tr>
                     <th scope="row">Playoff</th>
                     <td th:text="${player.playoffsPerGame.ptsPerGame}"></td>
-                    <td th:text="${player.playoffsPerGame.trbPerGme}"></td>
                     <td th:text="${player.playoffsPerGame.astPerGame}"></td>
+                    <td th:text="${player.playoffsPerGame.trbPerGme}"></td>
                     <td th:text="${player.playoffsPerGame.stlPerGame}"></td>
                     <td th:text="${player.playoffsPerGame.blkPerGame}"></td>
                     <td th:text="${player.playoffsPerGame.tovPerGame}"></td>
@@ -250,20 +317,58 @@
         </div>
     </div>
 
-
 </div>
 
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{assets/select2-develop/dist/js/select2.full.js}"></script>
+<script th:src="@{/assets/select2-develop/dist/js/select2.full.js}"></script>
 
-<script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var playerItem = /*[[${homePageModel.playerItem}]]*/ "";
+    console.log(playerItem);
+
+    $("#set-ranking").click(function() {
+       $.ajax({
+            url: "/ranking/" + playerItem,
+            data: {
+                "ranking": $("#ranking-value").val()
+            },
+            cache: false,
+            type: "POST",
+            success: function(response) {
+                console.log("Yea!");
+            },
+            error: function(xhr) {
+                console.log("Ho no...");
+            }
+        });
+    });
+
+    $("#remove-ranking").click(function() {
+       $.ajax({
+            url: "/ranking/" + playerItem,
+            cache: false,
+            type: "DELETE",
+            success: function(response) {
+                console.log("Yea!");
+            },
+            error: function(xhr) {
+                console.log("Ho no...");
+            }
+        });
+    });
 
     $("#player").select2({
         theme: "bootstrap4",
         templateResult: formatPlayerItem,
+        placeholder: {
+            id: playerItem, // the value of the option
+            text: 'Select an option'
+          },
         ajax: {
             url: '/players',
             dataType: 'json',
@@ -277,7 +382,7 @@
         }
     }).change(function(){
         $('#select-player-form').submit();
-    });
+    }).val(playerItem);
 
 
     function formatPlayerItem (player) {
@@ -287,7 +392,7 @@
       return $player;
     };
 
-
+/*]]>*/
 
 
 

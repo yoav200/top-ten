@@ -7,10 +7,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class PlayerStatistics {
 
-    private final int rankLow;
+    private final Integer rankLow;
 
-    private final int rankHigh;
+    private final Integer rankHigh;
 
-    private final double rankAverage;
+    private final Double rankAverage;
 
+    public boolean isValid() {
+        return rankLow != null && rankHigh != null && rankAverage != null;
+    }
 }

@@ -30,7 +30,7 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container justify-content-center">
             <i class="fa-solid fa-basketball-hoop"></i>
-            <span class="navbar-brand mb-0 h1">Rank The Greatest NBA Players</span>
+            <span class="navbar-brand mb-0 h1">Rank NBA Greatest</span>
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -126,22 +126,22 @@
                                 <tr>
                                     <th scope="row">Average</th>
                                     <td>
-                                        <span th:if="${statistics}" th:text="${statistics.rankAverage}"></span>
-                                        <span th:unless="${statistics}" th:text="N/A"></span>
+                                        <span th:if="${statistics.isValid}" th:text="${statistics.rankAverage}"></span>
+                                        <span th:unless="${statistics.isValid}" th:text="'N/A'"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">High</th>
                                     <td>
-                                        <span th:if="${statistics}" th:text="${statistics.rankHigh}"></span>
-                                        <span th:unless="${statistics}" th:text="N/A"></span>
+                                        <span th:if="${statistics.isValid}" th:text="${statistics.rankHigh}"></span>
+                                        <span th:unless="${statistics.isValid}" th:text="'N/A'"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Low</th>
                                     <td>
-                                        <span th:if="${statistics}" th:text="${statistics.rankLow}"></span>
-                                        <span th:unless="${statistics}" th:text="N/A"></span>
+                                        <span th:if="${statistics.isValid}" th:text="${statistics.rankLow}"></span>
+                                        <span th:unless="${statistics.isValid}" th:text="'N/A'"></span>
                                     </td>
                                 </tr>
                                 <tr class="table-primary">

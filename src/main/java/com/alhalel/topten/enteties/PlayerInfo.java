@@ -55,7 +55,7 @@ public class PlayerInfo {
 
     private String yearsActive;
 
-    private String experience;
+    //private String experience;
 
     private boolean active;
 

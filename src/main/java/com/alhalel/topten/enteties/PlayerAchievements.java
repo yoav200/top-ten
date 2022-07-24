@@ -20,7 +20,6 @@ import java.util.Objects;
 public class PlayerAchievements {
 
     @Id
-    //@GeneratedValue
     @Column(name = "player_id")
     private Long id;
 

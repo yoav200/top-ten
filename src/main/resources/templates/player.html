@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Yoav">
+    <meta name="generator" content="Hugo 0.84.0">
+    <meta name="theme-color" content="#7952b3">
+    <title>Top Ten - Rank Greatest NBA Players of ALL Time</title>
+
+    <link rel="canonical" href="http://localhost:8080/">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+          crossorigin="anonymous">
+    <!-- bootstrap-icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <!-- select2 shit -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container justify-content-center">
+            <i class="fa-solid fa-basketball-hoop"></i>
+            <span class="navbar-brand mb-0 h1">Rank The Greatest NBA Players</span>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <a href="#" class="nav-item nav-link active">Players</a>
+                    <a href="/ranking/" class="nav-item nav-link">Ranking</a>
+                    <a href="#" class="nav-item nav-link disabled">Social</a>
+                    <a href="#" class="nav-item nav-link disabled">Login</a>
+                </div>
+
+                <form id="select-player-header-form" method="get" class="col-md-4" role="search">
+                    <select id="player-search-header" class="form-select me-4">
+                        <option value="">Search player</option>
+                    </select>
+                </form>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <!-- Position it: -->
+            <!-- - `.toast-container` for spacing between toasts -->
+            <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
+            <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
+            <div class="toast-container top-0 end-0 p-3">
+                <!-- Then put toasts within -->
+                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <i class="bi-gift-fill"></i>
+                        <strong class="me-auto">Bootstrap</strong>
+                        <small class="text-muted">just now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        See? Just like this.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div th:if="${player}">
+            <div class="card mb-3">
+                <div class="row g-0 border">
+                    <div class="col-md-2">
+                        <img th:if="${player.playerInfo.imageUrl}"
+                             class="img-fluid rounded-start"
+                             itemscope="image"
+                             th:src="${player.playerInfo.imageUrl}"
+                             alt="Photo of ${player.playerInfo.fullName}">
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="card-body">
+                            <h3 class="card-title" th:text="${player.playerInfo.fullName}"></h3>
+                            <table class="table card-text">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Date of Birth</th>
+                                    <td><span th:text="${player.playerInfo.DOB}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Years Active</th>
+                                    <td><span th:text="${player.playerInfo.yearsActive}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Active</th>
+                                    <td><span th:text="${player.playerInfo.active}"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <p class="card-text">
+                                <small class="text-muted">Last updated <span
+                                        th:text="${player.updateDateTime}"/></small>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="card-body">
+                            <h3 class="card-title">Ranking</h3>
+
+                            <table class="table card-text">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Average</th>
+                                    <td>
+                                        <span th:if="${statistics}" th:text="${statistics.rankAverage}"></span>
+                                        <span th:unless="${statistics}" th:text="N/A"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">High</th>
+                                    <td>
+                                        <span th:if="${statistics}" th:text="${statistics.rankHigh}"></span>
+                                        <span th:unless="${statistics}" th:text="N/A"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Low</th>
+                                    <td>
+                                        <span th:if="${statistics}" th:text="${statistics.rankLow}"></span>
+                                        <span th:unless="${statistics}" th:text="N/A"></span>
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <th scope="row">Yours</th>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle" href="#" role="button"
+                                               data-bs-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <span th:if="${rankingItem}" th:text="${rankingItem.rank}"/>
+                                                <span th:unless="${rankingItem}" th:text="unranked"/>
+                                            </a>
+
+                                            <div class="dropdown-menu">
+                                                <div class="dropdown-header">Rank Player</div>
+                                                <div class="dropdown-item">
+                                                    <!-- Default value -->
+                                                    <span id="rangeval"
+                                                          th:text="${rankingItem!=null ? rankingItem.rank : '50'} "/>
+                                                    <input type="range" class="form-control-range"
+                                                           min="1"
+                                                           max="75"
+                                                           th:value="${rankingItem!=null ? rankingItem.rank : '50'}"
+                                                           id="ranking-value"
+                                                           onInput="$('#rangeval').html($(this).val())">
+                                                </div>
+                                                <div class="dropdown-item">
+                                                    <div class="btn-group" role="group"
+                                                         aria-label="Basic example">
+                                                        <button id="set-ranking" type="button"
+                                                                class="btn btn-link">Set
+                                                        </button>
+                                                        <button id="remove-ranking" type="button"
+                                                                class="btn btn-link">Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="row g-0 border">
+                    <div class="col-md-3">
+                        <div class="card-body">
+                            <table class="table table-striped table-hover table-sm">
+                                <caption>Achievements</caption>
+                                <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Award</th>
+                                    <th scope="col">#</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Championships</th>
+                                    <td th:if="${player.achievements.championshipsAba > 0}"
+                                        th:text="${player.achievements.championships} + ' NBA ' + ${player.achievements.championshipsAba} + ' ABA'">
+                                    </td>
+                                    <td th:if="${player.achievements.championshipsAba == 0}"
+                                        th:text="${player.achievements.championships}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Finals Mvp</th>
+                                    <td th:text="${player.achievements.finalsMvp}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">MVP</th>
+                                    <td th:text="${player.achievements.leagueMvp}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.scoringChamp > 0}">
+                                    <th scope="row">Scoring Champ.</th>
+                                    <td th:text="${player.achievements.scoringChamp}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.reboundChamp > 0}">
+                                    <th scope="row">Rebound Champ.</th>
+                                    <td th:text="${player.achievements.reboundChamp}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.assistChamp > 0}">
+                                    <th scope="row">Assist Champ.</th>
+                                    <td th:text="${player.achievements.assistChamp}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.stealsChamp > 0}">
+                                    <th scope="row">Steal Champ.</th>
+                                    <td th:text="${player.achievements.stealsChamp}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.blocksChamp > 0}">
+                                    <th scope="row">Block Champ.</th>
+                                    <td th:text="${player.achievements.blocksChamp}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.defensivePlayerOfTheYear > 0}">
+                                    <th scope="row">DPOY</th>
+                                    <td th:text="${player.achievements.defensivePlayerOfTheYear}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.allNba > 0}">
+                                    <th scope="row">All NBA</th>
+                                    <td th:text="${player.achievements.allNba}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.allDefensive > 0}">
+                                    <th scope="row">All Defensive</th>
+                                    <td th:text="${player.achievements.allDefensive}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.allStar > 0}">
+                                    <th scope="row">All Star</th>
+                                    <td th:text="${player.achievements.allStar}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.allStarMvp > 0}">
+                                    <th scope="row">All Star MVP</th>
+                                    <td th:text="${player.achievements.allStarMvp}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.rookieOfTheYear > 0}">
+                                    <th scope="row">ROY</th>
+                                    <td th:text="${player.achievements.rookieOfTheYear}"></td>
+                                </tr>
+                                <tr th:if="${player.achievements.mostImprove > 0}">
+                                    <th scope="row">Most Improved</th>
+                                    <td th:text="${player.achievements.mostImprove}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <table class="table table-striped table-hover table-sm">
+                                <caption>Career stats</caption>
+                                <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Per Game</th>
+                                    <th scope="col">Points</th>
+                                    <th scope="col">Assists</th>
+                                    <th scope="col">Rebounds</th>
+                                    <th scope="col">Steels</th>
+                                    <th scope="col">Blocks</th>
+                                    <th scope="col">Turnovers</th>
+                                    <th scope="col" title="Player Efficiency Rating">PER</th>
+                                    <th scope="col" title="Win Shares /48 minutes">WS/48</th>
+                                    <th scope="col" title="Box Plus/Minus">BPM</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Regular season</th>
+                                    <td th:text="${player.careerPerGame.ptsPerGame}"></td>
+                                    <td th:text="${player.careerPerGame.astPerGame}"></td>
+                                    <td th:text="${player.careerPerGame.trbPerGme}"></td>
+                                    <td th:text="${player.careerPerGame.stlPerGame}"></td>
+                                    <td th:text="${player.careerPerGame.blkPerGame}"></td>
+                                    <td th:text="${player.careerPerGame.tovPerGame}"></td>
+                                    <td th:text="${player.careerPerGame.per}"></td>
+                                    <td th:text="${player.careerPerGame.wsPer48}"></td>
+                                    <td th:text="${player.careerPerGame.bpm}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Playoff</th>
+                                    <td th:text="${player.playoffsPerGame.ptsPerGame}"></td>
+                                    <td th:text="${player.playoffsPerGame.astPerGame}"></td>
+                                    <td th:text="${player.playoffsPerGame.trbPerGme}"></td>
+                                    <td th:text="${player.playoffsPerGame.stlPerGame}"></td>
+                                    <td th:text="${player.playoffsPerGame.blkPerGame}"></td>
+                                    <td th:text="${player.playoffsPerGame.tovPerGame}"></td>
+                                    <td th:text="${player.playoffsPerGame.per}"></td>
+                                    <td th:text="${player.playoffsPerGame.wsPer48}"></td>
+                                    <td th:text="${player.playoffsPerGame.bpm}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-striped table-hover table-sm">
+                                <caption>Shooting</caption>
+                                <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Per Game</th>
+                                    <th scope="col" title="Field Goal Percentage">FG%</th>
+                                    <th scope="col" title="Free Throws Percentage">FT%</th>
+                                    <th scope="col" title="3-Point Field Goal Percentage">3P%</th>
+                                    <th scope="col" title="Effective Field Goal Percentage">eFG%</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Regular season</th>
+                                    <td th:text="${player.careerPerGame.fgPct}"></td>
+                                    <td th:text="${player.careerPerGame.ftPct}"></td>
+                                    <td th:text="${player.careerPerGame.fg3Pct}"></td>
+                                    <td th:text="${player.careerPerGame.efgPct}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Playoff</th>
+                                    <td th:text="${player.playoffsPerGame.fgPct}"></td>
+                                    <td th:text="${player.playoffsPerGame.ftPct}"></td>
+                                    <td th:text="${player.playoffsPerGame.fg3Pct}"></td>
+                                    <td th:text="${player.playoffsPerGame.efgPct}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer class="page-footer font-small blue">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2022 Copyright:
+        <a href="#"> Top-Ten Ranker</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+
+<!-- jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+<!-- select2 shit -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+
+
+<script th:inline="javascript">
+
+/*<![CDATA[*/
+    var playerItem = /*[[${player.uniqueName}]]*/ "";
+    console.log(playerItem);
+/*]]>*/
+
+$(document).ready(function() {
+
+   $(".toast").toast("show");
+
+       $("#set-ranking").click(function() {
+       $.ajax({
+            url: "/ranking/" + playerItem,
+            data: {
+                "ranking": $("#ranking-value").val()
+            },
+            cache: false,
+            type: "POST",
+            success: function(response) {
+                console.log("Yea!");
+            },
+            error: function(xhr) {
+                console.log("Ho no...");
+            }
+        });
+    });
+
+    $("#remove-ranking").click(function() {
+       $.ajax({
+            url: "/ranking/" + playerItem,
+            cache: false,
+            type: "DELETE",
+            success: function(response) {
+                console.log("Yea!");
+            },
+            error: function(xhr) {
+                console.log("Ho no...");
+            }
+        });
+    });
+
+
+    $("#player-search-header").select2({
+        theme: "bootstrap-5",
+        placeholder: {
+            text: 'Select an option'
+          },
+        ajax: {
+            url: '/players',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    }).change(function() {
+        console.log(this.value)
+        $('#select-player-header-form').attr('action', "/players/" + this.value).submit();
+    });
+
+});
+</script>
+
+</body>
+</html>

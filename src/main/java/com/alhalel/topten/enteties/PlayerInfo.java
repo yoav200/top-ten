@@ -15,7 +15,6 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
-@ToString
 @Entity
 @Table(name = "player_info")
 public class PlayerInfo {
@@ -70,5 +69,25 @@ public class PlayerInfo {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerInfo{" +
+                "id=" + id +
+                ", createDateTime=" + createDateTime +
+                ", updateDateTime=" + updateDateTime +
+                ", fullName='" + fullName + '\'' +
+                ", country='" + country + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", position='" + position + '\'' +
+                ", DOB='" + DOB + '\'' +
+                ", height='" + height + '\'' +
+                ", wight='" + wight + '\'' +
+                ", draft='" + draft + '\'' +
+                ", NBADebut='" + NBADebut + '\'' +
+                ", yearsActive='" + yearsActive + '\'' +
+                ", active=" + active +
+                '}';
     }
 }

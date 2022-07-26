@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PlayerStatistics {
+public class PlayerStatisticsModel {
 
     private final Integer rankLow;
 

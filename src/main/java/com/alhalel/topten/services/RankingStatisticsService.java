@@ -1,6 +1,6 @@
 package com.alhalel.topten.services;
 
-import com.alhalel.topten.model.PlayerStatistics;
+import com.alhalel.topten.model.PlayerStatisticsModel;
 import com.alhalel.topten.repositories.RankListItemRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class RankingStatisticsService {
     private final RankListItemRepository rankListItemRepository;
 
-    public Optional<PlayerStatistics> getPlayerStatistics(String playerUniqueName) {
+    public Optional<PlayerStatisticsModel> getPlayerStatistics(String playerUniqueName) {
         return rankListItemRepository.getPlayerStats(playerUniqueName);
     }
 }

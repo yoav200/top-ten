@@ -14,7 +14,6 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
-@ToString
 @Entity
 @Table(name = "player_stats")
 public class PlayerStats {
@@ -78,6 +77,31 @@ public class PlayerStats {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerStats{" +
+                "id=" + id +
+                ", createDateTime=" + createDateTime +
+                ", updateDateTime=" + updateDateTime +
+                ", statsFor=" + statsFor +
+                ", games=" + games +
+                ", ptsPerGame=" + ptsPerGame +
+                ", trbPerGme=" + trbPerGme +
+                ", astPerGame=" + astPerGame +
+                ", stlPerGame=" + stlPerGame +
+                ", blkPerGame=" + blkPerGame +
+                ", tovPerGame=" + tovPerGame +
+                ", fgPct=" + fgPct +
+                ", fg3Pct=" + fg3Pct +
+                ", ftPct=" + ftPct +
+                ", efgPct=" + efgPct +
+                ", per=" + per +
+                ", ws=" + ws +
+                ", wsPer48=" + wsPer48 +
+                ", bpm=" + bpm +
+                '}';
     }
 }
 

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
-@ToString
 @Entity
 @Table(name = "rank_list")
 public class RankList {
@@ -53,6 +52,80 @@ public class RankList {
                 .collect(Collectors.toList());
     }
 
+
+    // ~ ==================== List Item Actions
+
+    public void updateRankItem(RankListItem item, int number) {
+        if (item.getRank() == number) {
+            return;
+        }
+        getRankItemByRank(number).ifPresentOrElse(exist -> {
+            while (item.getRank() > number) {
+                moveRankUp(item.getRank());
+            }
+            while (item.getRank() < number) {
+                moveRankDown(item.getRank());
+            }
+        }, () -> item.setRank(number));
+    }
+
+    // number 3 -- > 4
+    public void moveRankDown(int rank) {
+        if (rank == 50) {
+            return;
+        }
+        getRankItemByRank(rank).ifPresent(item -> getRankItemByRank(rank + 1)
+                .ifPresentOrElse(lowerItem -> {
+                    lowerItem.setRank(rank);
+                    item.setRank(rank + 1);
+                }, () -> item.setRank(rank + 1)));
+    }
+
+    // number 3 -- > 2
+    public void moveRankUp(int rank) {
+        if (rank == 1) {
+            return;
+        }
+        getRankItemByRank(rank).ifPresent(item -> getRankItemByRank(rank - 1)
+                .ifPresentOrElse(upperItem -> {
+                    upperItem.setRank(rank);
+                    item.setRank(rank - 1);
+                }, () -> item.setRank(rank - 1)));
+    }
+
+    public void addRankItem(RankListItem item) {
+        int nextFreeRank = findNextFreeRank(item.getRank());
+
+        while (nextFreeRank > item.getRank()) {
+            int finalNextFreeRank = nextFreeRank;
+            getRankItemByRank(nextFreeRank - 1).ifPresent(b -> b.setRank(finalNextFreeRank));
+            nextFreeRank = nextFreeRank - 1;
+        }
+        rankListItems.add(item);
+    }
+
+
+    public boolean isValidList() {
+        Set<Integer> items = new HashSet<>();
+        return rankListItems.stream().map(RankListItem::getRank)
+                .filter(n -> !items.add(n))
+                .collect(Collectors.toSet()).isEmpty();
+    }
+
+    private boolean hasRank(int rank) {
+        return rankListItems.stream().anyMatch(b -> b.getRank() == rank);
+    }
+
+    private int findNextFreeRank(int rank) {
+        return hasRank(rank) ? findNextFreeRank(rank + 1) : rank;
+    }
+
+    public Optional<RankListItem> getRankItemByRank(int rank) {
+        return rankListItems.stream().filter(b -> b.getRank() == rank).findFirst();
+    }
+
+    // ~ ==================== Hashcode & Equals
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,5 +137,16 @@ public class RankList {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "RankList{" +
+                "id=" + id +
+                ", createDateTime=" + createDateTime +
+                ", updateDateTime=" + updateDateTime +
+                ", title='" + title + '\'' +
+                ", rankListItems=" + rankListItems +
+                '}';
     }
 }

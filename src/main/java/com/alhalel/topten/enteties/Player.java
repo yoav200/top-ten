@@ -15,7 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
 @Entity
 @Table(name = "player")
 public class Player {
@@ -88,4 +87,13 @@ public class Player {
         return getClass().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + id +
+                ", createDateTime=" + createDateTime +
+                ", updateDateTime=" + updateDateTime +
+                ", uniqueName='" + uniqueName +
+                '}';
+    }
 }

@@ -80,6 +80,12 @@
         <hr class="my-4">
 
         <div th:if="${player}">
+
+            <form id="update-rank-form" method="post" action="/ranking/">
+                <input type="hidden" id="playerId" name="playerId">
+                <input type="hidden" id="rank" name="rank">
+            </form>
+
             <div class="card mb-3">
                 <div class="row g-0 border">
                     <div class="col-md-2">
@@ -171,11 +177,14 @@
                                                 <div class="dropdown-item">
                                                     <div class="btn-group" role="group"
                                                          aria-label="Basic example">
-                                                        <button id="set-ranking" type="button"
-                                                                class="btn btn-link">Set
+                                                        <button id="set-ranking"
+                                                                type="button"
+                                                                class="btn btn-link"
+                                                                th:attr="onclick=|updateRank('${player.uniqueName}')|">Set
                                                         </button>
                                                         <button id="remove-ranking" type="button"
-                                                                class="btn btn-link">Remove
+                                                                class="btn btn-link"
+                                                                th:attr="onclick=|removeRank('${player.uniqueName}')|">Remove
                                                         </button>
                                                     </div>
                                                 </div>
@@ -386,41 +395,21 @@
     console.log(playerItem);
 /*]]>*/
 
+function updateRank(playerId) {
+    $('#playerId').val(playerId);
+    $('#rank').val($("#ranking-value").val());
+    $('#update-rank-form').attr('action', '/ranking/').submit();
+}
+
+function removeRank(playerId, rank) {
+    $('#playerId').val(playerId);
+    $('#rank').val(rank);
+    $('#update-rank-form').attr('action', '/ranking/remove').submit();
+}
+
 $(document).ready(function() {
 
    $(".toast").toast("show");
-
-       $("#set-ranking").click(function() {
-       $.ajax({
-            url: "/ranking/" + playerItem,
-            data: {
-                "ranking": $("#ranking-value").val()
-            },
-            cache: false,
-            type: "POST",
-            success: function(response) {
-                console.log("Yea!");
-            },
-            error: function(xhr) {
-                console.log("Ho no...");
-            }
-        });
-    });
-
-    $("#remove-ranking").click(function() {
-       $.ajax({
-            url: "/ranking/" + playerItem,
-            cache: false,
-            type: "DELETE",
-            success: function(response) {
-                console.log("Yea!");
-            },
-            error: function(xhr) {
-                console.log("Ho no...");
-            }
-        });
-    });
-
 
     $("#player-search-header").select2({
         theme: "bootstrap-5",

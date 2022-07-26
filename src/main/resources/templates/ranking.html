@@ -24,6 +24,19 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+            crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/e7b3a909ee.js" crossorigin="anonymous"></script>
+    <!-- select2 shit -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+
 </head>
 <body>
 
@@ -82,13 +95,17 @@
 
         <div th:if="${rankList}">
 
+            <form id="update-rank-form" method="post" action="/ranking/">
+                <input type="hidden" id="playerId" name="playerId">
+                <input type="hidden" id="rank" name="rank">
+            </form>
+
             <table class="table table-sm caption-top table-striped table-hover table-bordered text-strong">
                 <caption>Ranking List</caption>
                 <thead class="table-dark">
                 <tr>
                     <th scope="col">Rank #</th>
                     <th scope="col">Player</th>
-
                     <th scope="col" title="Include NBA and ABA">Champs.</th>
                     <th scope="col" title="Finals MVP">FMVP</th>
                     <th scope="col">MVP</th>
@@ -103,9 +120,12 @@
                 </tr>
                 </thead>
                 <tbody>
-
                 <tr th:each="rankItem : ${rankList.sortedRankListItems}">
-                    <th class="table-dark" scope="row" th:text="${rankItem.rank}"></th>
+                    <th class="table-dark text-center" scope="row">
+                        <div th:text="${rankItem.rank}"></div>
+                        <div><button th:attr="onclick=|updateRank('${rankItem.player.uniqueName}', '${rankItem.rank - 1}')|"> <i class='fas fa-arrow-up'></i></button></div>
+                        <div><button th:attr="onclick=|updateRank('${rankItem.player.uniqueName}', '${rankItem.rank + 1}')|" > <i class='fas fa-arrow-down'></i></button></div>
+                    </th>
                     <td>
                         <div class="card mb-1" style="max-width: 540px;">
                             <div class="row g-0">
@@ -133,23 +153,35 @@
                             </div>
                         </div>
                     </td>
-
-                    <td th:text="${rankItem.player.achievements.championships + rankItem.player.achievements.championshipsAba}"></td>
-                    <td th:text="${rankItem.player.achievements.finalsMvp}"></td>
-                    <td th:text="${rankItem.player.achievements.leagueMvp}"></td>
-                    <td th:text="${rankItem.player.careerPerGame.ptsPerGame}"></td>
-                    <td th:text="${rankItem.player.careerPerGame.astPerGame}"></td>
-                    <td th:text="${rankItem.player.careerPerGame.trbPerGme}"></td>
-                    <td th:text="${rankItem.player.careerPerGame.blkPerGame}"></td>
-                    <td th:text="${rankItem.player.careerPerGame.stlPerGame}"></td>
-                    <td th:text="${rankItem.player.careerPerGame.per}"></td>
-                    <td th:text="${rankItem.player.careerPerGame.bpm}"></td>
+                    <td th:class="${rankListStats.champs == rankItem.player.achievements.totalChamps}?'table-success':''"
+                        th:text="${rankItem.player.achievements.totalChamps}"></td>
+                    <td th:class="${rankListStats.finalsMvp == rankItem.player.achievements.finalsMvp}?'table-success':''"
+                        th:text="${rankItem.player.achievements.finalsMvp}"></td>
+                    <td th:class="${rankListStats.leagueMvp == rankItem.player.achievements.leagueMvp}?'table-success':''"
+                        th:text="${rankItem.player.achievements.leagueMvp}"></td>
+                    <td th:class="${rankListStats.ptsPerGame == rankItem.player.careerPerGame.ptsPerGame}?'table-success':''"
+                        th:text="${rankItem.player.careerPerGame.ptsPerGame}"></td>
+                    <td th:class="${rankListStats.astPerGame == rankItem.player.careerPerGame.astPerGame}?'table-success':''"
+                        th:text="${rankItem.player.careerPerGame.astPerGame}"></td>
+                    <td th:class="${rankListStats.trbPerGme == rankItem.player.careerPerGame.trbPerGme}?'table-success':''"
+                        th:text="${rankItem.player.careerPerGame.trbPerGme}"></td>
+                    <td th:class="${rankListStats.blkPerGame == rankItem.player.careerPerGame.blkPerGame}?'table-success':''"
+                        th:text="${rankItem.player.careerPerGame.blkPerGame}"></td>
+                    <td th:class="${rankListStats.stlPerGame == rankItem.player.careerPerGame.stlPerGame}?'table-success':''"
+                        th:text="${rankItem.player.careerPerGame.stlPerGame}"></td>
+                    <td th:class="${rankListStats.per == rankItem.player.careerPerGame.per}?'table-success':''"
+                        th:text="${rankItem.player.careerPerGame.per}"></td>
+                    <td th:class="${rankListStats.bpm == rankItem.player.careerPerGame.bpm}?'table-success':''"
+                        th:text="${rankItem.player.careerPerGame.bpm}"></td>
                     <td>TBD</td>
                 </tr>
                 </tbody>
                 <tfoot>
                 </tfoot>
             </table>
+
+            <h6><span class="badge bg-success">highest</span> - Highlighted filed are the highest on THIS list</h6>
+
         </div>
     </div>
 </main>
@@ -163,19 +195,15 @@
 </footer>
 
 
-<!-- Bootstrap JS Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-        crossorigin="anonymous"></script>
-
-<!-- jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-
-<!-- select2 shit -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
 
 
 <script th:inline="javascript">
+
+function updateRank(playerId, rank) {
+    $('#playerId').val(playerId);
+    $('#rank').val(rank);
+    $('#update-rank-form').submit();
+}
 
 $(document).ready(function() {
 

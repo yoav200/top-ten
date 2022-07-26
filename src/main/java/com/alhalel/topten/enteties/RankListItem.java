@@ -14,12 +14,11 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
-@ToString
 @Entity
 @Table(name = "rank_list_item",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"rank_list_id", "player_id"}),
-                @UniqueConstraint(columnNames = {"rank_list_id", "rank"})
+                @UniqueConstraint(columnNames = {"rank_list_id", "player_id"})
+                //@UniqueConstraint(columnNames = {"rank_list_id", "rank"})
         })
 public class RankListItem {
 
@@ -32,7 +31,6 @@ public class RankListItem {
 
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_id", nullable = false)
@@ -56,5 +54,16 @@ public class RankListItem {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "RankListItem{" +
+                "id=" + id +
+                ", createDateTime=" + createDateTime +
+                ", updateDateTime=" + updateDateTime +
+                ", player=" + player +
+                ", rank=" + rank +
+                '}';
     }
 }

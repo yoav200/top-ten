@@ -14,7 +14,6 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
-@ToString
 @Entity
 @Table(name = "player_achievements")
 public class PlayerAchievements {
@@ -66,6 +65,11 @@ public class PlayerAchievements {
 
     private int mostImprove;
 
+
+    public int getTotalChamps() {
+        return getChampionships() + getChampionshipsAba();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,5 +81,30 @@ public class PlayerAchievements {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerAchievements{" +
+                "id=" + id +
+                ", createDateTime=" + createDateTime +
+                ", updateDateTime=" + updateDateTime +
+                ", championships=" + championships +
+                ", championshipsAba=" + championshipsAba +
+                ", finalsMvp=" + finalsMvp +
+                ", leagueMvp=" + leagueMvp +
+                ", scoringChamp=" + scoringChamp +
+                ", reboundChamp=" + reboundChamp +
+                ", assistChamp=" + assistChamp +
+                ", stealsChamp=" + stealsChamp +
+                ", blocksChamp=" + blocksChamp +
+                ", defensivePlayerOfTheYear=" + defensivePlayerOfTheYear +
+                ", allNba=" + allNba +
+                ", allDefensive=" + allDefensive +
+                ", allStar=" + allStar +
+                ", allStarMvp=" + allStarMvp +
+                ", rookieOfTheYear=" + rookieOfTheYear +
+                ", mostImprove=" + mostImprove +
+                '}';
     }
 }

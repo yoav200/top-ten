@@ -23,28 +23,29 @@ spring:
   flyway:
     enabled: false
 
-#  h2:
-#    console.enabled: true
-#    console.path: /h2-console
+  #  h2:
+  #    console.enabled: true
+  #    console.path: /h2-console
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 964718617611-le13opabiecm49gfnblh2p1jqd29s1h5.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
 
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            clientId: YOUR_GOOGLE_APP_CLIENT_ID
-#            clientSecret: YOUR_GOOGLE_APP_SECRET_KEY
-#            scope:
-#              - email
-#              - profile
-#
-#          facebook:
-#            clientId: YOUR_FACEBOOK_APP_CLIENT_ID
-#            clientSecret: YOUR_FACEBOOK_APP_SECRET_KEY
-#            scope:
-#              - email
-#              - public_profile
+          facebook:
+            clientId: 362211486075851
+            clientSecret: a968f53b0ff30b660ca6f85842a97e99
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
 
   thymeleaf:
     cache: false

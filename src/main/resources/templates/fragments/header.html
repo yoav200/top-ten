@@ -1,47 +1,40 @@
-<!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Spring Boot Thymeleaf Application - Bootstrap Autocomplete</title>
-
-    <link th:rel="stylesheet" th:href="@{/assets/select2-develop/dist/css/select2.css}"/>
-    <link th:rel="stylesheet" th:href="@{/assets/select2-bootstrap4-theme-master/dist/select2-bootstrap4.css}"/>
-    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
-
-</head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">Top Ten - Rank Greatest NBA Playes of ALL Time</a>
-        <button class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarResponsive"
-                aria-controls="navbarResponsive"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/index">Players<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/my-list">My List</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Public Lists</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Login</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+
+<div th:fragment="header">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container justify-content-center">
+                <i class='fas fa-basketball-ball' style='font-size:24px; color:white'></i>
+                <span class="navbar-brand mb-0 h1">Rank NBA Greatest</span>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <a href="/" class="nav-item nav-link">Players</a>
+                        <a href="/ranking" class="nav-item nav-link">Ranking</a>
+                        <a href="#" class="nav-item nav-link disabled">Social</a>
+                        <a href="#" class="nav-item nav-link disabled">Login</a>
+                    </div>
+
+                    <form id="select-player-header-form" method="get" class="col-md-4" role="search">
+                        <select id="player-search-header" class="form-select me-4">
+                            <option value="">Search player</option>
+                        </select>
+                    </form>
+                    <div>
+                        <div sec:authorize="isAuthenticated()">
+                            Authenticated as <span sec:authentication="name"></span></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+</div>
 
 
 </body>

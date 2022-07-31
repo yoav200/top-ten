@@ -1,5 +1,6 @@
 package com.alhalel.topten.enteties;
 
+import com.alhalel.topten.user.User;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,6 +19,11 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "rank_list")
 public class RankList {
+
+    public enum RankListVisibility {
+        PRIVATE, SHARE_ANONYMOUSLY, SHARE
+    }
+
     @Id
     @GeneratedValue
     private Long id;
@@ -30,9 +36,12 @@ public class RankList {
 
     private String title;
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "account_id", referencedColumnName = "id")
-//    private Account account;
+    @Enumerated(EnumType.STRING)
+    private RankListVisibility visibility = RankListVisibility.SHARE;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    private User user;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "rank_list_id", referencedColumnName = "id")
@@ -46,6 +55,7 @@ public class RankList {
         return rankListItems;
     }
 
+    // used in UI
     public List<RankListItem> sortedRankListItems() {
         return getRankListItems().stream()
                 .sorted(Comparator.comparing(RankListItem::getRank))
@@ -105,11 +115,13 @@ public class RankList {
     }
 
 
-    public boolean isValidList() {
+    public boolean isInvalidList() {
         Set<Integer> items = new HashSet<>();
-        return rankListItems.stream().map(RankListItem::getRank)
+        return !rankListItems.stream()
+                .map(RankListItem::getRank)
                 .filter(n -> !items.add(n))
-                .collect(Collectors.toSet()).isEmpty();
+                .collect(Collectors.toSet())
+                .isEmpty();
     }
 
     private boolean hasRank(int rank) {

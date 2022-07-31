@@ -9,4 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "service.scrapers")
 public class ScraperConfig {
     private String basketballReferenceUrl;
+    private String nbaStats;
+    private int minGamesLimit;
 }

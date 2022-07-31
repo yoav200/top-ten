@@ -32,6 +32,9 @@ public class RankListItem {
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
 
+    @ManyToOne
+    private RankList rankList;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;

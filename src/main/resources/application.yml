@@ -69,3 +69,8 @@ service:
   scrapers:
     basketball-reference-url: "https://www.basketball-reference.com/"
     nba-stats: "https://www.nba.com/stats/"
+    min-games-limit: 10
+  players:
+    random-fetch-size: 5
+  ranking:
+    default-list-id: 19

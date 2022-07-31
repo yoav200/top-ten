@@ -30,8 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                     .and()
+                .csrf()
+                    .disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/test", "/error", "/favicon.ico")
+                    .antMatchers("/", "/test", "/favicon.ico")
                         .permitAll()
                     .antMatchers("/auth/**", "/oauth2/**")
                         .permitAll()
@@ -48,10 +50,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .and()
                     .userInfoEndpoint()
                         .userService(customOAuth2UserService)
+                        .and()
+                    .and()
+                .logout()
+                .logoutSuccessUrl("/")
 //                        .userAuthoritiesMapper(this.userAuthoritiesMapper())
 //                        .and()
 //                    .successHandler(oAuth2AuthenticationSuccessHandler)
 //                    .failureHandler(oAuth2AuthenticationFailureHandler)
+//                        .and()
+//                    .and()
+//                .exceptionHandling().accessDeniedPage("/");
         ;
     }
 

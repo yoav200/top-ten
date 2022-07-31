@@ -1,5 +1,6 @@
 package com.alhalel.topten.enteties;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,9 +18,9 @@ import java.util.Objects;
 @Getter
 @Entity
 @Table(name = "player_info")
+@JsonIgnoreProperties(value = {"id", "createDateTime", "player"})
 public class PlayerInfo {
     @Id
-    //@GeneratedValue
     @Column(name = "player_id")
     private Long id;
 
@@ -53,8 +54,6 @@ public class PlayerInfo {
     private String NBADebut;
 
     private String yearsActive;
-
-    //private String experience;
 
     private boolean active;
 

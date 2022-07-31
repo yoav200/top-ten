@@ -55,6 +55,9 @@ public class BasketballReferenceScarper {
                 getPlayerStats(doc, "playoffs_per_game", "playoffs_advanced", PlayerStats.StatsFor.PLAYOFFS)
         ));
 
+        if (player.getCareerPerGame().getGames() < config.getMinGamesLimit())
+            player.setEligibleForSaving(false);
+
         return player;
     }
 

@@ -5,7 +5,9 @@ import com.alhalel.topten.enteties.PlayerStats;
 import com.alhalel.topten.enteties.RankList;
 import com.alhalel.topten.enteties.RankListItem;
 import com.alhalel.topten.model.RankListStatisticsModel;
+import com.alhalel.topten.repositories.RankListItemRepository;
 import com.alhalel.topten.repositories.RankListRepository;
+import com.alhalel.topten.user.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,18 +19,35 @@ import java.util.Optional;
 @AllArgsConstructor
 public class RankingService {
 
-
     private final RankListRepository rankListRepository;
 
+    private final RankListItemRepository rankListItemRepository;
 
-    public Optional<RankList> getRankingListForAccount() {
-        return rankListRepository.findAll().stream().findFirst();
+    private final UserRepository userRepository;
+
+    public Optional<RankList> getRankingListForUser(Long userId) {
+        return rankListRepository.findByUserId(userId);
+    }
+
+    public Optional<RankListItem> findRankingItem(Long userId, Long playerId) {
+        return rankListItemRepository.findByRankListUserIdAndPlayerId(userId, playerId);
+    }
+
+    public RankList updateRankingListVisibility(Long userId, RankList.RankListVisibility visibility) {
+        return rankListRepository.findByUserId(userId).map(rankList -> {
+            //rankList.setVisibility(visibility);
+            return rankListRepository.save(rankList);
+        }).orElseThrow(() -> new IllegalArgumentException("Ranking list for user " + userId + " not found"));
     }
 
     public void updatePlayerRanking(
             RankList rankList,
             Player player,
             Integer rank) {
+
+        if (!player.isEligibleForSaving()) {
+            throw new IllegalArgumentException("Player " + player.getPlayerInfo().getFullName() + " is not Eligible for ranking");
+        }
 
         rankList.getRankListItems().stream()
                 .filter(item -> item.getPlayer().equals(player))
@@ -37,7 +56,7 @@ public class RankingService {
                         item -> rankList.updateRankItem(item, rank),
                         () -> rankList.addRankItem(RankListItem.builder().rank(rank).player(player).build()));
 
-        if (!rankList.isValidList()) {
+        if (rankList.isInvalidList()) {
             throw new IllegalArgumentException("Invalid Block. Found duplicate numbers");
         }
 
@@ -48,15 +67,17 @@ public class RankingService {
     public void removePlayerRanking(RankList rankList, Player player) {
         rankList.getRankListItems().removeIf(rankListItem -> rankListItem.getPlayer().equals(player));
 
-        if (!rankList.isValidList()) {
+        if (rankList.isInvalidList()) {
             throw new IllegalArgumentException("Invalid Block. Found duplicate numbers");
         }
 
         rankListRepository.save(rankList);
     }
 
-    public RankList createRankingListForAccount() {
-        return rankListRepository.save(RankList.builder().build());
+    public RankList createRankingListForUser(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> rankListRepository.save(RankList.builder().user(user).title("Default list for user").build()))
+                .orElseThrow(() -> new IllegalArgumentException("User not found " + userId));
     }
 
     public RankListStatisticsModel getRankListStatistics(RankList rankList) {

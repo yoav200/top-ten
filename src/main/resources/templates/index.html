@@ -7,22 +7,47 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <div>
-            <h2>Please Login</h2>
-            <br/>
+
+
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Log In</h1>
+                <p class="col-md-8 fs-4">
+                    Hi there!
+                    <br>Please use one of the supported social networks to log in.
+                    <br>Once logged-in you'll be able to create your own NBA Ranking List to show off with and vote on other list.<br>
+                    So what are you waiting for?? Click one of the buttons and start ranking.
+                </p>
+
+                <hr class="my-4">
+
+
+                <a class="btn btn-lg btn-block btn-primary mb-2"
+                   style="background-color: #dd4b39;"
+                   th:href="@{/oauth2/authorization/google}"
+                   type="submit"><i class="fab fa-google me-2"></i> Sign in with google</a>
+
+                <a class="btn btn-lg btn-block btn-primary mb-2"
+                   style="background-color: #3b5998;"
+                   th:href="@{/oauth2/authorization/facebook}"
+                   type="submit"><i class="fab fa-facebook-f me-2"></i>Sign in with facebook</a>
+            </div>
         </div>
-        <div>
-            <h4>
-                <i class='fab fa-facebook-square' style='font-size:48px;color:blue'></i>
-                <a th:href="@{/oauth2/authorization/facebook}">Login with Facebook</a>
-            </h4>
-        </div>
-        <div>
-            <h4>
-                <i class='fab fa-google' style='font-size:48px;color:blue'></i>
-                <a th:href="@{/oauth2/authorization/google}">Login with Google</a>
-            </h4>
-        </div>
+
+
+        <!--        <div>-->
+        <!--            <h4>-->
+        <!--                <i class='fab fa-facebook-square' style='font-size:48px;color:blue'></i>-->
+        <!--                <a th:href="@{/oauth2/authorization/facebook}">Login with Facebook</a>-->
+        <!--            </h4>-->
+        <!--        </div>-->
+        <!--        <div>-->
+        <!--            <h4>-->
+        <!--                <i class='fab fa-google' style='font-size:48px;color:blue'></i>-->
+        <!--                <a th:href="@{/oauth2/authorization/google}">Login with Google</a>-->
+        <!--            </h4>-->
+        <!--        </div>-->
+
 
     </div>
 </div>

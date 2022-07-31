@@ -5,6 +5,7 @@ import com.alhalel.topten.security.UserPrincipal;
 import com.alhalel.topten.security.oauth2.user.OAuth2UserInfo;
 import com.alhalel.topten.security.oauth2.user.OAuth2UserInfoFactory;
 import com.alhalel.topten.user.AuthProvider;
+import com.alhalel.topten.user.Role;
 import com.alhalel.topten.user.User;
 import com.alhalel.topten.user.UserRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @Component
@@ -70,12 +73,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setRoles(Set.of(Role.ROLE_USER));
         return userRepository.save(user);
     }
 
-    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setName(oAuth2UserInfo.getName());
-        existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
-        return userRepository.save(existingUser);
+    private User updateExistingUser(User user, OAuth2UserInfo oAuth2UserInfo) {
+        user.setName(oAuth2UserInfo.getName());
+        user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setRoles(Set.of(Role.ROLE_USER));
+        return userRepository.save(user);
     }
 }

@@ -14,4 +14,6 @@ public interface RankListItemRepository extends JpaRepository<RankListItem, Long
             "FROM RankListItem " +
             "WHERE player.uniqueName = ?1")
     Optional<PlayerStatisticsModel> getPlayerStats(String uniqueName);
+
+    Optional<RankListItem> findByRankListUserIdAndPlayerId(Long userId, Long playerId);
 }

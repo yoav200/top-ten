@@ -1,5 +1,6 @@
 package com.alhalel.topten.enteties;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "player")
+@JsonIgnoreProperties(value = {"id", "createDateTime", "careerPerGame", "playoffsPerGame"})
 public class Player {
 
     @Id
@@ -44,6 +46,8 @@ public class Player {
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Set<PlayerStats> playerStats;
 
+    @Transient
+    private boolean isEligibleForSaving = true;
 
     public void setPlayerInfo(PlayerInfo playerInfo) {
         this.playerInfo = playerInfo;

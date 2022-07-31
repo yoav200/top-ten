@@ -1,5 +1,6 @@
 package com.alhalel.topten.enteties;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Getter
 @Entity
 @Table(name = "player_achievements")
+@JsonIgnoreProperties(value = {"id", "createDateTime", "player"})
 public class PlayerAchievements {
 
     @Id

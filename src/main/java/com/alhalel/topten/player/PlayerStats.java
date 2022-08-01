@@ -1,4 +1,4 @@
-package com.alhalel.topten.enteties;
+package com.alhalel.topten.player;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

@@ -1,8 +1,8 @@
 package com.alhalel.topten.scrapers;
 
 import com.alhalel.topten.config.ScraperConfig;
-import com.alhalel.topten.enteties.Player;
-import com.alhalel.topten.model.PlayerItem;
+import com.alhalel.topten.player.Player;
+import com.alhalel.topten.player.model.PlayerItem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

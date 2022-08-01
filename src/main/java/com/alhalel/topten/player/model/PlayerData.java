@@ -1,8 +1,10 @@
-package com.alhalel.topten.model;
+package com.alhalel.topten.player.model;
 
-import com.alhalel.topten.enteties.Player;
+import com.alhalel.topten.player.Player;
+import com.alhalel.topten.util.ResourceUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -14,6 +16,12 @@ public class PlayerData {
     private String country;
 
     private String imageUrl;
+
+    private String yearsActive;
+
+    private boolean active;
+
+    private boolean eligibleForSaving;
 
     private double games;
 
@@ -33,7 +41,10 @@ public class PlayerData {
         this.uniqueName = player.getUniqueName();
         this.fullName = player.getPlayerInfo().getFullName();
         this.country = player.getPlayerInfo().getCountry();
-        this.imageUrl = player.getPlayerInfo().getImageUrl();
+        this.imageUrl = StringUtils.defaultIfBlank(player.getPlayerInfo().getImageUrl(), ResourceUtils.defaultPlayerAvatar());
+        this.yearsActive = player.getPlayerInfo().getYearsActive();
+        this.active = player.getPlayerInfo().isActive();
+        this.eligibleForSaving = player.isEligibleForSaving();
         this.games = player.getCareerPerGame().getGames();
         this.ptsPerGame = player.getCareerPerGame().getPtsPerGame();
         this.trbPerGme = player.getCareerPerGame().getTrbPerGme();

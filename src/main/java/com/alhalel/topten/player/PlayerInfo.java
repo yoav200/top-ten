@@ -1,7 +1,9 @@
-package com.alhalel.topten.enteties;
+package com.alhalel.topten.player;
 
+import com.alhalel.topten.util.ResourceUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -56,6 +58,10 @@ public class PlayerInfo {
     private String yearsActive;
 
     private boolean active;
+
+    public String getImageUrl() {
+        return StringUtils.defaultIfBlank(this.imageUrl, ResourceUtils.defaultPlayerAvatar());
+    }
 
     @Override
     public boolean equals(Object o) {

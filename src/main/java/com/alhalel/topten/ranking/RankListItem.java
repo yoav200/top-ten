@@ -1,5 +1,6 @@
-package com.alhalel.topten.enteties;
+package com.alhalel.topten.ranking;
 
+import com.alhalel.topten.player.Player;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;

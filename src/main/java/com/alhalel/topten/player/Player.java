@@ -1,4 +1,4 @@
-package com.alhalel.topten.enteties;
+package com.alhalel.topten.player;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -47,7 +47,7 @@ public class Player {
     private Set<PlayerStats> playerStats;
 
     @Transient
-    private boolean isEligibleForSaving = true;
+    private boolean eligibleForSaving = true;
 
     public void setPlayerInfo(PlayerInfo playerInfo) {
         this.playerInfo = playerInfo;

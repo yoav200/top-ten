@@ -8,9 +8,7 @@
 <div layout:fragment="content">
     <div class="container">
 
-        <hr class="my-4">
-
-        <div th:if="${player}">
+        <div th:if="${player}" class="p-4 mt-4 bg-light rounded-3">
 
             <form id="update-rank-form" method="post" action="/ranking/">
                 <input type="hidden" id="playerId" name="playerId">
@@ -41,7 +39,11 @@
                                     <td><span th:text="${player.playerInfo.yearsActive}"></span></td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Active</th>
+                                    <th scope="row">Games Played (Season)</th>
+                                    <td><span th:text="${player.getCareerPerGame.games}"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Is Active</th>
                                     <td><span th:text="${player.playerInfo.active}"></span></td>
                                 </tr>
                                 </tbody>
@@ -55,10 +57,16 @@
                         </div>
                     </div>
 
-                    <div class="col-md-5">
+                    <div th:unless="${player.eligibleForSaving}" class="col-md-5">
                         <div class="card-body">
                             <h3 class="card-title">Ranking</h3>
+                            <span class="card-text">This player is not eligible for Ranking</span>
+                        </div>
+                    </div>
 
+                    <div th:if="${player.eligibleForSaving}" class="col-md-5">
+                        <div class="card-body">
+                            <h3 class="card-title">Ranking</h3>
                             <table class="table card-text">
                                 <tbody>
                                 <tr>
@@ -85,43 +93,32 @@
                                 <tr class="table-primary">
                                     <th scope="row">Yours</th>
                                     <td>
-                                        <div class="dropdown">
-                                            <a class="dropdown-toggle" href="#" role="button"
-                                               data-bs-toggle="dropdown"
-                                               aria-expanded="false">
-                                                <span th:if="${rankingItem}" th:text="${rankingItem.rank}"></span>
-                                                <span th:unless="${rankingItem}" th:text="unranked"></span>
-                                            </a>
+                                        <div>
+                                            <span>
+                                                <span id="ex6SliderVal"
+                                                      th:text="${rankingItem} ? ${rankingItem.rank} : 'unranked'"></span>
+                                            </span>
 
-                                            <div class="dropdown-menu">
-                                                <div class="dropdown-header">Rank Player</div>
-                                                <div class="dropdown-item">
-                                                    <!-- Default value -->
-                                                    <span id="rangeval"
-                                                          th:text="${rankingItem!=null ? rankingItem.rank : '50'} "></span>
-                                                    <input type="range" class="form-control-range"
-                                                           min="1"
-                                                           max="75"
-                                                           th:value="${rankingItem!=null ? rankingItem.rank : '50'}"
-                                                           id="ranking-value"
-                                                           onInput="$('#rangeval').html($(this).val())">
-                                                </div>
-                                                <div class="dropdown-item">
-                                                    <div class="btn-group" role="group"
-                                                         aria-label="Basic example">
-                                                        <button id="set-ranking"
-                                                                type="button"
-                                                                class="btn btn-link"
-                                                                th:attr="onclick=|updateRank('${player.uniqueName}')|">Set
-                                                        </button>
-                                                        <button id="remove-ranking" type="button"
-                                                                class="btn btn-link"
-                                                                th:attr="onclick=|removeRank('${player.uniqueName}')|">Remove
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <hr class="my-1">
+                                            <input id="ex6" type="text"
+                                                   data-slider-min="1"
+                                                   data-slider-max="50"
+                                                   data-slider-step="1"
+                                                   data-slider-value="3"
+                                                   data-slider-tooltip="hide"/>
+
+                                            <button id="set-ranking"
+                                                    type="button"
+                                                    class="btn btn-link"
+                                                    th:attr="onclick=|updateRank('${player.uniqueName}')|">Set
+                                            </button>
+                                            |
+                                            <button id="remove-ranking" type="button"
+                                                    class="btn btn-link"
+                                                    th:attr="onclick=|removeRank('${player.uniqueName}')|">Remove
+                                            </button>
                                         </div>
+
                                     </td>
                                 </tr>
                                 </tbody>
@@ -302,19 +299,28 @@
 
     function updateRank(playerId) {
         $('#playerId').val(playerId);
-        $('#rank').val($("#ranking-value").val());
+        $('#rank').val($("#ex6").val());
+        console.log($('#playerId').val(), $('#rank').val() )
         $('#update-rank-form').attr('action', '/ranking/').submit();
     }
 
     function removeRank(playerId, rank) {
         $('#playerId').val(playerId);
-        $('#rank').val(rank);
+        $('#rank').val($("#ex6").val());
+        console.log($('#playerId').val(), $('#rank').val() )
         $('#update-rank-form').attr('action', '/ranking/remove').submit();
     }
 
     $(document).ready(function() {
         console.log("Ready!");
+
+        $("#ex6").slider();
+
+        $("#ex6").on("slide", function(slideEvt) {
+            $("#ex6SliderVal").text(slideEvt.value);
+        });
     });
+
 
     </script>
 

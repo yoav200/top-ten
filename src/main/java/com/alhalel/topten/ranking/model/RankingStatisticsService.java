@@ -1,7 +1,7 @@
-package com.alhalel.topten.services;
+package com.alhalel.topten.ranking.model;
 
-import com.alhalel.topten.model.PlayerStatisticsModel;
-import com.alhalel.topten.repositories.RankListItemRepository;
+import com.alhalel.topten.player.model.PlayerStatisticsModel;
+import com.alhalel.topten.ranking.RankListItemRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

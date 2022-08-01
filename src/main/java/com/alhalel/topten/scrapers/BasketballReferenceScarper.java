@@ -1,11 +1,11 @@
 package com.alhalel.topten.scrapers;
 
 import com.alhalel.topten.config.ScraperConfig;
-import com.alhalel.topten.enteties.Player;
-import com.alhalel.topten.enteties.PlayerAchievements;
-import com.alhalel.topten.enteties.PlayerInfo;
-import com.alhalel.topten.enteties.PlayerStats;
-import com.alhalel.topten.model.PlayerItem;
+import com.alhalel.topten.player.Player;
+import com.alhalel.topten.player.PlayerAchievements;
+import com.alhalel.topten.player.PlayerInfo;
+import com.alhalel.topten.player.PlayerStats;
+import com.alhalel.topten.player.model.PlayerItem;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Connection;
@@ -46,17 +46,25 @@ public class BasketballReferenceScarper {
 
         Document doc = Jsoup.connect(playerurl).get();
 
+        PlayerStats playerStats = getPlayerStats(
+                doc,
+                "per_game",
+                "advanced",
+                PlayerStats.StatsFor.REGULAR_SEASON);
+
+        PlayerStats playerPlayoffsStats = getPlayerStats(
+                doc,
+                "playoffs_per_game",
+                "playoffs_advanced",
+                PlayerStats.StatsFor.PLAYOFFS);
+
+
         Player player = new Player();
         player.setUniqueName(playerItem.getUniqueName());
         player.setPlayerInfo(getPlayerInfo(playerItem, doc, "meta"));
         player.setAchievements(getPlayerAchievements(doc, "bling"));
-        player.setPlayerStats(Set.of(
-                getPlayerStats(doc, "per_game", "advanced", PlayerStats.StatsFor.REGULAR_SEASON),
-                getPlayerStats(doc, "playoffs_per_game", "playoffs_advanced", PlayerStats.StatsFor.PLAYOFFS)
-        ));
-
-        if (player.getCareerPerGame().getGames() < config.getMinGamesLimit())
-            player.setEligibleForSaving(false);
+        player.setPlayerStats(Set.of(playerStats, playerPlayoffsStats));
+        player.setEligibleForSaving(playerStats.getGames() > config.getMinGamesLimit());
 
         return player;
     }
@@ -64,7 +72,6 @@ public class BasketballReferenceScarper {
     public PlayerInfo getPlayerInfo(PlayerItem playerItem, Document doc, String id) {
         PlayerInfo.PlayerInfoBuilder infoBuilder = PlayerInfo.builder()
                 .fullName(playerItem.getFullName())
-                //.uniqueName(playerItem.getUniqueName())
                 .yearsActive(playerItem.getYearsActive())
                 .active(playerItem.isActive());
 

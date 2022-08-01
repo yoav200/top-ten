@@ -1,9 +1,7 @@
-package com.alhalel.topten.services;
+package com.alhalel.topten.player;
 
-import com.alhalel.topten.enteties.Player;
-import com.alhalel.topten.model.PlayerData;
-import com.alhalel.topten.model.PlayerItem;
-import com.alhalel.topten.repositories.PlayerRepository;
+import com.alhalel.topten.player.model.PlayerData;
+import com.alhalel.topten.player.model.PlayerItem;
 import com.alhalel.topten.scrapers.BasketballReferenceScarper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -68,8 +66,8 @@ public class PlayersService {
 
     public Player getPlayer(String uniqueName) {
         return Optional.ofNullable(playersItems.get(uniqueName))
-                .map(playerItem ->
-                        playerRepository.findPlayerByUniqueName(uniqueName).orElseGet(() -> {
+                .map(playerItem -> playerRepository.findPlayerByUniqueName(uniqueName)
+                        .orElseGet(() -> {
                             try {
                                 Player player = scarper.getPlayer(playerItem);
                                 // save only player with minimum of games
@@ -88,9 +86,12 @@ public class PlayersService {
 
         List<String> keysAsArray = new ArrayList<>(playersItems.keySet());
 
-        return IntStream.rangeClosed(1, number).mapToObj(i -> {
-            String uniqueName = keysAsArray.get(random.nextInt(keysAsArray.size()));
-            return new PlayerData(getPlayer(uniqueName));
-        }).collect(Collectors.toList());
+        return IntStream.rangeClosed(1, number)
+                .mapToObj(ignore -> {
+                    String uniqueName = keysAsArray.get(random.nextInt(keysAsArray.size()));
+                    return new PlayerData(getPlayer(uniqueName));
+                })
+                .filter(PlayerData::isEligibleForSaving)
+                .collect(Collectors.toList());
     }
 }

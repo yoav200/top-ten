@@ -1,6 +1,6 @@
-package com.alhalel.topten.repositories;
+package com.alhalel.topten.ranking;
 
-import com.alhalel.topten.enteties.RankList;
+import com.alhalel.topten.ranking.RankList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

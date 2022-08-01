@@ -1,4 +1,4 @@
-package com.alhalel.topten.enteties;
+package com.alhalel.topten.ranking;
 
 import com.alhalel.topten.user.User;
 import lombok.*;
@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)

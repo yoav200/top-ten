@@ -1,6 +1,5 @@
-package com.alhalel.topten.repositories;
+package com.alhalel.topten.player;
 
-import com.alhalel.topten.enteties.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

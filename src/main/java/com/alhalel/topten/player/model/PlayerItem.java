@@ -1,4 +1,4 @@
-package com.alhalel.topten.model;
+package com.alhalel.topten.player.model;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,12 +1,8 @@
-package com.alhalel.topten.services;
+package com.alhalel.topten.ranking;
 
-import com.alhalel.topten.enteties.Player;
-import com.alhalel.topten.enteties.PlayerStats;
-import com.alhalel.topten.enteties.RankList;
-import com.alhalel.topten.enteties.RankListItem;
-import com.alhalel.topten.model.RankListStatisticsModel;
-import com.alhalel.topten.repositories.RankListItemRepository;
-import com.alhalel.topten.repositories.RankListRepository;
+import com.alhalel.topten.player.Player;
+import com.alhalel.topten.player.PlayerStats;
+import com.alhalel.topten.ranking.model.RankListStatisticsModel;
 import com.alhalel.topten.user.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,7 +31,7 @@ public class RankingService {
 
     public RankList updateRankingListVisibility(Long userId, RankList.RankListVisibility visibility) {
         return rankListRepository.findByUserId(userId).map(rankList -> {
-            //rankList.setVisibility(visibility);
+            rankList.setVisibility(visibility);
             return rankListRepository.save(rankList);
         }).orElseThrow(() -> new IllegalArgumentException("Ranking list for user " + userId + " not found"));
     }
@@ -76,7 +72,12 @@ public class RankingService {
 
     public RankList createRankingListForUser(Long userId) {
         return userRepository.findById(userId)
-                .map(user -> rankListRepository.save(RankList.builder().user(user).title("Default list for user").build()))
+                .map(user -> {
+                    RankList rankList = new RankList();
+                    rankList.setUser(user);
+                    rankList.setTitle("Default list for user");
+                    return rankListRepository.save(rankList);
+                })
                 .orElseThrow(() -> new IllegalArgumentException("User not found " + userId));
     }
 

@@ -1,11 +1,11 @@
 package com.alhalel.topten.controllers;
 
-import com.alhalel.topten.enteties.Player;
-import com.alhalel.topten.enteties.RankList;
+import com.alhalel.topten.player.Player;
+import com.alhalel.topten.player.PlayersService;
+import com.alhalel.topten.ranking.RankList;
+import com.alhalel.topten.ranking.RankingService;
+import com.alhalel.topten.ranking.model.RankingStatisticsService;
 import com.alhalel.topten.security.UserPrincipal;
-import com.alhalel.topten.services.PlayersService;
-import com.alhalel.topten.services.RankingService;
-import com.alhalel.topten.services.RankingStatisticsService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
+
+import static com.alhalel.topten.controllers.PlayersController.principalToUserPrincipal;
 
 @Controller
 @RequestMapping("ranking")
@@ -28,7 +32,8 @@ public class RankingController {
 
     @Secured("ROLE_USER")
     @GetMapping("/my-list")
-    String myRanking(UserPrincipal principal, Model model) {
+    String myRanking(Principal p, Model model) {
+        UserPrincipal principal = principalToUserPrincipal(p);
         rankingService.getRankingListForUser(principal.getId()).ifPresent(list -> {
             model.addAttribute("rankListStats", rankingService.getRankListStatistics(list));
             model.addAttribute("rankList", list);
@@ -40,7 +45,9 @@ public class RankingController {
     @PostMapping("/my-list")
     String changeListVisibility(
             @RequestParam(value = "visibility") RankList.RankListVisibility visibility,
-            UserPrincipal principal, Model model) {
+            Principal p, Model model) {
+
+        UserPrincipal principal = principalToUserPrincipal(p);
 
         RankList rankList = rankingService.updateRankingListVisibility(principal.getId(), visibility);
 
@@ -52,7 +59,8 @@ public class RankingController {
 
     @Secured("ROLE_USER")
     @GetMapping("")
-    String rankings(UserPrincipal principal, Model model) {
+    String rankings(Principal p, Model model) {
+        UserPrincipal principal = principalToUserPrincipal(p);
         rankingService.getRankingListForUser(principal.getId()).ifPresent(list -> {
             model.addAttribute("rankListStats", rankingService.getRankListStatistics(list));
             model.addAttribute("rankList", list);
@@ -65,8 +73,10 @@ public class RankingController {
     public String updatePlayerRanking(
             @RequestParam(value = "playerId") String playerId,
             @RequestParam(value = "rank") Integer rank,
-            UserPrincipal principal,
+            Principal p,
             Model model) {
+
+        UserPrincipal principal = principalToUserPrincipal(p);
 
         Player player = playersService.getPlayer(playerId);
 
@@ -85,14 +95,15 @@ public class RankingController {
     @PostMapping("/remove")
     public String removePlayerRanking(
             @RequestParam(value = "playerId") String playerId,
-            UserPrincipal principal,
+            Principal p,
             Model model) {
+
+        UserPrincipal principal = principalToUserPrincipal(p);
 
         Player player = playersService.getPlayer(playerId);
 
-        rankingService.getRankingListForUser(principal.getId()).ifPresent(list -> {
-            rankingService.removePlayerRanking(list, player);
-        });
+        rankingService.getRankingListForUser(principal.getId())
+                .ifPresent(list -> rankingService.removePlayerRanking(list, player));
 
         statisticsService.getPlayerStatistics(player.getUniqueName())
                 .ifPresent(stats -> model.addAttribute("statistics", stats));
@@ -100,6 +111,4 @@ public class RankingController {
         model.addAttribute("player", player);
         return "player";
     }
-
-
 }

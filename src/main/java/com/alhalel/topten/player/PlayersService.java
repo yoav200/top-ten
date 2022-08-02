@@ -15,8 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
 @Service
@@ -29,7 +28,7 @@ public class PlayersService {
 
     private final ResourceLoader resourceLoader;
 
-    private final Map<String, PlayerItem> playersItems = new HashMap<>();
+    private final Map<String, PlayerItem> playersItems = new ConcurrentHashMap<>();
 
     private final BasketballReferenceScarper scarper;
 
@@ -84,14 +83,31 @@ public class PlayersService {
 
     public List<PlayerData> getRandomPlayers(int number) {
 
+        int max = 8;
+        int tries = 0;
+
+        List<PlayerData> players = new ArrayList<>();
         List<String> keysAsArray = new ArrayList<>(playersItems.keySet());
 
-        return IntStream.rangeClosed(1, number)
-                .mapToObj(ignore -> {
-                    String uniqueName = keysAsArray.get(random.nextInt(keysAsArray.size()));
-                    return new PlayerData(getPlayer(uniqueName));
-                })
-                .filter(PlayerData::isEligibleForSaving)
-                .collect(Collectors.toList());
+        while (players.size() < number && tries < max) {
+            String uniqueName = keysAsArray.get(random.nextInt(keysAsArray.size()));
+            PlayerData playerData = getPlayerData(getPlayer(uniqueName));
+
+            if (playerData.isEligibleForSaving()) {
+                players.add(playerData);
+            } else {
+                playersItems.remove(uniqueName);
+                keysAsArray.remove(uniqueName);
+            }
+
+            tries++;
+        }
+        return players;
+    }
+
+    public PlayerData getPlayerData(Player player) {
+        PlayerData playerData = new PlayerData(player);
+        playerData.setExternalLink(scarper.getPlayerUrl(player.getUniqueName()));
+        return playerData;
     }
 }

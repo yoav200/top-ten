@@ -38,7 +38,7 @@ public class RankList {
     @Enumerated(EnumType.STRING)
     private RankListVisibility visibility = RankListVisibility.SHARE;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 

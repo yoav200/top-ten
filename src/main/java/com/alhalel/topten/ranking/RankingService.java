@@ -1,11 +1,17 @@
 package com.alhalel.topten.ranking;
 
+import com.alhalel.topten.config.RankingConfig;
 import com.alhalel.topten.player.Player;
 import com.alhalel.topten.player.PlayerStats;
 import com.alhalel.topten.ranking.model.RankListStatisticsModel;
+import com.alhalel.topten.user.User;
 import com.alhalel.topten.user.UserRepository;
+import com.alhalel.topten.user.model.UserModel;
+import com.alhalel.topten.util.ResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +26,8 @@ public class RankingService {
     private final RankListItemRepository rankListItemRepository;
 
     private final UserRepository userRepository;
+
+    private final RankingConfig rankingConfig;
 
     public Optional<RankList> getRankingListForUser(Long userId) {
         return rankListRepository.findByUserId(userId);
@@ -36,6 +44,25 @@ public class RankingService {
         }).orElseThrow(() -> new IllegalArgumentException("Ranking list for user " + userId + " not found"));
     }
 
+    public Page<RankList> findAll(Pageable paging) {
+        User anonymous = new User();
+        anonymous.setName("Anonymous");
+        anonymous.setImageUrl(ResourceUtils.defaultPlayerAvatar());
+        Page<RankList> page = rankListRepository.findByVisibilityNot(RankList.RankListVisibility.PRIVATE, paging);
+
+        page.getContent().forEach(rankList -> {
+            if (rankList.getVisibility().equals(RankList.RankListVisibility.SHARE_ANONYMOUSLY)) {
+                rankList.setUser(anonymous);
+            }
+        });
+
+        return page;
+    }
+
+    public Optional<RankList> findRankList(Long id) {
+        return rankListRepository.findById(id);
+    }
+
     public void updatePlayerRanking(
             RankList rankList,
             Player player,
@@ -43,6 +70,10 @@ public class RankingService {
 
         if (!player.isEligibleForSaving()) {
             throw new IllegalArgumentException("Player " + player.getPlayerInfo().getFullName() + " is not Eligible for ranking");
+        }
+
+        if (rank < rankingConfig.getMinRanking() || rank > rankingConfig.getMaxRanking()) {
+            throw new IllegalArgumentException("Rank must be between " + rankingConfig.getMinRanking() + " and " + rankingConfig.getMaxRanking());
         }
 
         rankList.getRankListItems().stream()
@@ -55,9 +86,7 @@ public class RankingService {
         if (rankList.isInvalidList()) {
             throw new IllegalArgumentException("Invalid Block. Found duplicate numbers");
         }
-
         rankListRepository.save(rankList);
-
     }
 
     public void removePlayerRanking(RankList rankList, Player player) {
@@ -68,6 +97,13 @@ public class RankingService {
         }
 
         rankListRepository.save(rankList);
+    }
+
+    public UserModel getUserForList(RankList rankList) {
+        return UserModel.builder()
+                .name(rankList.getUser().getName())
+                .imageUrl(rankList.getUser().getImageUrl())
+                .build();
     }
 
     public RankList createRankingListForUser(Long userId) {

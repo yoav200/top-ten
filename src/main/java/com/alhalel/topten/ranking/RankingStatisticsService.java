@@ -1,4 +1,4 @@
-package com.alhalel.topten.ranking.model;
+package com.alhalel.topten.ranking;
 
 import com.alhalel.topten.player.model.PlayerStatisticsModel;
 import com.alhalel.topten.ranking.RankListItemRepository;

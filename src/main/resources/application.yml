@@ -64,6 +64,8 @@ management:
       exposure:
         include: "*"
       base-path: "/actuator"
+    health:
+      show-details: always
 
 service:
   scrapers:
@@ -71,7 +73,8 @@ service:
     nba-stats: "https://www.nba.com/stats/"
     min-games-limit: 82
   players:
-    random-fetch-size: 5
+    random-fetch-size: 4
   ranking:
-    default-list-id: 19
+    editors-choice: 432
+    min-ranking: 1
     max-ranking: 50

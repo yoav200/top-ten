@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<body>
+
+<div layout:fragment="content">
+    <div class="container">
+
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/ranking/editors-choice">Editor's choice</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/ranking/lists">All Lists</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/ranking/my-list">My List</a>
+            </li>
+        </ul>
+
+        <div class="p-4 mt-4 bg-light rounded-3">
+            <h3>All Lists</h3>
+        </div>
+
+        <div th:if="${page}" class="p-4 mt-4 bg-light rounded-3">
+
+            <div class="row">
+
+                <div class="card"
+                     th:each="rankList, iStat : ${page.content}"
+                     th:style="${iStat.odd}? 'font-weight: bold;'">
+
+                    <div class="card-header">
+                        List by:
+                        <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"/>
+                        <span th:text="${rankList.user.name}"></span>
+                    </div>
+
+                        <ul class="list-group list-group-flush list-group-horizontal">
+
+                            <li class="list-group-item" th:each="item,pStat : ${rankList.sortedRankListItems}"  th:unless="${pStat.index > 5}">
+                                <span th:text="${item.rank}"></span>
+                                <img th:if="${item.player.playerInfo.imageUrl}"
+                                     class="img-fluid rounded-start"
+                                     itemscope="image"
+                                     th:src="${item.player.playerInfo.imageUrl}"
+                                     alt="Photo of ${player.playerInfo.fullName}">
+                            </li>
+                            <li class="list-group-item text-center">
+                                <a th:href="'/ranking/lists/' + ${rankList.id}" class="">Full List</a>
+                            </li>
+                        </ul>
+
+
+                    <div class="card-footer">
+
+                    </div>
+
+                </div>
+
+<!--                <div th:if="${page.totalPages > 0}" class="pagination"-->
+<!--                     th:each="pageNumber : ${pageNumbers}">-->
+<!--                    <a th:href="@{/ranking/lists(size=${page.size}, page=${pageNumber})}"-->
+<!--                       th:text=${pageNumber}-->
+<!--                       th:class="${pageNumber==page.number + 1} ? active"></a>-->
+<!--                </div>-->
+
+            </div>
+
+
+                <ul class="pagination mt-3">
+                    <li class="page-item" th:if="${page.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
+                        <a th:href="@{/ranking/lists(size=${page.size}, page=${pageNumber})}"
+                           th:text=${pageNumber}
+                           th:class="${pageNumber==page.number + 1} ? 'page-link active':'page-link'"></a>
+                    </li>
+                </ul>
+
+
+
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+    $(document).ready(function() {
+        console.log("Ready!");
+    });
+
+    </script>
+
+</th:block>
+
+</body>
+</html>

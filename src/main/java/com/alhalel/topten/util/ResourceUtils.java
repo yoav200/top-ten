@@ -7,6 +7,6 @@ public class ResourceUtils {
 
 
     public static String defaultPlayerAvatar() {
-        return "/resources/static/images/no-profile-image.png";
+        return "/images/no-profile-image.png";
     }
 }

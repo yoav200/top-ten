@@ -104,7 +104,7 @@
                                                    data-slider-min="1"
                                                    data-slider-max="50"
                                                    data-slider-step="1"
-                                                   data-slider-value="3"
+                                                   th:data-slider-value="${rankingItem!=null ? rankingItem.rank : '50'}"
                                                    data-slider-tooltip="hide"/>
 
                                             <button id="set-ranking"
@@ -287,8 +287,17 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+
+            <div class="card ">
+                <div class="card-body">
+                    <h5 class="card-title">External links</h5>
+                    <p class="card-text"></p>
+                    <i class='fas fa-external-link-alt'></i>
+                    <a target="_blank" th:href="${playerData.externalLink}" class="">basketball-reference</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -301,14 +310,14 @@
         $('#playerId').val(playerId);
         $('#rank').val($("#ex6").val());
         console.log($('#playerId').val(), $('#rank').val() )
-        $('#update-rank-form').attr('action', '/ranking/').submit();
+        $('#update-rank-form').attr('action', '/ranking/my-list/update').submit();
     }
 
     function removeRank(playerId, rank) {
         $('#playerId').val(playerId);
         $('#rank').val($("#ex6").val());
         console.log($('#playerId').val(), $('#rank').val() )
-        $('#update-rank-form').attr('action', '/ranking/remove').submit();
+        $('#update-rank-form').attr('action', '/ranking/my-list/remove').submit();
     }
 
     $(document).ready(function() {
@@ -320,7 +329,6 @@
             $("#ex6SliderVal").text(slideEvt.value);
         });
     });
-
 
     </script>
 

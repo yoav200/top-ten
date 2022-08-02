@@ -11,17 +11,15 @@
         <div class="p-4 mt-4 bg-light rounded-3">
 
             <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">Players</h1>
-                <p class="col-md-8 fs-4">
-                    Rank'em!,
-                    <br>Bellow are random NBA players, you can pick one or select from the 'Search Player' box located
-                    in the navigation bar.
-                    <br>But remember, you can only rank up to 50 players.
-                </p>
+                <h1 class="display-5 fw-bold">Random NBA Players</h1>
+
+            </div>
+
+            <div id="spinner" class="spinner-border m-5"  role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
 
             <div id="playersCards" class="row row-cols-1 row-cols-md-2 g-4">
-
                 <script id="blog" type="template">
                     <div class="col">
                         <div class="card" style="border-radius: 15px;">
@@ -29,30 +27,50 @@
                                 <div class="d-flex text-black">
                                     <div class="flex-shrink-0">
                                         <img src="{{image_url}}"
-                                             alt="Generic placeholder image" class="img-fluid"
-                                             style="width: 180px; border-radius: 10px;">
+                                             alt="placeholder image" class="img-thumbnail"
+                                             style="width:130px;height:190px;border-radius: 10px;">
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h5 class="mb-1">{{title}}</h5>
                                         <p class="mb-2 pb-1" style="color: #2b2a2a;">{{yearsActive}} | {{active}}</p>
                                         <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
                                              style="background-color: #efefef;">
-                                            <div>
+                                            <div class="px-2">
                                                 <p class="small text-muted mb-1">ppg</p>
                                                 <p class="mb-0">{{ptsPerGame}}</p>
                                             </div>
-                                            <div class="px-3">
+                                            <div class="px-2">
                                                 <p class="small text-muted mb-1">apg</p>
                                                 <p class="mb-0">{{astPerGame}}</p>
                                             </div>
-                                            <div>
+                                            <div class="px-2">
                                                 <p class="small text-muted mb-1">rpg</p>
                                                 <p class="mb-0">{{trbPerGme}}</p>
                                             </div>
+
+                                            <div class="px-2">
+                                                <p class="small text-muted mb-1">|</p>
+                                                <p class="mb-0">|</p>
+                                            </div>
+
+                                            <div class="px-2">
+                                                <p class="small text-muted mb-1">fg%</p>
+                                                <p class="mb-0">{{fgPct}}</p>
+                                            </div>
+                                            <div class="px-2">
+                                                <p class="small text-muted mb-1">3p%</p>
+                                                <p class="mb-0">{{fg3Pct}}</p>
+                                            </div>
+                                            <div class="px-2">
+                                                <p class="small text-muted mb-1">ft%</p>
+                                                <p class="mb-0">{{ftPct}}</p>
+                                            </div>
                                         </div>
                                         <div class="d-flex pt-1">
-                                            <a href="/players/{{uniqueName}}" class="card-link btn btn-outline-primary me-1 flex-grow-1">Rank Player</a>
-                                            <button type="button" class="btn btn-primary flex-grow-1">Follow</button>
+                                            <a href="/players/{{uniqueName}}"
+                                               class="card-link btn btn-outline-primary me-1 flex-grow-1">Rank
+                                                Player</a>
+                                            <a target="_blank" href="{{externalLink}}" class="btn btn-primary">basketball-reference</a>
                                         </div>
                                     </div>
                                 </div>
@@ -63,8 +81,9 @@
                         </div>
                     </div>
                 </script>
-
             </div>
+
+
         </div>
     </div>
 </div>
@@ -74,8 +93,8 @@
     <script th:inline="javascript">
 
     $(function () {
-        console.log("Ready!");
 
+        console.log("Ready!");
         $.get("/players/random", function(data, status) {
             console.log("Data: " + data + "\nStatus: " + status);
 
@@ -91,10 +110,18 @@
                 x = x.replace(/{{trbPerGme}}/ig, obj.trbPerGme);
                 x = x.replace(/{{yearsActive}}/ig, obj.yearsActive);
                 x = x.replace(/{{active}}/ig, obj.active);
+                x = x.replace(/{{fgPct}}/ig, obj.fgPct);
+                x = x.replace(/{{fg3Pct}}/ig, obj.fg3Pct);
+                x = x.replace(/{{ftPct}}/ig, obj.ftPct);
+                x = x.replace(/{{externalLink}}/ig, obj.externalLink);
                 $('#playersCards').append(x);
             });
 
+        }).always(function() {
+             // Request is complete so hide spinner
+             $('#spinner').hide();
         });
+
 
     });
 

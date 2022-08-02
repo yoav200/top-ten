@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PlayerData {
@@ -37,11 +39,13 @@ public class PlayerData {
 
     private double ftPct;
 
+    private String externalLink;
+
     public PlayerData(Player player) {
         this.uniqueName = player.getUniqueName();
         this.fullName = player.getPlayerInfo().getFullName();
         this.country = player.getPlayerInfo().getCountry();
-        this.imageUrl = StringUtils.defaultIfBlank(player.getPlayerInfo().getImageUrl(), ResourceUtils.defaultPlayerAvatar());
+        this.imageUrl = player.getPlayerInfo().getImageUrl();
         this.yearsActive = player.getPlayerInfo().getYearsActive();
         this.active = player.getPlayerInfo().isActive();
         this.eligibleForSaving = player.isEligibleForSaving();

@@ -40,11 +40,7 @@ public class BasketballReferenceScarper {
 
     public Player getPlayer(PlayerItem playerItem) throws IOException {
 
-        String uniqueName = playerItem.getUniqueName();
-        String letter = uniqueName.substring(0, 1);
-        String playerurl = config.getBasketballReferenceUrl() + String.format(PLAYER_URL, letter, uniqueName);
-
-        Document doc = Jsoup.connect(playerurl).get();
+        Document doc = Jsoup.connect(getPlayerUrl(playerItem.getUniqueName())).get();
 
         PlayerStats playerStats = getPlayerStats(
                 doc,
@@ -67,6 +63,11 @@ public class BasketballReferenceScarper {
         player.setEligibleForSaving(playerStats.getGames() > config.getMinGamesLimit());
 
         return player;
+    }
+
+    public String getPlayerUrl(String uniqueName) {
+        String letter = uniqueName.substring(0, 1);
+        return config.getBasketballReferenceUrl() + String.format(PLAYER_URL, letter, uniqueName);
     }
 
     public PlayerInfo getPlayerInfo(PlayerItem playerItem, Document doc, String id) {

@@ -5,7 +5,7 @@ import com.alhalel.topten.player.PlayersService;
 import com.alhalel.topten.player.model.PlayerData;
 import com.alhalel.topten.player.model.PlayerItem;
 import com.alhalel.topten.ranking.RankingService;
-import com.alhalel.topten.ranking.model.RankingStatisticsService;
+import com.alhalel.topten.ranking.RankingStatisticsService;
 import com.alhalel.topten.security.UserPrincipal;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +31,7 @@ public class PlayersController {
     private final RankingStatisticsService statisticsService;
 
 
-    @GetMapping("")
+    @GetMapping(value = {"", "/"})
     public String players(Model model) {
         return "players";
     }
@@ -53,6 +53,7 @@ public class PlayersController {
                 .ifPresent(stats -> model.addAttribute("statistics", stats));
 
         model.addAttribute("player", player);
+        model.addAttribute("playerData", playersService.getPlayerData(player));
         return "player";
     }
 

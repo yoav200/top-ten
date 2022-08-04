@@ -68,6 +68,7 @@ management:
       show-details: always
 
 service:
+  admin-users: yoav200@gmail.com, roey.alhalel@gmail.com
   scrapers:
     basketball-reference-url: "https://www.basketball-reference.com/"
     nba-stats: "https://www.nba.com/stats/"
@@ -78,3 +79,6 @@ service:
     editors-choice: 432
     min-ranking: 1
     max-ranking: 50
+  social:
+    max-comment-by-user: 8
+    max-comment-length: 256

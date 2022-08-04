@@ -5,7 +5,6 @@ import com.alhalel.topten.player.Player;
 import com.alhalel.topten.player.PlayerStats;
 import com.alhalel.topten.ranking.model.RankListStatisticsModel;
 import com.alhalel.topten.user.User;
-import com.alhalel.topten.user.UserRepository;
 import com.alhalel.topten.user.model.UserModel;
 import com.alhalel.topten.util.ResourceUtils;
 import lombok.AllArgsConstructor;
@@ -24,8 +23,6 @@ public class RankingService {
     private final RankListRepository rankListRepository;
 
     private final RankListItemRepository rankListItemRepository;
-
-    private final UserRepository userRepository;
 
     private final RankingConfig rankingConfig;
 
@@ -106,15 +103,11 @@ public class RankingService {
                 .build();
     }
 
-    public RankList createRankingListForUser(Long userId) {
-        return userRepository.findById(userId)
-                .map(user -> {
-                    RankList rankList = new RankList();
-                    rankList.setUser(user);
-                    rankList.setTitle("Default list for user");
-                    return rankListRepository.save(rankList);
-                })
-                .orElseThrow(() -> new IllegalArgumentException("User not found " + userId));
+    public RankList createRankingListForUser(User user) {
+        RankList rankList = new RankList();
+        rankList.setUser(user);
+        rankList.setTitle("Default list for user");
+        return rankListRepository.save(rankList);
     }
 
     public RankListStatisticsModel getRankListStatistics(RankList rankList) {

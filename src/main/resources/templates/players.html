@@ -101,6 +101,7 @@
             var temp = $.trim($('#blog').html());
 
             $.each(data, function (index, obj) {
+                var active = obj.active?'Active':'Retired';
                 var x = temp.replace(/{{title}}/ig, obj.fullName);
                 x = x.replace(/{{image_url}}/ig, obj.imageUrl);
                 x = x.replace(/{{uniqueName}}/ig, obj.uniqueName);
@@ -109,7 +110,7 @@
                 x = x.replace(/{{astPerGame}}/ig, obj.astPerGame);
                 x = x.replace(/{{trbPerGme}}/ig, obj.trbPerGme);
                 x = x.replace(/{{yearsActive}}/ig, obj.yearsActive);
-                x = x.replace(/{{active}}/ig, obj.active);
+                x = x.replace(/{{active}}/ig, active);
                 x = x.replace(/{{fgPct}}/ig, obj.fgPct);
                 x = x.replace(/{{fg3Pct}}/ig, obj.fg3Pct);
                 x = x.replace(/{{ftPct}}/ig, obj.ftPct);

@@ -59,13 +59,11 @@ public class RankingController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         model.addAttribute("page", page);
-        return "ranking/all-rankings.html";
+        return "ranking/all-rankings";
     }
 
     @GetMapping("/lists/{rankListId}")
-    String getList(
-            @PathVariable("rankListId") long rankListId,
-            Model model) {
+    String getList(@PathVariable("rankListId") long rankListId, Model model) {
 
         rankingService.findRankList(rankListId).ifPresent(list -> {
 
@@ -80,7 +78,7 @@ public class RankingController {
                     break;
             }
         });
-        return "ranking/ranking.html";
+        return "ranking/ranking";
     }
 
 
@@ -122,7 +120,7 @@ public class RankingController {
         Player player = playersService.getPlayer(playerId);
 
         RankList rankList = rankingService.getRankingListForUser(principal.getId())
-                .orElseGet(() -> rankingService.createRankingListForUser(principal.getId()));
+                .orElseGet(() -> rankingService.createRankingListForUser(principal.getUser()));
 
         rankingService.updatePlayerRanking(rankList, player, rank);
 
@@ -143,6 +141,6 @@ public class RankingController {
         rankingService.getRankingListForUser(principal.getId())
                 .ifPresent(list -> rankingService.removePlayerRanking(list, player));
 
-        return "ranking/my-ranking";
+        return "redirect:/ranking/my-list";
     }
 }

@@ -21,19 +21,26 @@
         </ul>
 
         <div class="p-4 mt-4 bg-light rounded-3 row">
-            <h3 class="col-6">This is Your Ranking List</h3>
-            <div class="col-6 text-end">
-                <span>List Visibility: </span>
-                <select>
-                    <option>PRIVATE</option>
-                    <option>SHARE_ANONYMOUSLY</option>
-                    <option>SHARE</option>
-                </select>
+            <h3 class="col-8">This is Your Ranking List</h3>
+            <div class="col-4 text-end">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">List Visibility:</span>
+                    <select id="list-visibility-select" class="form-select">
+                        <option value="PRIVATE" th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).PRIVATE }">PRIVATE</option>
+                        <option value="SHARE_ANONYMOUSLY" th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE_ANONYMOUSLY }">SHARE ANONYMOUSLY</option>
+                        <option value="SHARE" th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE }">SHARE</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="updateListVisibility()"> Set </button>
+                </div>
             </div>
         </div>
 
 
         <div th:if="${rankList}" class="p-4 mt-4 bg-light rounded-3">
+
+            <form id="list-visibility-form" method="post" action="/ranking/">
+                <input type="hidden" id="visibility" name="visibility">
+            </form>
 
             <form id="update-rank-form" method="post" action="/ranking/">
                 <input type="hidden" id="playerId" name="playerId">
@@ -126,6 +133,11 @@
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
+
+    function updateListVisibility() {
+        $('#visibility').val($("#list-visibility-select").val());
+        $('#list-visibility-form').attr('action', '/ranking/my-list').submit();
+    }
 
     function updateRank(playerId, rank) {
         $('#playerId').val(playerId);

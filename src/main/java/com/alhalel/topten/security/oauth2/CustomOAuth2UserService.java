@@ -10,6 +10,7 @@ import com.alhalel.topten.user.User;
 import com.alhalel.topten.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -25,6 +27,9 @@ import java.util.Set;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+
+    @Value("${service.admin-users}")
+    private final List<String> adminUsers;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -73,14 +78,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
-        user.setRoles(Set.of(Role.ROLE_USER));
+        user.setRoles(getRolesForUser(oAuth2UserInfo.getEmail()));
         return userRepository.save(user);
     }
 
     private User updateExistingUser(User user, OAuth2UserInfo oAuth2UserInfo) {
         user.setName(oAuth2UserInfo.getName());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
-        user.setRoles(Set.of(Role.ROLE_USER));
+        user.setRoles(getRolesForUser(oAuth2UserInfo.getEmail()));
         return userRepository.save(user);
     }
+
+    private Set<Role> getRolesForUser(String email) {
+        if (adminUsers.contains(email)) {
+            return Set.of(Role.ROLE_USER, Role.ROLE_ADMIN);
+        } else {
+            return Set.of(Role.ROLE_USER);
+        }
+    }
 }
+

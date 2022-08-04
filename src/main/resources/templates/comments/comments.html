@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<body>
+
+<body>
+
+<div th:fragment="content-f">
+
+    <div class="container my-5 py-5">
+        <div class="row d-flex ">
+            <div class="col-md-12 col-lg-10 col-xl-8">
+                <div class="card">
+
+                    <div class="card-body p-4">
+                        <h4 class="text-center mb-4 pb-2">Comments</h4>
+                        <div class="row">
+                            <div class="col">
+
+                                <!-- root comment -->
+                                <div class="d-flex flex-start" th:each="comment, iStat : ${comments}">
+                                    <img class="rounded-circle shadow-1-strong me-3"
+                                         th:src="${comment.user.imageUrl}" alt="avatar"
+                                         width="65"
+                                         height="65"/>
+                                    <div class="flex-grow-1 flex-shrink-1">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <p class="mb-1">
+                                                    <span th:text="${comment.user.name}"></span> <small
+                                                        class="text-muted" th:text="${comment.updateDateTime}"></small>
+                                                </p>
+                                            </div>
+                                            <p class="small mb-0" th:text="${comment.content}"></p>
+                                            <div>
+                                                <a href="#!" class="me-4"><i class="fas fa-reply fa-xs"></i><span
+                                                        class="small"> reply</span></a>
+                                                <a href="#!" class="me-2"><i class='fas fa-thumbs-up'></i><span
+                                                        class="small"> 0 </span></a>
+                                                <a href="#!" class="me-2"><i class='fas fa-thumbs-down'></i><span
+                                                        class="small"> 0 </span></a>
+                                            </div>
+                                        </div>
+
+                                        <!-- Replay  -->
+                                        <div class="d-flex flex-start mt-4"
+                                             th:each="replay, iStat : ${comment.replays}">
+                                            <a class="me-3" href="#">
+                                                <img class="rounded-circle shadow-1-strong me-3"
+                                                     th:src="${replay.user.imageUrl}" alt="avatar"
+                                                     width="65"
+                                                     height="65"/>
+                                            </a>
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="mb-1">
+                                                            <span th:text="${replay.user.name}"></span> <small
+                                                                class="text-muted"
+                                                                th:text="${replay.updateDateTime}"></small>
+                                                        </p>
+                                                    </div>
+                                                    <p class="small mb-0" th:text="${replay.content}"></p>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <!-- new post -->
+                            <div class="post-comment-container d-flex flex-start mt-3">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                     th:src="${#authentication.getPrincipal().getImageUrl()}" alt="avatar"
+                                     width="65"
+                                     height="65"/>
+                                <div class="flex-grow-1 flex-shrink-1 mt-3">
+                                    <div>
+                                        <p class="small mb-0">
+                                            <input type="text" class="post-comment-content form-control"
+                                                   data-parent-id="123"/>
+                                        </p>
+                                        <div>
+                                            <a href="#!" class="post-comment-link me-4"><i
+                                                    class="fas fa-share fa-xs"></i><span class="small">post</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</body>
+</html>
+
+
+
+
+
+

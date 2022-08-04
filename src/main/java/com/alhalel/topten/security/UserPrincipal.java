@@ -9,40 +9,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
 public class UserPrincipal implements OAuth2User, UserDetails {
-    private final Long id;
-    private final String email;
 
-    private final String name;
+    private User user;
 
-    private final String imageUrl;
-    private final Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
 
-    public static UserPrincipal create(User user) {
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
-        return UserPrincipal.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .imageUrl(user.getImageUrl())
-                .authorities(authorities)
-                .build();
+    public static UserPrincipal create(User user, Map<String, Object> attributes) {
+        return UserPrincipal.builder().user(user).attributes(attributes).build();
     }
 
-    public static UserPrincipal create(User user, Map<String, Object> attributes) {
-        UserPrincipal userPrincipal = UserPrincipal.create(user);
-        userPrincipal.setAttributes(attributes);
-        return userPrincipal;
+    public User getUser() {
+        return user;
+    }
+
+    public Long getId() {
+        return user.getId();
+    }
+
+    public String getName() {
+        return user.getName();
+    }
+
+    public String getImageUrl() {
+        return user.getImageUrl();
     }
 
     @Override
@@ -52,7 +48,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return user.getEmail();
     }
 
     @Override
@@ -77,7 +73,9 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return user.getRoles().stream()
+                .map(r -> new SimpleGrantedAuthority(r.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override

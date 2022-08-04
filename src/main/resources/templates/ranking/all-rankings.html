@@ -25,60 +25,51 @@
         </div>
 
         <div th:if="${page}" class="p-4 mt-4 bg-light rounded-3">
-
             <div class="row">
-
                 <div class="card"
                      th:each="rankList, iStat : ${page.content}"
                      th:style="${iStat.odd}? 'font-weight: bold;'">
 
                     <div class="card-header">
                         List by:
-                        <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"/>
+                        <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"
+                             style="width:75px;"/>
                         <span th:text="${rankList.user.name}"></span>
                     </div>
 
-                        <ul class="list-group list-group-flush list-group-horizontal">
-
-                            <li class="list-group-item" th:each="item,pStat : ${rankList.sortedRankListItems}"  th:unless="${pStat.index > 5}">
-                                <span th:text="${item.rank}"></span>
-                                <img th:if="${item.player.playerInfo.imageUrl}"
-                                     class="img-fluid rounded-start"
-                                     itemscope="image"
-                                     th:src="${item.player.playerInfo.imageUrl}"
-                                     alt="Photo of ${player.playerInfo.fullName}">
-                            </li>
-                            <li class="list-group-item text-center">
-                                <a th:href="'/ranking/lists/' + ${rankList.id}" class="">Full List</a>
-                            </li>
-                        </ul>
-
-
+                    <ul class="list-group list-group-flush list-group-horizontal">
+                        <li class="list-group-item list-group-item-action list-group-item-light"
+                            th:each="item,pStat : ${rankList.sortedRankListItems}"
+                            th:unless="${pStat.index > 5}">
+                            <i th:class="'fa-solid fa-'+${item.rank}" style='font-size:24px'></i>
+                            <img th:if="${item.player.playerInfo.imageUrl}"
+                                 class="img-fluid rounded-start"
+                                 th:src="${item.player.playerInfo.imageUrl}"
+                                 th:title="${item.player.playerInfo.fullName}"
+                                 style="width:90px; height: 134px">
+                        </li>
+                        <li class="list-group-item list-group-item-action list-group-item-light">
+                            <a th:href="'/ranking/lists/' + ${rankList.id}"
+                               class="list-group-item rounded-3" aria-current="true">
+                                <img th:src="@{/images/no-profile-image.png}"
+                                     alt="Photo of Some player"
+                                     style="width:90px; height: 134px">
+                            </a>
+                        </li>
+                    </ul>
                     <div class="card-footer">
 
                     </div>
-
                 </div>
-
-<!--                <div th:if="${page.totalPages > 0}" class="pagination"-->
-<!--                     th:each="pageNumber : ${pageNumbers}">-->
-<!--                    <a th:href="@{/ranking/lists(size=${page.size}, page=${pageNumber})}"-->
-<!--                       th:text=${pageNumber}-->
-<!--                       th:class="${pageNumber==page.number + 1} ? active"></a>-->
-<!--                </div>-->
-
             </div>
 
-
-                <ul class="pagination mt-3">
-                    <li class="page-item" th:if="${page.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
-                        <a th:href="@{/ranking/lists(size=${page.size}, page=${pageNumber})}"
-                           th:text=${pageNumber}
-                           th:class="${pageNumber==page.number + 1} ? 'page-link active':'page-link'"></a>
-                    </li>
-                </ul>
-
-
+            <ul class="pagination mt-3">
+                <li class="page-item" th:if="${page.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
+                    <a th:href="@{/ranking/lists(size=${page.size}, page=${pageNumber})}"
+                       th:text=${pageNumber}
+                       th:class="${pageNumber==page.number + 1} ? 'page-link active':'page-link'"></a>
+                </li>
+            </ul>
 
         </div>
     </div>
@@ -90,6 +81,9 @@
     $(document).ready(function() {
         console.log("Ready!");
     });
+
+
+
 
     </script>
 

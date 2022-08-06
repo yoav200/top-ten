@@ -113,16 +113,6 @@ public class RankList {
         rankListItems.add(item);
     }
 
-
-    public boolean isInvalidList() {
-        Set<Integer> items = new HashSet<>();
-        return !rankListItems.stream()
-                .map(RankListItem::getRank)
-                .filter(n -> !items.add(n))
-                .collect(Collectors.toSet())
-                .isEmpty();
-    }
-
     private boolean hasRank(int rank) {
         return rankListItems.stream().anyMatch(b -> b.getRank() == rank);
     }

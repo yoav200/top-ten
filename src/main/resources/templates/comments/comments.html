@@ -8,17 +8,20 @@
 <div th:fragment="content-f">
 
     <div class="container my-5 py-5">
-        <div class="row d-flex ">
-            <div class="col-md-12 col-lg-10 col-xl-8">
+        <div class="row d-flex">
+            <div class="col-12">
+                <h4 class="text-center mb-4 pb-2">So what do think about this list?</h4>
                 <div class="card">
+                    <div class="card-body p-2">
 
-                    <div class="card-body p-4">
-                        <h4 class="text-center mb-4 pb-2">Comments</h4>
                         <div class="row">
-                            <div class="col">
+                            <div class="col-8">
+
+                                <input type="hidden" id="reply-parent-id" value=""/>
+                                <input type="hidden" id="reply-user-name" value=""/>
 
                                 <!-- root comment -->
-                                <div class="d-flex flex-start" th:each="comment, iStat : ${comments}">
+                                <div class="d-flex flex-start mb-4" th:each="comment, iStat : ${comments}">
                                     <img class="rounded-circle shadow-1-strong me-3"
                                          th:src="${comment.user.imageUrl}" alt="avatar"
                                          width="65"
@@ -27,24 +30,29 @@
                                         <div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <p class="mb-1">
-                                                    <span th:text="${comment.user.name}"></span> <small
-                                                        class="text-muted" th:text="${comment.updateDateTime}"></small>
+                                                    <span th:text="${comment.user.name}"></span>
+                                                    <small class="text-muted"
+                                                           th:title="${comment.updateDateTime}"
+                                                           th:text="${comment.getTimeAgo}"></small>
                                                 </p>
                                             </div>
                                             <p class="small mb-0" th:text="${comment.content}"></p>
                                             <div>
-                                                <a href="#!" class="me-4"><i class="fas fa-reply fa-xs"></i><span
+                                                <a href="#!" class="me-4"
+                                                   th:attr="onclick=|replay('${comment.id}','${comment.user.name}', '${iStat.index}')|"><i
+                                                        class="fas fa-reply fa-xs"></i><span
                                                         class="small"> reply</span></a>
-                                                <a href="#!" class="me-2"><i class='fas fa-thumbs-up'></i><span
+                                                <a href="#!" class="me-2 disabled"><i class='fas fa-thumbs-up'></i><span
                                                         class="small"> 0 </span></a>
-                                                <a href="#!" class="me-2"><i class='fas fa-thumbs-down'></i><span
+                                                <a href="#!" class="me-2 disabled"><i
+                                                        class='fas fa-thumbs-down'></i><span
                                                         class="small"> 0 </span></a>
                                             </div>
                                         </div>
 
                                         <!-- Replay  -->
                                         <div class="d-flex flex-start mt-4"
-                                             th:each="replay, iStat : ${comment.replays}">
+                                             th:each="replay, iStat2 : ${comment.replays}">
                                             <a class="me-3" href="#">
                                                 <img class="rounded-circle shadow-1-strong me-3"
                                                      th:src="${replay.user.imageUrl}" alt="avatar"
@@ -55,53 +63,122 @@
                                                 <div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <p class="mb-1">
-                                                            <span th:text="${replay.user.name}"></span> <small
-                                                                class="text-muted"
-                                                                th:text="${replay.updateDateTime}"></small>
+                                                            <span th:text="${replay.user.name}"></span>
+                                                            <small class="text-muted"
+                                                                   th:title="${replay.updateDateTime}"
+                                                                   th:text="${replay.getTimeAgo}"></small>
                                                         </p>
                                                     </div>
                                                     <p class="small mb-0" th:text="${replay.content}"></p>
+                                                    <div>
+                                                        <a href="#!" class="me-4"
+                                                           th:attr="onclick=|replay('${replay.id}', '${replay.user.name}', '${iStat.index}')|"><i
+                                                                class="fas fa-reply fa-xs"></i><span
+                                                                class="small"> reply</span></a>
+                                                        <a href="#!" class="me-2 disabled"><i
+                                                                class='fas fa-thumbs-up'></i><span
+                                                                class="small"> 0 </span></a>
+                                                        <a href="#!" class="me-2 disabled"><i
+                                                                class='fas fa-thumbs-down'></i><span
+                                                                class="small"> 0 </span></a>
+                                                    </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
+
+                                        <!-- new replay -->
+                                        <div th:id="'replay-div-' + ${iStat.index}" class="mt-4 new-reply"
+                                             style="display: none;">
+                                            <img class="rounded-circle shadow-1-strong me-3"
+                                                 th:src="${#authentication.getPrincipal().getImageUrl()}" alt="avatar"
+                                                 width="65"
+                                                 height="65"/>
+                                            <div class="flex-grow-1 flex-shrink-1 mt-3">
+                                                <div>
+                                                    <p class="small mb-0">
+                                                        <input th:id="'replay-content-' + ${iStat.index}"
+                                                               type="text"
+                                                               class="post-comment-content form-control"/>
+                                                    </p>
+                                                    <div>
+                                                        <a th:attr="onclick=|post('${iStat.index}')|"
+                                                           href="#!"
+                                                           class="post-comment-link me-4"><i
+                                                                class="fas fa-share fa-xs"></i>
+                                                            <span class="small">post</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
-
-
                                 </div>
-                            </div>
 
-                            <!-- new post -->
-                            <div class="post-comment-container d-flex flex-start mt-3">
-                                <img class="rounded-circle shadow-1-strong me-3"
-                                     th:src="${#authentication.getPrincipal().getImageUrl()}" alt="avatar"
-                                     width="65"
-                                     height="65"/>
-                                <div class="flex-grow-1 flex-shrink-1 mt-3">
-                                    <div>
-                                        <p class="small mb-0">
-                                            <input type="text" class="post-comment-content form-control"
-                                                   data-parent-id="123"/>
-                                        </p>
+                                <!-- new post -->
+                                <div class="post-comment-container d-flex flex-start mt-3">
+                                    <img class="rounded-circle shadow-1-strong me-3"
+                                         th:src="${#authentication.getPrincipal().getImageUrl()}" alt="avatar"
+                                         width="65"
+                                         height="65"/>
+                                    <div class="flex-grow-1 flex-shrink-1 mt-3">
                                         <div>
-                                            <a href="#!" class="post-comment-link me-4"><i
-                                                    class="fas fa-share fa-xs"></i><span class="small">post</span></a>
+                                            <p class="small mb-0">
+                                                <input id="replay-content-main"
+                                                       type="text"
+                                                       class="post-comment-content form-control"/>
+                                            </p>
+                                            <div>
+                                                <a th:attr="onclick=|post('main')|"
+                                                   href="#!" class="post-comment-link me-4"><i
+                                                        class="fas fa-share fa-xs"></i><span
+                                                        class="small">post</span></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 
+    <script>
+    function replay(parentId, userName, elementId) {
+        //console.log(parentId, userName, elementId)
+
+        $('#reply-parent-id').val(parentId)
+        $('#reply-user-name').val(userName)
+
+        var contentPrefix = '@' + userName + ' '
+
+        // show/hide elements
+        $('.new-reply').removeClass("d-flex flex-start").hide();
+        $('#replay-div-' + elementId).addClass("d-flex flex-start").show();
+        // set content
+        $('#replay-content-' + elementId).val(contentPrefix).focus();
+    }
+
+    function post(elementId) {
+        if('main' == elementId) {
+            $('#reply-parent-id').val('')
+            $('#reply-user-name').val('')
+        }
+
+        var parentId = $('#reply-parent-id').val()
+        var content = $('#replay-content-' + elementId).val()
+
+        //console.log(parentId, elementId, content)
+
+        $.post('/comments/RANK_LIST/' + rankListId, { 'content' : content, 'parentId' : parentId},  function(data) {
+            $('#comments-container').load('/comments/RANK_LIST/' + rankListId);
+        }).fail(function(xhr, status, error) {
+            addError([xhr.responseJSON]);
+        });
+    }
+    </script>
 
 </body>
 </html>

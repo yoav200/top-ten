@@ -309,14 +309,14 @@
     function updateRank(playerId) {
         $('#playerId').val(playerId);
         $('#rank').val($("#ex6").val());
-        console.log($('#playerId').val(), $('#rank').val() )
+        //console.log($('#playerId').val(), $('#rank').val() )
         $('#update-rank-form').attr('action', '/ranking/my-list/update').submit();
     }
 
     function removeRank(playerId, rank) {
         $('#playerId').val(playerId);
         $('#rank').val($("#ex6").val());
-        console.log($('#playerId').val(), $('#rank').val() )
+        //console.log($('#playerId').val(), $('#rank').val() )
         $('#update-rank-form').attr('action', '/ranking/my-list/remove').submit();
     }
 

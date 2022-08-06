@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<body>
+
+<div layout:fragment="content">
+    <div class="container">
+
+
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Opps!</h1>
+                <p class="col-md-8 fs-4">
+                    <br>Looks like you encountered an error!
+                </p>
+
+                <hr class="my-4">
+
+                <div th:if="${messages}">
+
+                    <div class="alert alert-warning" role="alert" th:each="message, iStat : ${messages.messages}">
+                        <h4 class="alert-heading" th:text="${message.title}"></h4>
+                        <p th:text="${message.text}"></p>
+                        <hr>
+                        <p class="mb-0"><a href="#" class="alert-link">an example link</a></p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <th:block layout:fragment="script"></th:block>
+
+
+</body>
+</html>

@@ -59,25 +59,17 @@ public class RankingController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         model.addAttribute("page", page);
+
         return "ranking/all-rankings";
     }
 
     @GetMapping("/lists/{rankListId}")
     String getList(@PathVariable("rankListId") long rankListId, Model model) {
-
         rankingService.findRankList(rankListId).ifPresent(list -> {
-
-            switch (list.getVisibility()) {
-                case PRIVATE:
-                    break;
-                case SHARE:
-                    model.addAttribute("user", rankingService.getUserForList(list));
-                case SHARE_ANONYMOUSLY:
-                    model.addAttribute("rankListStats", rankingService.getRankListStatistics(list));
-                    model.addAttribute("rankList", list);
-                    break;
-            }
+            model.addAttribute("rankListStats", rankingService.getRankListStatistics(list));
+            model.addAttribute("rankList", list);
         });
+
         return "ranking/ranking";
     }
 

@@ -11,15 +11,17 @@
         <div class="p-4 mt-4 bg-light rounded-3">
 
             <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">Random NBA Players</h1>
-
+                <h1 class="display-5 fw-bold">Random NBA Players
+                    <button id="refresh-btn" style='font-size:24px'><i class='fa-solid fa-arrows-rotate'></i></button>
+                 </h1>
             </div>
 
-            <div id="spinner" class="spinner-border m-5"  role="status">
+            <div id="spinner" class="spinner-border m-5" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
 
-            <div id="playersCards" class="row row-cols-1 row-cols-md-2 g-4">
+            <div>
+                <div id="playersCards" class="row row-cols-1 row-cols-md-2 g-4"></div>
                 <script id="blog" type="template">
                     <div class="col">
                         <div class="card" style="border-radius: 15px;">
@@ -83,7 +85,6 @@
                 </script>
             </div>
 
-
         </div>
     </div>
 </div>
@@ -92,11 +93,13 @@
 
     <script th:inline="javascript">
 
-    $(function () {
+    function loadRandomPlayers() {
 
-        console.log("Ready!");
+        $("#playersCards").empty();
+        $('#spinner').show();
+
         $.get("/players/random", function(data, status) {
-            console.log("Data: " + data + "\nStatus: " + status);
+            //console.log("Data: " + data + "\nStatus: " + status);
 
             var temp = $.trim($('#blog').html());
 
@@ -122,10 +125,17 @@
              // Request is complete so hide spinner
              $('#spinner').hide();
         });
+    }
 
+    $(function () {
+        console.log("Ready!");
 
+        loadRandomPlayers();
+
+        $('#refresh-btn').click(function () {
+            loadRandomPlayers();
+        });
     });
-
     </script>
 
 </th:block>

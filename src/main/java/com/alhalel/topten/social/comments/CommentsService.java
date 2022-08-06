@@ -27,13 +27,17 @@ public class CommentsService {
 
     private final Integer maxCommentLength;
 
+    private final Integer minCommentLength;
+
     public CommentsService(
             CommentsRepository commentsRepository,
             @Value("${service.social.max-comment-by-user}") Integer maxCommentByUser,
-            @Value("${service.social.max-comment-length}") Integer maxCommentLength) {
+            @Value("${service.social.max-comment-length}") Integer maxCommentLength,
+            @Value("${service.social.min-comment-length}") Integer minCommentLength) {
         this.commentsRepository = commentsRepository;
         this.maxCommentByUser = maxCommentByUser;
         this.maxCommentLength = maxCommentLength;
+        this.minCommentLength = minCommentLength;
     }
 
 
@@ -100,6 +104,10 @@ public class CommentsService {
 
         if (content.length() > maxCommentLength) {
             throw new IllegalArgumentException("Comment size excited max allowed");
+        }
+
+        if (content.length() < minCommentLength) {
+            throw new IllegalArgumentException("Comment size to short");
         }
 
         Comments comment = Comments.builder()

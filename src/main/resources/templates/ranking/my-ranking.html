@@ -20,112 +20,140 @@
             </li>
         </ul>
 
-        <div class="p-4 mt-4 bg-light rounded-3 row">
-            <h3 class="col-8">This is Your Ranking List</h3>
-            <div class="col-4 text-end">
-                <div class="input-group mb-3">
-                    <span class="input-group-text">List Visibility:</span>
-                    <select id="list-visibility-select" class="form-select">
-                        <option value="PRIVATE" th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).PRIVATE }">PRIVATE</option>
-                        <option value="SHARE_ANONYMOUSLY" th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE_ANONYMOUSLY }">SHARE ANONYMOUSLY</option>
-                        <option value="SHARE" th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE }">SHARE</option>
-                    </select>
-                    <button class="btn btn-primary" onclick="updateListVisibility()"> Set </button>
-                </div>
-            </div>
+        <div th:unless="${rankList}">
+            Ho dear,
+            looks like you haven't created your ranking list yet.
+            no worries, will take care of you
         </div>
 
+        <div th:if="${rankList}">
+            <div class="p-4 mt-4 bg-light rounded-3 row">
+                <h3 class="col-8">This is Your Ranking List</h3>
+                <div class="col-4 text-end">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">List Visibility:</span>
+                        <select id="list-visibility-select" class="form-select">
+                            <option value="PRIVATE"
+                                    th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).PRIVATE }">
+                                PRIVATE
+                            </option>
+                            <option value="SHARE_ANONYMOUSLY"
+                                    th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE_ANONYMOUSLY }">
+                                SHARE ANONYMOUSLY
+                            </option>
+                            <option value="SHARE"
+                                    th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE }">
+                                SHARE
+                            </option>
+                        </select>
+                        <button class="btn btn-primary" onclick="updateListVisibility()"> Set</button>
+                    </div>
+                </div>
+            </div>
 
-        <div th:if="${rankList}" class="p-4 mt-4 bg-light rounded-3">
+            <div class="p-4 mt-4 bg-light rounded-3">
 
-            <form id="list-visibility-form" method="post" action="/ranking/">
-                <input type="hidden" id="visibility" name="visibility">
-            </form>
+                <form id="list-visibility-form" method="post" action="/ranking/">
+                    <input type="hidden" id="visibility" name="visibility">
+                </form>
 
-            <form id="update-rank-form" method="post" action="/ranking/">
-                <input type="hidden" id="playerId" name="playerId">
-                <input type="hidden" id="rank" name="rank">
-            </form>
+                <form id="update-rank-form" method="post" action="/ranking/">
+                    <input type="hidden" id="playerId" name="playerId">
+                    <input type="hidden" id="rank" name="rank">
+                </form>
 
-            <table class="table table-sm caption-top table-striped table-hover table-bordered text-strong">
-                <thead>
-                <tr>
-                    <th scope="col">Rank #</th>
-                    <th scope="col">Player</th>
-                    <th scope="col" title="Include NBA and ABA">Champs.</th>
-                    <th scope="col" title="Finals MVP">FMVP</th>
-                    <th scope="col">MVP</th>
-                    <th scope="col" title="Point Per Game">PPG</th>
-                    <th scope="col" title="Assists Per Game">APG</th>
-                    <th scope="col" title="Rebounds Per Game">RPG</th>
-                    <th scope="col" title="Blocks Per Game">BPG</th>
-                    <th scope="col" title="Steels Per Game">SPG</th>
-                    <th scope="col" title="Player Efficiency Rating">PER</th>
-                    <th scope="col" title="Box Plus/Minus">BPM</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="rankItem : ${rankList.sortedRankListItems}">
-                    <th class="text-center" scope="row">
-                        <div th:text="${rankItem.rank}"></div>
-                        <div><button class="btn btn-info btn-sm m-1" th:attr="onclick=|updateRank('${rankItem.player.uniqueName}', '${rankItem.rank - 1}')|"> <i class='fas fa-arrow-up'></i></button></div>
-                        <div><button class="btn btn-info btn-sm m-1" th:attr="onclick=|updateRank('${rankItem.player.uniqueName}', '${rankItem.rank + 1}')|" > <i class='fas fa-arrow-down'></i></button></div>
-                    </th>
-                    <td>
-                        <div class="card mb-1" style="max-width: 540px;">
-                            <div class="row g-0">
-                                <div class="col-md-2">
-                                    <img th:if="${rankItem.player.playerInfo.imageUrl}"
-                                         class="img-fluid rounded-start"
-                                         itemscope="image"
-                                         th:src="${rankItem.player.playerInfo.imageUrl}"
-                                         alt="Photo of ${player.playerInfo.fullName}">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <a th:href="'/players/' + ${rankItem.player.uniqueName}">
-                                                <span th:text="${rankItem.player.playerInfo.fullName}"></span>
-                                            </a>
-                                        </h5>
-                                        <p class="card-text" th:text="${rankItem.player.playerInfo.yearsActive}"></p>
-                                        <p class="card-text">
-                                            <small class="text-muted" th:if="${rankItem.player.playerInfo.active}" th:text="Active"></small>
-                                            <small class="text-muted" th:unless="${rankItem.player.playerInfo.active}" th:text="Retired"></small>
-                                        </p>
+                <table class="table table-sm caption-top table-striped table-hover table-bordered text-strong">
+                    <thead>
+                    <tr>
+                        <th scope="col">Rank #</th>
+                        <th scope="col">Player</th>
+                        <th scope="col" title="Include NBA and ABA">Champs.</th>
+                        <th scope="col" title="Finals MVP">FMVP</th>
+                        <th scope="col">MVP</th>
+                        <th scope="col" title="Point Per Game">PPG</th>
+                        <th scope="col" title="Assists Per Game">APG</th>
+                        <th scope="col" title="Rebounds Per Game">RPG</th>
+                        <th scope="col" title="Blocks Per Game">BPG</th>
+                        <th scope="col" title="Steels Per Game">SPG</th>
+                        <th scope="col" title="Player Efficiency Rating">PER</th>
+                        <th scope="col" title="Box Plus/Minus">BPM</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rankItem : ${rankList.sortedRankListItems}">
+                        <th class="text-center" scope="row">
+                            <div th:text="${rankItem.rank}"></div>
+                            <div>
+                                <button class="btn btn-info btn-sm m-1"
+                                        th:attr="onclick=|updateRank('${rankItem.player.uniqueName}', '${rankItem.rank - 1}')|">
+                                    <i class='fas fa-arrow-up'></i></button>
+                            </div>
+                            <div>
+                                <button class="btn btn-info btn-sm m-1"
+                                        th:attr="onclick=|updateRank('${rankItem.player.uniqueName}', '${rankItem.rank + 1}')|">
+                                    <i class='fas fa-arrow-down'></i></button>
+                            </div>
+                        </th>
+                        <td>
+                            <div class="card mb-1" style="max-width: 540px;">
+                                <div class="row g-0">
+                                    <div class="col-md-2">
+                                        <img th:if="${rankItem.player.playerInfo.imageUrl}"
+                                             class="img-fluid rounded-start"
+                                             itemscope="image"
+                                             th:src="${rankItem.player.playerInfo.imageUrl}"
+                                             alt="Photo of ${player.playerInfo.fullName}">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                <a th:href="'/players/' + ${rankItem.player.uniqueName}">
+                                                    <span th:text="${rankItem.player.playerInfo.fullName}"></span>
+                                                </a>
+                                            </h5>
+                                            <p class="card-text"
+                                               th:text="${rankItem.player.playerInfo.yearsActive}"></p>
+                                            <p class="card-text">
+                                                <small class="text-muted" th:if="${rankItem.player.playerInfo.active}"
+                                                       th:text="Active"></small>
+                                                <small class="text-muted"
+                                                       th:unless="${rankItem.player.playerInfo.active}"
+                                                       th:text="Retired"></small>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                    <td th:class="${rankListStats.champs == rankItem.player.achievements.totalChamps}?'table-success':''"
-                        th:text="${rankItem.player.achievements.totalChamps}"></td>
-                    <td th:class="${rankListStats.finalsMvp == rankItem.player.achievements.finalsMvp}?'table-success':''"
-                        th:text="${rankItem.player.achievements.finalsMvp}"></td>
-                    <td th:class="${rankListStats.leagueMvp == rankItem.player.achievements.leagueMvp}?'table-success':''"
-                        th:text="${rankItem.player.achievements.leagueMvp}"></td>
-                    <td th:class="${rankListStats.ptsPerGame == rankItem.player.careerPerGame.ptsPerGame}?'table-success':''"
-                        th:text="${rankItem.player.careerPerGame.ptsPerGame}"></td>
-                    <td th:class="${rankListStats.astPerGame == rankItem.player.careerPerGame.astPerGame}?'table-success':''"
-                        th:text="${rankItem.player.careerPerGame.astPerGame}"></td>
-                    <td th:class="${rankListStats.trbPerGme == rankItem.player.careerPerGame.trbPerGme}?'table-success':''"
-                        th:text="${rankItem.player.careerPerGame.trbPerGme}"></td>
-                    <td th:class="${rankListStats.blkPerGame == rankItem.player.careerPerGame.blkPerGame}?'table-success':''"
-                        th:text="${rankItem.player.careerPerGame.blkPerGame}"></td>
-                    <td th:class="${rankListStats.stlPerGame == rankItem.player.careerPerGame.stlPerGame}?'table-success':''"
-                        th:text="${rankItem.player.careerPerGame.stlPerGame}"></td>
-                    <td th:class="${rankListStats.per == rankItem.player.careerPerGame.per}?'table-success':''"
-                        th:text="${rankItem.player.careerPerGame.per}"></td>
-                    <td th:class="${rankListStats.bpm == rankItem.player.careerPerGame.bpm}?'table-success':''"
-                        th:text="${rankItem.player.careerPerGame.bpm}"></td>
-                </tr>
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+                        </td>
+                        <td th:class="${rankListStats.champs == rankItem.player.achievements.totalChamps}?'table-success':''"
+                            th:text="${rankItem.player.achievements.totalChamps}"></td>
+                        <td th:class="${rankListStats.finalsMvp == rankItem.player.achievements.finalsMvp}?'table-success':''"
+                            th:text="${rankItem.player.achievements.finalsMvp}"></td>
+                        <td th:class="${rankListStats.leagueMvp == rankItem.player.achievements.leagueMvp}?'table-success':''"
+                            th:text="${rankItem.player.achievements.leagueMvp}"></td>
+                        <td th:class="${rankListStats.ptsPerGame == rankItem.player.careerPerGame.ptsPerGame}?'table-success':''"
+                            th:text="${rankItem.player.careerPerGame.ptsPerGame}"></td>
+                        <td th:class="${rankListStats.astPerGame == rankItem.player.careerPerGame.astPerGame}?'table-success':''"
+                            th:text="${rankItem.player.careerPerGame.astPerGame}"></td>
+                        <td th:class="${rankListStats.trbPerGme == rankItem.player.careerPerGame.trbPerGme}?'table-success':''"
+                            th:text="${rankItem.player.careerPerGame.trbPerGme}"></td>
+                        <td th:class="${rankListStats.blkPerGame == rankItem.player.careerPerGame.blkPerGame}?'table-success':''"
+                            th:text="${rankItem.player.careerPerGame.blkPerGame}"></td>
+                        <td th:class="${rankListStats.stlPerGame == rankItem.player.careerPerGame.stlPerGame}?'table-success':''"
+                            th:text="${rankItem.player.careerPerGame.stlPerGame}"></td>
+                        <td th:class="${rankListStats.per == rankItem.player.careerPerGame.per}?'table-success':''"
+                            th:text="${rankItem.player.careerPerGame.per}"></td>
+                        <td th:class="${rankListStats.bpm == rankItem.player.careerPerGame.bpm}?'table-success':''"
+                            th:text="${rankItem.player.careerPerGame.bpm}"></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
 
-            <h6><span class="badge bg-success">highest</span> - Highlighted filed are the highest on THIS list</h6>
+                <h6><span class="badge bg-success">highest</span> - Highlighted filed are the highest on THIS list</h6>
 
+            </div>
         </div>
     </div>
 </div>
@@ -143,13 +171,15 @@
         $('#playerId').val(playerId);
         $('#rank').val(rank);
 
-        console.log(playerId, rank);
+        //console.log(playerId, rank);
         $('#update-rank-form').attr('action', '/ranking/my-list/update').submit();
     }
 
     $(document).ready(function() {
         console.log("Ready!");
     });
+
+
 
     </script>
 

@@ -13,7 +13,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.IntSummaryStatistics;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -42,22 +46,27 @@ public class RankingService {
     }
 
     public Page<RankList> findAll(Pageable paging) {
-        User anonymous = new User();
-        anonymous.setName("Anonymous");
-        anonymous.setImageUrl(ResourceUtils.defaultPlayerAvatar());
         Page<RankList> page = rankListRepository.findByVisibilityNot(RankList.RankListVisibility.PRIVATE, paging);
 
         page.getContent().forEach(rankList -> {
             if (rankList.getVisibility().equals(RankList.RankListVisibility.SHARE_ANONYMOUSLY)) {
-                rankList.setUser(anonymous);
+                rankList.setUser(getAnonymous());
             }
         });
 
         return page;
     }
 
+
     public Optional<RankList> findRankList(Long id) {
-        return rankListRepository.findById(id);
+        return rankListRepository
+                .findByIdAndVisibilityNot(id, RankList.RankListVisibility.PRIVATE)
+                .map(r -> {
+                    if (r.getVisibility().equals(RankList.RankListVisibility.SHARE_ANONYMOUSLY)) {
+                        r.setUser(getAnonymous());
+                    }
+                    return r;
+                });
     }
 
     public void updatePlayerRanking(
@@ -80,8 +89,8 @@ public class RankingService {
                         item -> rankList.updateRankItem(item, rank),
                         () -> rankList.addRankItem(RankListItem.builder().rank(rank).player(player).build()));
 
-        if (rankList.isInvalidList()) {
-            throw new IllegalArgumentException("Invalid Block. Found duplicate numbers");
+        if (isInvalidList(rankList)) {
+            throw new IllegalArgumentException("Invalid Block. Found duplicates or out of range");
         }
         rankListRepository.save(rankList);
     }
@@ -89,8 +98,8 @@ public class RankingService {
     public void removePlayerRanking(RankList rankList, Player player) {
         rankList.getRankListItems().removeIf(rankListItem -> rankListItem.getPlayer().equals(player));
 
-        if (rankList.isInvalidList()) {
-            throw new IllegalArgumentException("Invalid Block. Found duplicate numbers");
+        if (isInvalidList(rankList)) {
+            throw new IllegalArgumentException("Invalid Block. Found duplicates or out of range");
         }
 
         rankListRepository.save(rankList);
@@ -154,5 +163,32 @@ public class RankingService {
         });
 
         return statisticsModel;
+    }
+
+
+    private boolean isInvalidList(RankList rankList) {
+        Set<Integer> items = new HashSet<>();
+
+        IntSummaryStatistics collect = rankList.getRankListItems().stream()
+                .map(RankListItem::getRank)
+                .collect(Collectors.summarizingInt(Integer::intValue));
+
+        boolean inRAnge = collect.getMax() <= rankingConfig.getMaxRanking()
+                && collect.getMin() >= rankingConfig.getMinRanking();
+
+        boolean noDuplicates = rankList.getRankListItems().stream()
+                .map(RankListItem::getRank)
+                .filter(n -> !items.add(n))
+                .collect(Collectors.toSet())
+                .isEmpty();
+
+        return inRAnge && !noDuplicates;
+    }
+
+    private static User getAnonymous() {
+        User anonymous = new User();
+        anonymous.setName("Anonymous");
+        anonymous.setImageUrl(ResourceUtils.defaultPlayerAvatar());
+        return anonymous;
     }
 }

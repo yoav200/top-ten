@@ -10,5 +10,7 @@ public interface RankListRepository extends JpaRepository<RankList, Long> {
 
     Optional<RankList> findByUserId(Long userId);
 
+    Optional<RankList> findByIdAndVisibilityNot(Long id, RankList.RankListVisibility visibility);
+
     Page<RankList> findByVisibilityNot(RankList.RankListVisibility visibility, Pageable pageable);
 }

@@ -26,9 +26,10 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
     <!-- Slider -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css"
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css"
           integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
@@ -41,7 +42,8 @@
     <!-- select2 shit -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     <!-- Slider -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA=="
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"
+            integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA=="
             crossorigin="anonymous"
             referrerpolicy="no-referrer"></script>
 
@@ -221,7 +223,13 @@ body {
     position: relative;
     margin-top: 85px;
 }
-</style>
+
+a.disabled{
+    pointer-events: none;
+    cursor: default;
+}
+
+    </style>
 
 
 </head>
@@ -231,25 +239,22 @@ body {
 
 <main>
 
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <!-- Position it: -->
-        <!-- - `.toast-container` for spacing between toasts -->
-        <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
-        <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-        <div class="toast-container top-0 end-0 p-3">
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="toast-container"></div>
+        <script id="toast-template" type="template">
+
             <!-- Then put toasts within -->
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
                     <i class="bi-gift-fill"></i>
-                    <strong class="me-auto">Bootstrap</strong>
-                    <small class="text-muted">just now</small>
+                    <strong class="me-auto">{{title}}</strong>
+                    <small class="text-muted">{{timeAgo}}</small>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-                <div class="toast-body">
-                    See? Just like this.
-                </div>
+                <div class="toast-body">{{text}}</div>
             </div>
-        </div>
+
+        </script>
     </div>
 
     <div layout:fragment="content" class="main-content">
@@ -261,10 +266,24 @@ body {
 
 <script th:inline="javascript">
 
+    function addError(errors) {
+        $('#toast-container').empty()
+
+        var temp = $.trim($('#toast-template').html());
+
+        $.each(errors, function (index, error) {
+            var x = temp.replace(/{{title}}/ig, error.error);
+            x = x.replace(/{{text}}/ig, error.message);
+            x = x.replace(/{{timeAgo}}/ig, error.timestamp);
+
+            $('#toast-container').append(x);
+        });
+
+        $(".toast").toast("show");
+    }
+
     $(document).ready(function() {
-
-        //$(".toast").toast("show");
-
+        // initiate players search
         $("#player-search-header").select2({
             theme: "bootstrap-5",
             placeholder: {
@@ -285,6 +304,7 @@ body {
             $('#select-player-header-form').attr('action', "/players/" + this.value).submit();
         });
     });
+
 </script>
 
 <th:block layout:fragment="script"></th:block>

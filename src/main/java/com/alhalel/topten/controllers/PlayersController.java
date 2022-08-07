@@ -10,6 +10,7 @@ import com.alhalel.topten.security.UserPrincipal;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,7 @@ public class PlayersController {
         return "players";
     }
 
+    @Secured("ROLE_USER")
     @GetMapping("/{playerId}")
     public String showPlayer(
             @PathVariable("playerId") String playerId,

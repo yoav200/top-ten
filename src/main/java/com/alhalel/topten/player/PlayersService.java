@@ -37,7 +37,7 @@ public class PlayersService {
     @PostConstruct
     public void init() {
 
-        Resource resource = resourceLoader.getResource("classpath:data/basketball-referense-nba-players.csv");
+        Resource resource = resourceLoader.getResource("classpath:data/basketball-reference-nba-players.csv");
 
         try (BufferedReader br = new BufferedReader(new FileReader(resource.getFile()))) {
             String line;

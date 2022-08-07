@@ -5,10 +5,10 @@ server:
 
 spring:
   datasource:
-    url: postgres://fzwbnyhdspvqfe:7766f2a4e14a38fa3ee882ed587666bb3aea399f7381501862fc087d31d21947@ec2-34-242-84-130.eu-west-1.compute.amazonaws.com:5432/d7e8sun0oieef0
+    url: ${DATABASE_URL}
     driverClassName: org.postgresql.Driver
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none # create, create-drop, validate, update
       format_sql: true

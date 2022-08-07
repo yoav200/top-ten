@@ -6,7 +6,7 @@ import com.alhalel.topten.player.PlayerStats;
 import com.alhalel.topten.ranking.model.RankListStatisticsModel;
 import com.alhalel.topten.user.User;
 import com.alhalel.topten.user.model.UserModel;
-import com.alhalel.topten.util.ResourceUtils;
+import com.alhalel.topten.util.LocalResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -188,7 +188,7 @@ public class RankingService {
     private static User getAnonymous() {
         User anonymous = new User();
         anonymous.setName("Anonymous");
-        anonymous.setImageUrl(ResourceUtils.defaultPlayerAvatar());
+        anonymous.setImageUrl(LocalResourceUtils.defaultPlayerAvatar());
         return anonymous;
     }
 }

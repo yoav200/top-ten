@@ -1,7 +1,6 @@
 package com.alhalel.topten.exceptions;
 
 import com.alhalel.topten.model.MessageHolder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -19,20 +18,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final ObjectMapper objectMapper;
-
-//    @Override
-//    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-//    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-//            MethodArgumentNotValidException ex,
-//            HttpHeaders headers,
-//            HttpStatus status,
-//            WebRequest request
-//    ) {
-//        //Body omitted as it's similar to the method of same name
-//        // in ProductController example...
-//        //.....
-//    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

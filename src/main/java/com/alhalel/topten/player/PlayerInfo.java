@@ -1,6 +1,6 @@
 package com.alhalel.topten.player;
 
-import com.alhalel.topten.util.ResourceUtils;
+import com.alhalel.topten.util.LocalResourceUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
@@ -60,7 +60,7 @@ public class PlayerInfo {
     private boolean active;
 
     public String getImageUrl() {
-        return StringUtils.defaultIfBlank(this.imageUrl, ResourceUtils.defaultPlayerAvatar());
+        return StringUtils.defaultIfBlank(this.imageUrl, LocalResourceUtils.defaultPlayerAvatar());
     }
 
     @Override

@@ -56,11 +56,11 @@ public class CommentsService {
         Map<Long, Comments> map = comments.stream()
                 .collect(Collectors.toMap(Comments::getId, item -> item));
 
-        Map<Comments, List<Comments>> commentsWithReplys = comments.stream()
+        Map<Comments, List<Comments>> commentsWithReplays = comments.stream()
                 .collect(groupingBy(c -> findRoot.apply(map, c.getId())));
 
 
-        return commentsWithReplys.entrySet().stream().map(entry -> {
+        return commentsWithReplays.entrySet().stream().map(entry -> {
                     // replays
                     List<CommentModel> replays = entry.getValue().stream()
                             .filter(c -> !Objects.equals(c.getId(), entry.getKey().getId()))

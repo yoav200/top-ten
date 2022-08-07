@@ -1,12 +1,8 @@
 package com.alhalel.topten.player.model;
 
 import com.alhalel.topten.player.Player;
-import com.alhalel.topten.util.ResourceUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

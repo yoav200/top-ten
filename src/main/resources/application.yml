@@ -5,12 +5,12 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/top-ten
+    url: ${DATABASE_URL}
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: admin
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update # create, create-drop, validate, update
       format_sql: true
@@ -23,25 +23,21 @@ spring:
   flyway:
     enabled: false
 
-  #  h2:
-  #    console.enabled: true
-  #    console.path: /h2-console
-
   security:
     oauth2:
       client:
         registration:
           google:
-            clientId: 964718617611-le13opabiecm49gfnblh2p1jqd29s1h5.apps.googleusercontent.com
-            clientSecret: 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
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
 
           facebook:
-            clientId: 362211486075851
-            clientSecret: a968f53b0ff30b660ca6f85842a97e99
+            clientId: ${FACEBOOG_CLIENT_ID}
+            clientSecret: ${FACEBOOK_CLIENT_SECRET}
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
@@ -56,7 +52,6 @@ spring:
     static-locations: file:src/main/resources/static/
     cache:
       period: 0
-
 
 management:
   endpoints:

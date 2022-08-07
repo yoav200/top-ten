@@ -8,13 +8,9 @@ spring:
     url: ${DATABASE_URL}
     driverClassName: org.postgresql.Driver
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none # create, create-drop, validate, update
-      format_sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL81Dialect
+      ddl-auto: none
+      format_sql: false
     show-sql: false
     open-in-view: false
 

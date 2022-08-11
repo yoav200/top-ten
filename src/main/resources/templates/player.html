@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layouts/layout}">
 <body>
 
@@ -92,12 +93,14 @@
                                 </tr>
                                 <tr class="table-primary" >
                                     <th scope="row">Yours</th>
-                                    <td th:unless="${rankingItem}">
+
+                                    <td sec:authorize="isAnonymous()">
                                         <a href="/">
                                             Rank <span th:text="${player.playerInfo.fullName}"></span>
                                         </a>
                                     </td>
-                                    <td th:if="${rankingItem}">
+
+                                    <td sec:authorize="isAuthenticated()">
                                         <div>
                                             <span>
                                                 <span id="ex6SliderVal"

@@ -7,10 +7,9 @@
 
 <div layout:fragment="content">
     <div class="container">
-
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/ranking/editors-choice">Editor's choice</a>
+                <a class="nav-link" href="/ranking/editors-choice">Editor's choice</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/ranking/lists">All Lists</a>
@@ -21,12 +20,21 @@
         </ul>
 
         <div th:unless="${rankList}">
-            Ho dear,
-            looks like you haven't created your ranking list yet.
-            no worries, will take care of you
+            <div class="p-4 mt-4 bg-light rounded-3">
+                <h3>
+                    Ho dear,
+                    <br>looks like you haven't created your ranking list yet.
+                    no worries. <a href="/players">Start ranking Players</a>
+                </h3>
+            </div>
+
+            <div class="col mt-4 rounded-3"
+                 th:style="'background-image: url(' + @{/static/bg} + ' ); background-size: 100% 100%; height:700px; border: 1px solid #000;'">
+            </div>
         </div>
 
         <div th:if="${rankList}">
+
             <div class="p-4 mt-4 bg-light rounded-3 row">
                 <h3 class="col-8">This is Your Ranking List</h3>
                 <div class="col-4 text-end">
@@ -178,6 +186,7 @@
     $(document).ready(function() {
         console.log("Ready!");
     });
+
 
 
 

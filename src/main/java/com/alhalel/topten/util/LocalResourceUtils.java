@@ -6,6 +6,8 @@ import org.springframework.util.ResourceUtils;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,7 +23,10 @@ public class LocalResourceUtils {
     @PostConstruct
     public void init() {
         try {
-            File[] files = ResourceUtils.getFile("classpath:static/images/bgs").listFiles();
+
+            URL resource = getClass().getResource("/static/images/bgs");
+
+            File[] files = ResourceUtils.getFile(resource).listFiles();
 
             if (files != null) {
                 for (File file : files) {
@@ -35,6 +40,16 @@ public class LocalResourceUtils {
         }
     }
 
+    public InputStream loadPlayersFile() {
+        InputStream resourceAsStream = getClass().getResourceAsStream("/data/basketball-reference-nba-players.csv");
+
+        if (resourceAsStream == null) {
+            throw new IllegalArgumentException("Missing players file");
+        }
+
+        return resourceAsStream;
+    }
+
     public static String defaultPlayerAvatar() {
         return "/images/no-profile-image.png";
     }
@@ -44,7 +59,10 @@ public class LocalResourceUtils {
     }
 
     public File getRandomBackgroundFile() throws FileNotFoundException {
-        String randomBackground = getRandomBackground();
-        return ResourceUtils.getFile("classpath:static/images/bgs/" + randomBackground);
+        URL resource = getClass().getResource("/static/images/bgs/" + getRandomBackground());
+        if (resource == null) {
+            throw new IllegalArgumentException("Missing Image file");
+        }
+        return ResourceUtils.getFile(resource);
     }
 }

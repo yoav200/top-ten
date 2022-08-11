@@ -167,13 +167,14 @@
             $('#reply-user-name').val('')
         }
 
+        var listId = $("#rank-list-id").val()
         var parentId = $('#reply-parent-id').val()
         var content = $('#replay-content-' + elementId).val()
 
         //console.log(parentId, elementId, content)
 
-        $.post('/comments/RANK_LIST/' + rankListId, { 'content' : content, 'parentId' : parentId},  function(data) {
-            $('#comments-container').load('/comments/RANK_LIST/' + rankListId);
+        $.post('/comments/RANK_LIST/' + listId, { 'content' : content, 'parentId' : parentId},  function(data) {
+            $('#comments-container').load('/comments/RANK_LIST/' + listId);
         }).fail(function(xhr, status, error) {
             addError([xhr.responseJSON]);
         });

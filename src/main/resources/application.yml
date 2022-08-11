@@ -12,7 +12,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update # create, create-drop, validate, update
+      ddl-auto: none # create, create-drop, validate, update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL81Dialect
@@ -20,7 +20,7 @@ spring:
     open-in-view: false
 
   flyway:
-    enabled: false
+    enabled: true
 
   security:
     oauth2:

@@ -23,7 +23,7 @@ spring:
 
   flyway:
     enabled: true
-    locations: classpath:resources/db/migration
+
 
   security:
     oauth2:

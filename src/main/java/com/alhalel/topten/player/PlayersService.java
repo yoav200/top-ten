@@ -3,17 +3,17 @@ package com.alhalel.topten.player;
 import com.alhalel.topten.player.model.PlayerData;
 import com.alhalel.topten.player.model.PlayerItem;
 import com.alhalel.topten.scrapers.BasketballReferenceScarper;
+import com.alhalel.topten.util.LocalResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.BooleanUtils;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,20 +26,20 @@ public class PlayersService {
 
     private static final String COMMA_DELIMITER = ",";
 
-    private final ResourceLoader resourceLoader;
-
     private final Map<String, PlayerItem> playersItems = new ConcurrentHashMap<>();
 
     private final BasketballReferenceScarper scarper;
+
+    private final LocalResourceUtils localResourceUtils;
 
     private final PlayerRepository playerRepository;
 
     @PostConstruct
     public void init() {
 
-        Resource resource = resourceLoader.getResource("classpath:data/basketball-reference-nba-players.csv");
+        InputStream resourceAsStream = localResourceUtils.loadPlayersFile();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(resource.getFile()))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(COMMA_DELIMITER);

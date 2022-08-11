@@ -46,11 +46,6 @@ public class HomeController {
         return "profile";
     }
 
-    @GetMapping(value = "/static/background")
-    @ResponseBody
-    String randomBackground() {
-        return localResourceUtils.getRandomBackground();
-    }
 
     @GetMapping(value = "/static/bg", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody

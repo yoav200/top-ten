@@ -10,7 +10,6 @@ import com.alhalel.topten.security.UserPrincipal;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -37,20 +37,21 @@ public class PlayersController {
         return "players";
     }
 
-    @Secured("ROLE_USER")
     @GetMapping("/{playerId}")
     public String showPlayer(
             @PathVariable("playerId") String playerId,
             Model model,
             Principal p) {
 
-        UserPrincipal principal = principalToUserPrincipal(p);
-
         Player player = playersService.getPlayer(playerId);
 
-        rankingService.findRankingItem(principal.getId(), player.getId())
-                .ifPresent(item -> model.addAttribute("rankingItem", item));
-
+        // add user ranking of player if exist
+        Optional.ofNullable(p).ifPresent(pp -> {
+            UserPrincipal principal = principalToUserPrincipal(p);
+            rankingService.findRankingItem(principal.getId(), player.getId())
+                    .ifPresent(item -> model.addAttribute("rankingItem", item));
+        });
+        // add player ranking statistics
         statisticsService.getPlayerStatistics(player.getUniqueName())
                 .ifPresent(stats -> model.addAttribute("statistics", stats));
 

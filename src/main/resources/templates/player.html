@@ -90,9 +90,14 @@
                                         <span th:unless="${statistics.isValid}" th:text="'N/A'"></span>
                                     </td>
                                 </tr>
-                                <tr class="table-primary">
+                                <tr class="table-primary" >
                                     <th scope="row">Yours</th>
-                                    <td>
+                                    <td th:unless="${rankingItem}">
+                                        <a href="/">
+                                            Rank <span th:text="${player.playerInfo.fullName}"></span>
+                                        </a>
+                                    </td>
+                                    <td th:if="${rankingItem}">
                                         <div>
                                             <span>
                                                 <span id="ex6SliderVal"

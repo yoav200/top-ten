@@ -1,26 +1,29 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /
-
 spring:
+  profiles:
+    active: test
+
   datasource:
-    url: ${DATABASE_URL}
-    driverClassName: org.postgresql.Driver
-    username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: H2
     hibernate:
-      ddl-auto: update # create, create-drop, validate, update
+      ddl-auto: none # create, create-drop, validate, update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL81Dialect
+        dialect: org.hibernate.dialect.H2Dialect
     show-sql: true
     open-in-view: false
 
+  h2:
+    console:
+      enabled: true
+
   flyway:
-    enabled: false
+    enabled: true
+    locations: classpath:resources/db/migration
 
   security:
     oauth2:
@@ -53,20 +56,12 @@ spring:
       cache:
         period: 0
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-      base-path: "/actuator"
-    health:
-      show-details: always
 
 logging:
   level:
     root: info
     org.springframework: info
-    com.alhalel.topten: info
+    com.alhalel.topten: debug
 
 
 service:

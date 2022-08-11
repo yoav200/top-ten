@@ -48,7 +48,7 @@ public class HomeController {
 
     @GetMapping(value = "/static/bg", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public byte[] getChart() throws IOException {
+    public byte[] randomBackgroundImage() throws IOException {
         return Resources.toByteArray(localResourceUtils.getRandomBackgroundFile());
     }
 }

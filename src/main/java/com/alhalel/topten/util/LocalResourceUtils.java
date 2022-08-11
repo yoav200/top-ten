@@ -27,9 +27,7 @@ public class LocalResourceUtils {
     @PostConstruct
     public void init() {
         try {
-            //URL resource = getClass().getClassLoader().getResource(STATIC_IMAGES_BGS);
-
-            URL resource = Resources.getResource("static/images/bgs/");
+            URL resource = Resources.getResource(STATIC_IMAGES_BGS);
 
             File[] files = ResourceUtils.getFile(resource).listFiles();
 
@@ -46,15 +44,6 @@ public class LocalResourceUtils {
     }
 
     public InputStream loadPlayersFile() throws IOException {
-//        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("/data/basketball-reference-nba-players.csv");
-//
-//
-//        if (resourceAsStream == null) {
-//            throw new IllegalArgumentException("Missing players file");
-//        }
-//
-//        return resourceAsStream;
-
         return Resources.getResource("data/basketball-reference-nba-players.csv").openStream();
     }
 
@@ -66,7 +55,7 @@ public class LocalResourceUtils {
         return backgrounds.get(random.nextInt(backgrounds.size()));
     }
 
-    public URL getRandomBackgroundFile() throws IOException {
-        return Resources.getResource("static/images/bgs/" + getRandomBackground());
+    public URL getRandomBackgroundFile() {
+        return Resources.getResource(STATIC_IMAGES_BGS + getRandomBackground());
     }
 }

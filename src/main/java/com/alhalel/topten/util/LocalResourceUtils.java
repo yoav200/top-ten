@@ -15,6 +15,8 @@ import java.util.Random;
 @Component
 public class LocalResourceUtils {
 
+    public static final String STATIC_IMAGES_BGS = "/static/images/bgs/";
+
     private static final Random random = new Random();
 
     private final List<String> backgrounds = new ArrayList<>();
@@ -23,8 +25,11 @@ public class LocalResourceUtils {
     @PostConstruct
     public void init() {
         try {
+            URL resource = getClass().getClassLoader().getResource(STATIC_IMAGES_BGS);
 
-            URL resource = getClass().getResource("/static/images/bgs");
+            if (resource == null) {
+                throw new IllegalArgumentException("Missing background images files");
+            }
 
             File[] files = ResourceUtils.getFile(resource).listFiles();
 
@@ -41,7 +46,7 @@ public class LocalResourceUtils {
     }
 
     public InputStream loadPlayersFile() {
-        InputStream resourceAsStream = getClass().getResourceAsStream("/data/basketball-reference-nba-players.csv");
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("/data/basketball-reference-nba-players.csv");
 
         if (resourceAsStream == null) {
             throw new IllegalArgumentException("Missing players file");
@@ -59,7 +64,7 @@ public class LocalResourceUtils {
     }
 
     public File getRandomBackgroundFile() throws FileNotFoundException {
-        URL resource = getClass().getResource("/static/images/bgs/" + getRandomBackground());
+        URL resource = getClass().getClassLoader().getResource(STATIC_IMAGES_BGS + getRandomBackground());
         if (resource == null) {
             throw new IllegalArgumentException("Missing Image file");
         }

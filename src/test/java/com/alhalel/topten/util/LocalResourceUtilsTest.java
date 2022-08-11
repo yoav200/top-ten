@@ -2,13 +2,11 @@ package com.alhalel.topten.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 
-@Disabled("Figure out class loader")
 class LocalResourceUtilsTest {
 
     private LocalResourceUtils localResourceUtils;
@@ -32,8 +30,8 @@ class LocalResourceUtilsTest {
     }
 
     @Test
-    void getRandomBackgroundFileTest() throws FileNotFoundException {
-        File file = localResourceUtils.getRandomBackgroundFile();
-        Assertions.assertNotNull(file);
+    void getRandomBackgroundFileTest() throws IOException {
+        URL randomBackgroundFile = localResourceUtils.getRandomBackgroundFile();
+        Assertions.assertNotNull(randomBackgroundFile);
     }
 }

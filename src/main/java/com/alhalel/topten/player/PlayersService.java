@@ -10,10 +10,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,7 +32,7 @@ public class PlayersService {
     private final PlayerRepository playerRepository;
 
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
 
         InputStream resourceAsStream = localResourceUtils.loadPlayersFile();
 

@@ -2,6 +2,7 @@ package com.alhalel.topten.controllers;
 
 import com.alhalel.topten.model.MessageHolder;
 import com.alhalel.topten.util.LocalResourceUtils;
+import com.google.common.io.Resources;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -11,9 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 @Controller
 @RequestMapping("/")
@@ -50,7 +49,6 @@ public class HomeController {
     @GetMapping(value = "/static/bg", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] getChart() throws IOException {
-        File file = localResourceUtils.getRandomBackgroundFile();
-        return Files.readAllBytes(file.toPath());
+        return Resources.toByteArray(localResourceUtils.getRandomBackgroundFile());
     }
 }

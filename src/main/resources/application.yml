@@ -26,6 +26,7 @@ spring:
     oauth2:
       client:
         registration:
+          # https://console.cloud.google.com/welcome?project=top-ten-ranking
           google:
             clientId: ${GOOGLE_CLIENT_ID}
             clientSecret: ${GOOGLE_CLIENT_SECRET}
@@ -33,7 +34,7 @@ spring:
             scope:
               - email
               - profile
-
+          # https://developers.facebook.com/apps/
           facebook:
             clientId: ${FACEBOOG_CLIENT_ID}
             clientSecret: ${FACEBOOK_CLIENT_SECRET}

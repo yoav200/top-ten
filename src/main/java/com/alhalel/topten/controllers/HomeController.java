@@ -2,7 +2,6 @@ package com.alhalel.topten.controllers;
 
 import com.alhalel.topten.model.MessageHolder;
 import com.alhalel.topten.util.LocalResourceUtils;
-import com.google.common.io.Resources;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -50,6 +49,6 @@ public class HomeController {
     @GetMapping(value = "/static/bg", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] randomBackgroundImage() throws IOException {
-        return Resources.toByteArray(localResourceUtils.getRandomBackgroundFile());
+        return localResourceUtils.getRandomBackgroundFile();
     }
 }

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.URL;
 
 class LocalResourceUtilsTest {
 
@@ -30,7 +29,7 @@ class LocalResourceUtilsTest {
 
     @Test
     void getRandomBackgroundFileTest() throws IOException {
-        URL randomBackgroundFile = localResourceUtils.getRandomBackgroundFile();
+        byte[] randomBackgroundFile = localResourceUtils.getRandomBackgroundFile();
         Assertions.assertNotNull(randomBackgroundFile);
     }
 }

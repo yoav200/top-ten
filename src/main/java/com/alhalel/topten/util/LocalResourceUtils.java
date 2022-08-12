@@ -1,15 +1,15 @@
 package com.alhalel.topten.util;
 
+import com.google.common.io.ByteStreams;
 import com.google.common.io.Resources;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,8 +38,9 @@ public class LocalResourceUtils {
         return list.get(random.nextInt(list.size()));
     }
 
-    public URL getRandomBackgroundFile() {
-        return Resources.getResource(STATIC_IMAGES_BGS + getRandomBackground());
+    public byte[] getRandomBackgroundFile() throws IOException {
+        InputStream inputStream = Resources.getResource(STATIC_IMAGES_BGS + getRandomBackground()).openStream();
+        return ByteStreams.toByteArray(inputStream);
     }
 
     private List<String> getBackgrounds() {
@@ -51,18 +52,15 @@ public class LocalResourceUtils {
 
     private void loadBackgrounds() {
         try {
-            URL resource = Resources.getResource(STATIC_IMAGES_BGS);
-
-            File[] files = ResourceUtils.getFile(resource).listFiles();
-
-            if (files != null) {
-                for (File file : files) {
-                    String path = file.getPath();
-                    int indexOf = path.lastIndexOf("\\");
-                    backgrounds.add(path.substring(indexOf + 1));
+            InputStream is = Resources.getResource(STATIC_IMAGES_BGS).openStream();
+            try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
+                 BufferedReader reader = new BufferedReader(streamReader)) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    backgrounds.add(line);
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             log.warn("Fail to load backgrounds", e);
         }
     }

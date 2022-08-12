@@ -35,7 +35,7 @@ public class RankingController {
     private final RankingConfig rankingConfig;
 
     @GetMapping(value = {"", "/", "/editors-choice"})
-    String editorsChoice(Model model) {
+    String editorsChoice() {
         return "redirect:/ranking/lists/" + rankingConfig.getEditorsChoice();
     }
 
@@ -65,9 +65,12 @@ public class RankingController {
 
     @GetMapping("/lists/{rankListId}")
     String getList(@PathVariable("rankListId") long rankListId, Model model) {
-        rankingService.findRankList(rankListId).ifPresent(list -> {
+
+        rankingService.findRankList(rankListId).ifPresentOrElse(list -> {
             model.addAttribute("rankListStats", rankingService.getRankListStatistics(list));
             model.addAttribute("rankList", list);
+        }, () -> {
+            throw new IllegalArgumentException("List number " + rankListId + " Not found");
         });
 
         return "ranking/ranking";
@@ -94,7 +97,7 @@ public class RankingController {
 
         UserPrincipal principal = principalToUserPrincipal(p);
 
-        RankList rankList = rankingService.updateRankingListVisibility(principal.getId(), visibility);
+        rankingService.updateRankingListVisibility(principal.getId(), visibility);
 
         return "redirect:/ranking/my-list";
     }

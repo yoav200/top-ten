@@ -27,13 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/test", "/favicon.ico", "/images/**", "/static/**")
+                    .antMatchers("/", "/test", "/images/**", "/static/**")
+                        .permitAll()
+                    .antMatchers("/terms", "/about", "/privacy", "/contact")
                         .permitAll()
                     .antMatchers("/auth/**", "/oauth2/**")
                         .permitAll()
-                    .antMatchers(HttpMethod.GET, "/comments/**")
-                        .permitAll()
-                    .antMatchers(HttpMethod.GET, "/voting/**")
+                    .antMatchers(HttpMethod.GET, "/comments/**", "/voting/**")
                         .permitAll()
                     .antMatchers(HttpMethod.GET, "/players", "/players/**")
                         .permitAll()

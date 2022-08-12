@@ -42,15 +42,15 @@
                         <span class="input-group-text">List Visibility:</span>
                         <select id="list-visibility-select" class="form-select">
                             <option value="PRIVATE"
-                                    th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).PRIVATE }">
+                                    th:selected="${rankList.visibility.toString() == 'PRIVATE' }">
                                 PRIVATE
                             </option>
                             <option value="SHARE_ANONYMOUSLY"
-                                    th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE_ANONYMOUSLY }">
+                                    th:selected="${rankList.visibility.toString() == 'SHARE_ANONYMOUSLY' }">
                                 SHARE ANONYMOUSLY
                             </option>
                             <option value="SHARE"
-                                    th:selected="${rankList.visibility == T(com.alhalel.topten.ranking.RankList.RankListVisibility).SHARE }">
+                                    th:selected="${rankList.visibility.toString() == 'SHARE' }">
                                 SHARE
                             </option>
                         </select>

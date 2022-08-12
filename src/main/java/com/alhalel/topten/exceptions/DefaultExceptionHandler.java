@@ -27,7 +27,7 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
         messageHolder.getMessages().add(
                 MessageHolder.Message.builder()
                         .severity(MessageHolder.Severity.ERROR)
-                        .title("Something bad happened...")
+                        .title("Something went wrong")
                         .text(exception.getMessage())
                         .build()
         );

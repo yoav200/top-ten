@@ -39,6 +39,7 @@ public class HomeController {
         return "index";
     }
 
+
     @Secured("ROLE_USER")
     @GetMapping(value = {"/profile"})
     String profile(Model model) {

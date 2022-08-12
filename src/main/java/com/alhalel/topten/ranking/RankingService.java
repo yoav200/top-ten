@@ -38,8 +38,8 @@ public class RankingService {
         return rankListItemRepository.findByRankListUserIdAndPlayerId(userId, playerId);
     }
 
-    public RankList updateRankingListVisibility(Long userId, RankList.RankListVisibility visibility) {
-        return rankListRepository.findByUserId(userId).map(rankList -> {
+    public void updateRankingListVisibility(Long userId, RankList.RankListVisibility visibility) {
+        rankListRepository.findByUserId(userId).map(rankList -> {
             rankList.setVisibility(visibility);
             return rankListRepository.save(rankList);
         }).orElseThrow(() -> new IllegalArgumentException("Ranking list for user " + userId + " not found"));
@@ -103,13 +103,6 @@ public class RankingService {
         }
 
         rankListRepository.save(rankList);
-    }
-
-    public UserModel getUserForList(RankList rankList) {
-        return UserModel.builder()
-                .name(rankList.getUser().getName())
-                .imageUrl(rankList.getUser().getImageUrl())
-                .build();
     }
 
     public RankList createRankingListForUser(User user) {

@@ -1,10 +1,10 @@
 package com.alhalel.topten.util;
 
 import com.google.common.io.Resources;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Log4j2
 @Component
 public class LocalResourceUtils {
 
@@ -24,8 +25,31 @@ public class LocalResourceUtils {
     private final List<String> backgrounds = new ArrayList<>();
 
 
-    @PostConstruct
-    public void init() {
+    public InputStream loadPlayersFile() throws IOException {
+        return Resources.getResource("data/basketball-reference-nba-players.csv").openStream();
+    }
+
+    public static String defaultPlayerAvatar() {
+        return "/images/no-profile-image.png";
+    }
+
+    public String getRandomBackground() {
+        List<String> list = getBackgrounds();
+        return list.get(random.nextInt(list.size()));
+    }
+
+    public URL getRandomBackgroundFile() {
+        return Resources.getResource(STATIC_IMAGES_BGS + getRandomBackground());
+    }
+
+    private List<String> getBackgrounds() {
+        if (backgrounds.isEmpty()) {
+            loadBackgrounds();
+        }
+        return backgrounds;
+    }
+
+    private void loadBackgrounds() {
         try {
             URL resource = Resources.getResource(STATIC_IMAGES_BGS);
 
@@ -39,23 +63,7 @@ public class LocalResourceUtils {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            log.warn("Fail to load backgrounds", e);
         }
-    }
-
-    public InputStream loadPlayersFile() throws IOException {
-        return Resources.getResource("data/basketball-reference-nba-players.csv").openStream();
-    }
-
-    public static String defaultPlayerAvatar() {
-        return "/images/no-profile-image.png";
-    }
-
-    public String getRandomBackground() {
-        return backgrounds.get(random.nextInt(backgrounds.size()));
-    }
-
-    public URL getRandomBackgroundFile() {
-        return Resources.getResource(STATIC_IMAGES_BGS + getRandomBackground());
     }
 }

@@ -14,7 +14,6 @@ class LocalResourceUtilsTest {
     @BeforeEach
     void setUp() {
         localResourceUtils = new LocalResourceUtils();
-        localResourceUtils.init();
     }
 
     @Test

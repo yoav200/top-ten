@@ -3,16 +3,16 @@ package com.alhalel.topten.player;
 import com.alhalel.topten.player.model.PlayerData;
 import com.alhalel.topten.player.model.PlayerItem;
 import com.alhalel.topten.scrapers.BasketballReferenceScarper;
-import com.alhalel.topten.util.LocalResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -21,38 +21,19 @@ public class PlayersService {
 
     private static final Random random = new Random();
 
-    private static final String COMMA_DELIMITER = ",";
-
     private final Map<String, PlayerItem> playersItems = new ConcurrentHashMap<>();
 
     private final BasketballReferenceScarper scarper;
 
-    private final LocalResourceUtils localResourceUtils;
-
     private final PlayerRepository playerRepository;
 
     @PostConstruct
-    public void init() throws IOException {
+    public void init() {
 
-        InputStream resourceAsStream = localResourceUtils.loadPlayersFile();
+        Map<String, PlayerItem> collect = scarper.loadPlayersDataFile().stream()
+                .collect(Collectors.toMap(PlayerItem::getUniqueName, Function.identity()));
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(COMMA_DELIMITER);
-                PlayerItem playerItem = PlayerItem.builder()
-                        //.id(Integer.valueOf(values[8]))
-                        .uniqueName(values[0])
-                        .fullName(values[1])
-                        .yearsActive(values[2])
-                        .active(BooleanUtils.toBoolean(values[3]))
-                        .build();
-                playersItems.put(playerItem.getUniqueName(), playerItem);
-
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        playersItems.putAll(collect);
     }
 
 

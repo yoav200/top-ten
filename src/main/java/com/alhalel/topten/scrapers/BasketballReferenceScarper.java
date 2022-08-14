@@ -6,8 +6,10 @@ import com.alhalel.topten.player.PlayerAchievements;
 import com.alhalel.topten.player.PlayerInfo;
 import com.alhalel.topten.player.PlayerStats;
 import com.alhalel.topten.player.model.PlayerItem;
+import com.alhalel.topten.util.LocalResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.BooleanUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,17 +17,30 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+/**
+ * a Scrapper for <a href="https://www.basketball-reference.com/">basketball-reference</a>
+ * based on data from the Session Storage key: bbr__bbr__players__csv
+ *
+ */
 @Log4j2
 @Service
 @AllArgsConstructor
 public class BasketballReferenceScarper {
+
+    private static final String PLAYERS_DATA_FILE = "data/basketball-reference-nba-players.csv";
+
+    private static final String COMMA_DELIMITER = ",";
+
+    private static final String PLAYER_URL = "players/%s/%s.html";
 
     // match pattern like: 2x AS MVP, 7x All-NBA, 4x NBA Champ
     private final static Pattern pattern1 = Pattern.compile("(\\d+)(x) (.*)$");
@@ -33,10 +48,9 @@ public class BasketballReferenceScarper {
     // match pattern like: 2021-22 All-NBA, 1983 NBA Champ, 1967-68 AST Champ
     private final static Pattern pattern2 = Pattern.compile("(\\d{4})(-\\d{2})? (.*)$");
 
-    private static final String PLAYER_URL = "players/%s/%s.html";
-
     private final ScraperConfig config;
 
+    private final LocalResourceUtils localResourceUtils;
 
     public Player getPlayer(PlayerItem playerItem) throws IOException {
 
@@ -217,5 +231,27 @@ public class BasketballReferenceScarper {
         FileOutputStream out = (new FileOutputStream(filepath));
         out.write(resultImageResponse.bodyAsBytes());  // resultImageResponse.body() is where the image's contents are.
         out.close();
+    }
+
+    public List<PlayerItem> loadPlayersDataFile() {
+        List<PlayerItem> playerItems = new ArrayList<>();
+
+        try (InputStream resourceAsStream = localResourceUtils.loadResourceFile(PLAYERS_DATA_FILE);
+             BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(COMMA_DELIMITER);
+                PlayerItem playerItem = PlayerItem.builder()
+                        .uniqueName(values[0])
+                        .fullName(values[1])
+                        .yearsActive(values[2])
+                        .active(BooleanUtils.toBoolean(values[3]))
+                        .build();
+                playerItems.add(playerItem);
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+        return playerItems;
     }
 }

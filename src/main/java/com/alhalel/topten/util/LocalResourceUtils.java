@@ -18,19 +18,20 @@ import java.util.Random;
 @Component
 public class LocalResourceUtils {
 
-    public static final String STATIC_IMAGES_BGS = "static/images/bgs/";
+    private static final String IMAGES_NO_PROFILE_IMAGE = "/images/no-profile-image.png";
+
+    private static final String STATIC_IMAGES_BGS = "static/images/bgs/";
 
     private static final Random random = new Random();
 
     private final List<String> backgrounds = new ArrayList<>();
 
-
-    public InputStream loadPlayersFile() throws IOException {
-        return Resources.getResource("data/basketball-reference-nba-players.csv").openStream();
+    public InputStream loadResourceFile(String path) throws IOException {
+        return Resources.getResource(path).openStream();
     }
 
     public static String defaultPlayerAvatar() {
-        return "/images/no-profile-image.png";
+        return IMAGES_NO_PROFILE_IMAGE;
     }
 
     public String getRandomBackground() {
@@ -51,14 +52,18 @@ public class LocalResourceUtils {
     }
 
     private void loadBackgrounds() {
+        log.info("loading backgrounds");
         try {
             InputStream is = Resources.getResource(STATIC_IMAGES_BGS).openStream();
             try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
                  BufferedReader reader = new BufferedReader(streamReader)) {
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    log.info(line);
                     backgrounds.add(line);
                 }
+            } finally {
+                log.info("loaded {} backgrounds", backgrounds.size());
             }
         } catch (Exception e) {
             log.warn("Fail to load backgrounds", e);

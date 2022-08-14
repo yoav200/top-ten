@@ -10,3 +10,7 @@ spring:
 
   flyway:
     enabled: true
+
+service:
+  ranking:
+    editors-choice: 29

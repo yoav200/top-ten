@@ -47,14 +47,20 @@
                 <div class="col-4 text-end">
                     <h3> Vote:
                         <button type="button"
-                                id="voteBtnUp"
-                                class="btn btn-success fas fa-thumbs-up"
+                                th:id="${'vote-up-btn-RANK_LIST-' + rankList.id}"
+                                th:data-object-id="${rankList.id}"
+                                th:data-object="RANK_LIST"
+                                th:data-vote="UP"
+                                class="btn btn-success fas fa-thumbs-up vote-btn"
                                 style='font-size:24px'> ...
                         </button>
 
                         <button type="button"
-                                id="voteBtnDown"
-                                class="btn btn-success fas fa-thumbs-down"
+                                th:id="${'vote-down-btn-RANK_LIST-' + rankList.id}"
+                                th:data-object-id="${rankList.id}"
+                                th:data-object="RANK_LIST"
+                                th:data-vote="DOWN"
+                                class="btn btn-success fas fa-thumbs-down vote-btn"
                                 style='font-size:24px'> ...
                         </button>
                     </h3>
@@ -160,22 +166,43 @@
 
     <script th:inline="javascript">
 
-    function updateVoteButtons(data) {
-        $('#voteBtnUp').text(' ' + data.upvotes);
-        $('#voteBtnDown').text(' ' + data.downvotes);
+    function updateVoteButtons(object, objectId, data) {
+        $(('#vote-up-btn-' + object + '-' + objectId)).text(' ' + data.upvotes);
+        $(('#vote-down-btn-' + object + '-' + objectId)).text(' ' + data.downvotes);
     }
 
-    function getRankListVotes(rankListId) {
-        $.get('/voting/RANK_LIST/' + rankListId, function(data, status) {
-            //console.log("Data: " + data + "\nStatus: " + status);
-            updateVoteButtons(data)
-        });
+    function getVoteForElement(voteBtn) {
+        var link = $(voteBtn);
+        var id = link.attr("id");
+        var object = link.data('object')
+        var objectId = link.data('object-id')
+        var vote = link.data('vote')
+        var upTxt = $(('#vote-up-btn-' + object + '-' + objectId)).text().trim();
+        var downTxt =$(('#vote-down-btn-' + object + '-' + objectId)).text().trim();
+
+        //console.log(id, objectId, object, vote);
+        //console.log(upTxt, downTxt);
+
+        if(id.startsWith('vote-up-btn')) {
+            $.get('/voting/' + object + '/' + objectId,   function(data) {
+                updateVoteButtons(object, objectId, data);
+            }).fail(function(xhr, status, error) {
+                addError([xhr.responseJSON]);
+            });
+        }
     }
 
-    function updateRankListVotes(rankListId, vote, callback) {
-        $.post('/voting/RANK_LIST/' + rankListId, { 'vote' : vote},  function(data) {
-            //console.log("Data: " + data);
-            updateVoteButtons(data)
+    function voteAction(voteBtn) {
+        var link = $(voteBtn);
+        var object = link.data('object')
+        var objectId = link.data('object-id')
+        var vote = link.data('vote')
+
+        //console.log(objectId, object, vote);
+        //console.log($(('#vote-up-btn-' + object + '-' + objectId)).text(), $(('#vote-down-btn-' + object + '-' + objectId)).text());
+
+        $.post('/voting/' + object + '/' + objectId, { 'vote' : vote},  function(data) {
+            updateVoteButtons(object, objectId, data);
         }).fail(function(xhr, status, error) {
             addError([xhr.responseJSON]);
         });
@@ -189,23 +216,20 @@
         console.log(rankListId);
 
         if(rankListId) {
-            // load votes
-            getRankListVotes(rankListId);
             // load comments
-            $('#comments-container').load('/comments/RANK_LIST/' + rankListId);
+            $('#comments-container').load('/comments/RANK_LIST/' + rankListId, function(responseTxt, statusTxt, jqXHR) {
+                // bind button click to function after button is AJAX loaded
+                $('.vote-btn').bind('click', function() {
+                    voteAction(this);
+                });
+
+                // get voting for elements
+                $('.vote-btn').each(function(i, voteBtn) {
+                    getVoteForElement(voteBtn);
+                });
+            });
         }
-
-        $('#voteBtnUp').click(function () {
-            updateRankListVotes(rankListId, "UP");
-         });
-
-        $('#voteBtnDown').click(function () {
-            updateRankListVotes(rankListId, "DOWN");
-        });
-
     });
-
-
     </script>
 
 </th:block>

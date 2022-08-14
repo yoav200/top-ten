@@ -3,6 +3,7 @@ package com.alhalel.topten.scrapers;
 import com.alhalel.topten.config.ScraperConfig;
 import com.alhalel.topten.player.Player;
 import com.alhalel.topten.player.model.PlayerItem;
+import com.alhalel.topten.util.LocalResourceUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class BasketballReferenceScarperTest {
     void setUp() {
         ScraperConfig config = new ScraperConfig();
         config.setBasketballReferenceUrl("https://www.basketball-reference.com/");
-        crawler = new BasketballReferenceScarper(config);
+        crawler = new BasketballReferenceScarper(config, new LocalResourceUtils());
     }
 
     @Test

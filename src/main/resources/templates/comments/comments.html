@@ -42,11 +42,18 @@
                                                    th:attr="onclick=|replay('${comment.id}','${comment.user.name}', '${iStat.index}')|"><i
                                                         class="fas fa-reply fa-xs"></i><span
                                                         class="small"> reply</span></a>
-                                                <a href="#!" class="me-2 disabled"><i class='fas fa-thumbs-up'></i><span
-                                                        class="small"> 0 </span></a>
-                                                <a href="#!" class="me-2 disabled"><i
-                                                        class='fas fa-thumbs-down'></i><span
-                                                        class="small"> 0 </span></a>
+                                                <a href="#!" class="me-2 vote-btn fas fa-thumbs-up" style="text-decoration: none;"
+                                                   th:id="${'vote-up-btn-COMMENT-' + comment.id}"
+                                                   th:data-object-id="${comment.id}"
+                                                   th:data-object="COMMENT"
+                                                   th:data-vote="UP"> 0
+                                                </a>
+                                                <a href="#!" class="me-2 vote-btn fas fa-thumbs-down" style="text-decoration: none;"
+                                                   th:id="${'vote-down-btn-COMMENT-' + comment.id}"
+                                                   th:data-object-id="${comment.id}"
+                                                   th:data-object="COMMENT"
+                                                   th:data-vote="DOWN"> 0
+                                                </a>
                                             </div>
                                         </div>
 
@@ -75,12 +82,18 @@
                                                            th:attr="onclick=|replay('${replay.id}', '${replay.user.name}', '${iStat.index}')|"><i
                                                                 class="fas fa-reply fa-xs"></i><span
                                                                 class="small"> reply</span></a>
-                                                        <a href="#!" class="me-2 disabled"><i
-                                                                class='fas fa-thumbs-up'></i><span
-                                                                class="small"> 0 </span></a>
-                                                        <a href="#!" class="me-2 disabled"><i
-                                                                class='fas fa-thumbs-down'></i><span
-                                                                class="small"> 0 </span></a>
+                                                        <a href="#!" class="me-2 vote-btn fas fa-thumbs-up" style="text-decoration: none;"
+                                                           th:id="${'vote-up-btn-COMMENT-' + replay.id}"
+                                                           th:data-object-id="${replay.id}"
+                                                           th:data-object="COMMENT"
+                                                           th:data-vote="UP"> 0
+                                                        </a>
+                                                        <a href="#!" class="me-2 vote-btn fas fa-thumbs-down" style="text-decoration: none;"
+                                                           th:id="${'vote-down-btn-COMMENT-' + replay.id}"
+                                                           th:data-object-id="${replay.id}"
+                                                           th:data-object="COMMENT"
+                                                           th:data-vote="DOWN"> 0
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>

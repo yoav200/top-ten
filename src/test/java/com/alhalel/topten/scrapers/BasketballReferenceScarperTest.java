@@ -12,13 +12,13 @@ import java.io.IOException;
 
 class BasketballReferenceScarperTest {
 
-    private BasketballReferenceScarper crawler;
+    private BasketballReferenceScarper scarper;
 
     @BeforeEach
     void setUp() {
         ScraperConfig config = new ScraperConfig();
         config.setBasketballReferenceUrl("https://www.basketball-reference.com/");
-        crawler = new BasketballReferenceScarper(config, new LocalResourceUtils());
+        scarper = new BasketballReferenceScarper(config, new LocalResourceUtils());
     }
 
     @Test
@@ -27,7 +27,7 @@ class BasketballReferenceScarperTest {
                 .uniqueName("jordami01")
                 .build();
 
-        Player player = crawler.getPlayer(build);
+        Player player = scarper.getPlayer(build);
 
         Assertions.assertNotNull(player);
     }
@@ -38,7 +38,7 @@ class BasketballReferenceScarperTest {
                 .uniqueName("ervinju01")
                 .build();
 
-        Player player = crawler.getPlayer(build);
+        Player player = scarper.getPlayer(build);
 
         Assertions.assertNotNull(player);
     }
@@ -49,7 +49,7 @@ class BasketballReferenceScarperTest {
                 .uniqueName("moranja01")
                 .build();
 
-        Player player = crawler.getPlayer(build);
+        Player player = scarper.getPlayer(build);
 
         Assertions.assertNotNull(player);
     }

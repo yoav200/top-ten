@@ -45,7 +45,10 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Is Active</th>
-                                    <td><span th:text="${player.playerInfo.active}"></span></td>
+                                    <td>
+                                        <span th:if="${player.playerInfo.active}">Yes</span>
+                                        <span th:unless="${player.playerInfo.active}">No</span>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

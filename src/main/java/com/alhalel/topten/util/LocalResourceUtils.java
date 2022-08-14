@@ -18,7 +18,11 @@ import java.util.Random;
 @Component
 public class LocalResourceUtils {
 
-    private static final String IMAGES_NO_PROFILE_IMAGE = "/images/no-profile-image.png";
+    public static final String PLAYERS_DATA_FILE_1 = "data/basketball-reference-nba-players.csv";
+
+    public static final String PLAYERS_DATA_FILE_2 = "data/nba-stat-players.json";
+
+    private static final String IMAGES_NO_PROFILE_IMAGE = "/images/player-icon.png";
 
     private static final String STATIC_IMAGES_BGS = "static/images/bgs/";
 

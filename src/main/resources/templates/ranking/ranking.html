@@ -6,6 +6,7 @@
 <body>
 
 <div layout:fragment="content">
+
     <div class="container">
         <ul class="nav">
             <li class="nav-item">
@@ -18,7 +19,6 @@
                 <a class="nav-link" href="/ranking/my-list">My List</a>
             </li>
         </ul>
-
 
         <div th:unless="${rankList}">
             <div class="p-4 mt-4 bg-light rounded-3">
@@ -33,37 +33,38 @@
             </div>
         </div>
 
-
         <div th:if="${rankList}">
-            <div class="p-4 mt-4 bg-light rounded-3 row">
-                <div class="col-8">
-                    <h3> List by:
-                        <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"
-                             style="width:75px;"/>
-                        <span th:text="${rankList.user.name}"></span>
-                    </h3>
-                </div>
+            <div class="p-4 mt-4 bg-light rounded-3">
+                <div class="row">
+                    <div class="col-8">
+                        <h3> List by:
+                            <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"
+                                 style="width:75px;"/>
+                            <span th:text="${rankList.user.name}"></span>
+                        </h3>
+                    </div>
 
-                <div class="col-4 text-end">
-                    <h3> Vote:
-                        <button type="button"
-                                th:id="${'vote-up-btn-RANK_LIST-' + rankList.id}"
-                                th:data-object-id="${rankList.id}"
-                                th:data-object="RANK_LIST"
-                                th:data-vote="UP"
-                                class="btn btn-success fas fa-thumbs-up vote-btn"
-                                style='font-size:24px'> ...
-                        </button>
+                    <div class="col-4 text-end">
+                        <h3> Vote:
+                            <button type="button"
+                                    th:id="${'vote-up-btn-RANK_LIST-' + rankList.id}"
+                                    th:data-object-id="${rankList.id}"
+                                    th:data-object="RANK_LIST"
+                                    th:data-vote="UP"
+                                    class="btn btn-success fas fa-thumbs-up vote-btn"
+                                    style='font-size:24px'> ...
+                            </button>
 
-                        <button type="button"
-                                th:id="${'vote-down-btn-RANK_LIST-' + rankList.id}"
-                                th:data-object-id="${rankList.id}"
-                                th:data-object="RANK_LIST"
-                                th:data-vote="DOWN"
-                                class="btn btn-success fas fa-thumbs-down vote-btn"
-                                style='font-size:24px'> ...
-                        </button>
-                    </h3>
+                            <button type="button"
+                                    th:id="${'vote-down-btn-RANK_LIST-' + rankList.id}"
+                                    th:data-object-id="${rankList.id}"
+                                    th:data-object="RANK_LIST"
+                                    th:data-vote="DOWN"
+                                    class="btn btn-success fas fa-thumbs-down vote-btn"
+                                    style='font-size:24px'> ...
+                            </button>
+                        </h3>
+                    </div>
                 </div>
             </div>
 
@@ -93,15 +94,15 @@
                             <div th:text="${rankItem.rank}" style="text-size:24px;"></div>
                         </th>
                         <td>
-                            <div class="card mb-1" style="max-width: 540px;">
-                                <div class="row g-0">
+                            <div class="card mb-1" style="max-width: 500px;">
+                                <div class="row">
                                     <div class="col-md-2">
                                         <img th:if="${rankItem.player.playerInfo.imageUrl}"
                                              class="img-fluid rounded-start"
                                              th:src="${rankItem.player.playerInfo.imageUrl}"
-                                             th:alt="'Photo of' + ${rankItem.player.playerInfo.fullName}">
+                                             th:alt="'Photo of ' + ${rankItem.player.playerInfo.fullName}">
                                     </div>
-                                    <div class="">
+                                    <div class="col-md-8">
                                         <div class="card-body">
                                             <h5 class="card-title">
                                                 <a th:href="'/players/' + ${rankItem.player.uniqueName}">

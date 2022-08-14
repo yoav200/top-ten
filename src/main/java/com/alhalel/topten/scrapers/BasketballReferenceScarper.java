@@ -36,8 +36,6 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class BasketballReferenceScarper {
 
-    private static final String PLAYERS_DATA_FILE = "data/basketball-reference-nba-players.csv";
-
     private static final String COMMA_DELIMITER = ",";
 
     private static final String PLAYER_URL = "players/%s/%s.html";
@@ -236,7 +234,7 @@ public class BasketballReferenceScarper {
     public List<PlayerItem> loadPlayersDataFile() {
         List<PlayerItem> playerItems = new ArrayList<>();
 
-        try (InputStream resourceAsStream = localResourceUtils.loadResourceFile(PLAYERS_DATA_FILE);
+        try (InputStream resourceAsStream = localResourceUtils.loadResourceFile(LocalResourceUtils.PLAYERS_DATA_FILE_1);
              BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream))) {
             String line;
             while ((line = br.readLine()) != null) {

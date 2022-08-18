@@ -17,15 +17,13 @@ import java.util.List;
 
 /**
  * A scrapper for: <a href="https://www.nba.com/players">NBA players</a>
- * based on data from the URL: https://stats.nba.com/stats/playerindex
+ * based on data from the URL: <a href="https://stats.nba.com/stats/playerindex">NBA Stats</a>
  */
 
 @Log4j2
 @Service
 @AllArgsConstructor
 public class NbaStatsScrapper {
-
-    private static final String PLAYERS_DATA_FILE = "data/basketball-reference-nba-players.csv";
 
     private static final String PLAYER_URL = "player/%s/%s";
 
@@ -39,8 +37,8 @@ public class NbaStatsScrapper {
         return config.getBasketballReferenceUrl() + String.format(PLAYER_URL, playerId, uniqueName);
     }
 
-    public List<PlayerData> loadPlayersDataFile() {
-        List<PlayerData> playerData = new ArrayList<>();
+    public List<NbaStatsPlayerData> loadPlayersDataFile() {
+        List<NbaStatsPlayerData> nbaStatsPlayerData = new ArrayList<>();
 
         try (InputStream is = localResourceUtils.loadResourceFile(LocalResourceUtils.PLAYERS_DATA_FILE_2)) {
             Iterator<JsonNode> playersSet = objectMapper.readTree(is).findPath("rowSet").elements();
@@ -50,7 +48,7 @@ public class NbaStatsScrapper {
                 playersSet.next().elements().forEachRemaining(list::add);
                 try {
                     Assert.isTrue(list.size() == 26, "Wrong number of player properties");
-                    playerData.add(PlayerData.builder()
+                    nbaStatsPlayerData.add(NbaStatsPlayerData.builder()
                             .personId(list.get(0).asInt())
                             .playerLastName(list.get(1).asText())
                             .playerFirstName(list.get(2).asText())
@@ -82,7 +80,7 @@ public class NbaStatsScrapper {
                     log.warn("Fail to parse player", e);
                 }
             }
-            return playerData;
+            return nbaStatsPlayerData;
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

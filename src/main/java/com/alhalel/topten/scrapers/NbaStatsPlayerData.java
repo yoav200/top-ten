@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PlayerData {
+public class NbaStatsPlayerData {
     private final int personId;
     private final String playerLastName;
     private final String playerFirstName;

@@ -50,27 +50,33 @@ public class LocalResourceUtils {
 
     private List<String> getBackgrounds() {
         if (backgrounds.isEmpty()) {
-            loadBackgrounds();
+            backgrounds.addAll(loadBackgrounds(STATIC_IMAGES_BGS));
+            loadBackgrounds("");
+            loadBackgrounds("/");
+            loadBackgrounds("static");
+            loadBackgrounds("images/bgs");
         }
         return backgrounds;
     }
 
-    private void loadBackgrounds() {
-        log.info("loading backgrounds");
+    private List<String> loadBackgrounds(String path) {
+        log.info("loading resources from path {}", path);
+        List<String> lines = new ArrayList<>();
         try {
-            InputStream is = Resources.getResource(STATIC_IMAGES_BGS).openStream();
+            InputStream is = Resources.getResource(path).openStream();
             try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
                  BufferedReader reader = new BufferedReader(streamReader)) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     log.info(line);
-                    backgrounds.add(line);
+                    lines.add(line);
                 }
             } finally {
-                log.info("loaded {} backgrounds", backgrounds.size());
+                log.info("loaded {} lines", lines.size());
             }
         } catch (Exception e) {
-            log.warn("Fail to load backgrounds", e);
+            log.warn("Fail to load lines from path {}", path, e);
         }
+        return lines;
     }
 }

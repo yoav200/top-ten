@@ -26,8 +26,8 @@ class NbaStatsScrapperTest {
 
     @Test
     void loadPlayersDataFile() {
-        List<PlayerData> playerData = scrapper.loadPlayersDataFile();
-        Assertions.assertNotNull(playerData);
-        Assertions.assertEquals(4827, playerData.size());
+        List<NbaStatsPlayerData> nbaStatsPlayerData = scrapper.loadPlayersDataFile();
+        Assertions.assertNotNull(nbaStatsPlayerData);
+        Assertions.assertEquals(4827, nbaStatsPlayerData.size());
     }
 }

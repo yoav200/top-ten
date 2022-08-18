@@ -52,9 +52,8 @@ public class LocalResourceUtils {
         if (backgrounds.isEmpty()) {
             backgrounds.addAll(loadBackgrounds(STATIC_IMAGES_BGS));
             loadBackgrounds("");
-            loadBackgrounds("/");
-            loadBackgrounds("static");
-            loadBackgrounds("images/bgs");
+//            loadBackgrounds("static");
+//            loadBackgrounds("data");
         }
         return backgrounds;
     }

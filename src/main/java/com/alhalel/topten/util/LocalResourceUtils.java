@@ -51,7 +51,7 @@ public class LocalResourceUtils {
     private List<String> getBackgrounds() {
         if (backgrounds.isEmpty()) {
             backgrounds.addAll(loadBackgrounds(STATIC_IMAGES_BGS));
-            loadBackgrounds("");
+            loadBackgrounds("static/images");
 //            loadBackgrounds("static");
 //            loadBackgrounds("data");
         }

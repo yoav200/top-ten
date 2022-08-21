@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A scrapper for: <a href="https://www.nba.com/players">NBA players</a>
@@ -33,8 +34,10 @@ public class NbaStatsScrapper {
 
     private ObjectMapper objectMapper;
 
-    public String getPlayerUrl(String playerId) {
-        return config.getBasketballReferenceUrl() + String.format(PLAYER_URL, playerId);
+    public String getPlayerUrl(Integer playerReference) {
+        return Optional.ofNullable(playerReference)
+                .map(integer -> config.getNbaStats() + String.format(PLAYER_URL, playerReference))
+                .orElse(null);
     }
 
     public List<NbaStatsPlayerData> loadPlayersDataFile() {

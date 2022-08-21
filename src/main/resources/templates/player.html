@@ -94,7 +94,7 @@
                                         <span th:unless="${statistics.isValid}" th:text="'N/A'"></span>
                                     </td>
                                 </tr>
-                                <tr class="table-primary" >
+                                <tr class="table-primary">
                                     <th scope="row">Yours</th>
 
                                     <td sec:authorize="isAnonymous()">
@@ -303,9 +303,17 @@
             <div class="card ">
                 <div class="card-body">
                     <h5 class="card-title">External links</h5>
-                    <p class="card-text"></p>
-                    <i class='fas fa-external-link-alt'></i>
-                    <a target="_blank" th:href="${playerData.externalLink}" class="">basketball-reference</a>
+                    <p class="card-text">
+                    <div th:if="${playerData.externalLink}">
+                        <i class='fas fa-external-link-alt'></i>
+                        <a target="_blank" th:href="${playerData.externalLink}" class="">basketball-reference</a>
+                    </div>
+
+                    <div th:if="${playerData.externalLink2}">
+                        <i class='fas fa-external-link-alt'></i>
+                        <a target="_blank" th:href="${playerData.externalLink2}" class="">NBA Stats</a>
+                    </div>
+                    </p>
                 </div>
             </div>
 
@@ -340,6 +348,7 @@
             $("#ex6SliderVal").text(slideEvt.value);
         });
     });
+
 
     </script>
 

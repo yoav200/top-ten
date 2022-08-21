@@ -56,10 +56,6 @@ public class PlayersService {
         return nbaStatsPlayerData.values();
     }
 
-    public void removePlayer(PlayerItem playerItem) {
-        playersItems.remove(playerItem.getUniqueName());
-    }
-
     public Player getPlayer(String uniqueName) {
         // validate uniqueName exist
         PlayerItem item = Optional.ofNullable(playersItems.get(uniqueName))
@@ -100,6 +96,7 @@ public class PlayersService {
     public PlayerData getPlayerData(Player player) {
         PlayerData playerData = new PlayerData(player);
         playerData.setExternalLink(basketballReferenceScarper.getPlayerUrl(player.getUniqueName()));
+        playerData.setExternalLink2(nbaStatsScrapper.getPlayerUrl(player.getPlayerReference()));
         return playerData;
     }
 
@@ -112,6 +109,7 @@ public class PlayersService {
 
         if (collect.size() == 1) {
             NbaStatsPlayerData data = collect.get(0);
+            player.setPlayerReference(data.getPersonId());
             player.getPlayerInfo().setHeight(data.getHeight());
             player.getPlayerInfo().setWight(data.getWeight());
             player.getPlayerInfo().setPosition(data.getPosition());

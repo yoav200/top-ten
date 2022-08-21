@@ -34,6 +34,9 @@ public class Player {
     @Column(unique = true, nullable = false, updatable = false)
     private String uniqueName;
 
+    @Column(name = "player_reference")
+    private Integer playerReference;
+
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn
     private PlayerInfo playerInfo;

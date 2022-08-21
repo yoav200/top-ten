@@ -15,12 +15,16 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Log4j2
 @Service
 @AllArgsConstructor
 public class LoadPlayersTask {
+
 
     private static final int UPDATE_ACTIVE_PLAYER = 7;
 
@@ -29,6 +33,8 @@ public class LoadPlayersTask {
     private final PlayersService playersService;
 
     private final PlayerRepository playerRepository;
+
+    private final Set<String> ignoredPlayers = Collections.synchronizedSet(new HashSet<>());
 
 
     @Scheduled(initialDelay = 1000 * 60 * 2, fixedDelay = 1000 * 60 * 15)
@@ -43,22 +49,27 @@ public class LoadPlayersTask {
         LockAssert.assertLocked();
         // do something
 
-        playersService.loadPlayersItems().forEach(playerItem -> {
-            // get from DB or scrap
-            Player player = playersService.getOrScrapForPlayer(playerItem);
+        playersService.loadPlayersItems().stream()
+                .filter(playerItem -> !ignoredPlayers.contains(playerItem.getUniqueName()))
+                .forEach(playerItem -> {
+                    // get from DB or scrap
+                    Player player = playersService.getOrScrapForPlayer(playerItem);
 
-            if (player.isEligibleForSaving() && shouldUpdateInfo(player)) {
-                log.info("Updating player {}", playerItem.getFullName());
-                playersService.updatePlayerInfo(player);
-            }
-            // save if Eligible For Saving
-            if (player.isEligibleForSaving()) {
-                playerRepository.save(player);
-            } else {
-                log.info("removing non-eligible player {}:{}", playerItem.getFullName(), playerItem.getUniqueName());
-                playersService.removePlayer(playerItem);
-            }
-        });
+                    if (player.isEligibleForSaving() && shouldUpdateInfo(player)) {
+                        log.info("Updating player {}", playerItem.getFullName());
+                        playersService.updatePlayerInfo(player);
+                    }
+
+                    // save if Eligible For Saving
+                    if (player.isEligibleForSaving()) {
+                        playerRepository.save(player);
+                    } else {
+                        log.info("add to ignore list non-eligible player {}:{}",
+                                playerItem.getFullName(),
+                                playerItem.getUniqueName());
+                        ignoredPlayers.add(playerItem.getUniqueName());
+                    }
+                });
 
         long e = System.currentTimeMillis();
         log.info("LoadPlayersTask finished at {}, elapse time {} seconds",

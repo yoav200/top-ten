@@ -74,7 +74,7 @@ public class PlayersController {
         return playersService.loadPlayersItems().stream()
                 .filter(p -> p.getFullName()
                         .toLowerCase()
-                        .contains(query))
+                        .contains(query.toLowerCase()))
                 .limit(15)
                 .collect(Collectors.toList());
     }

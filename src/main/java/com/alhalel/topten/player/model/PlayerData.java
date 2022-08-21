@@ -9,6 +9,8 @@ import lombok.Data;
 public class PlayerData {
     private String uniqueName;
 
+    private Integer playerReference;
+
     private String fullName;
 
     private String country;
@@ -37,8 +39,11 @@ public class PlayerData {
 
     private String externalLink;
 
+    private String externalLink2;
+
     public PlayerData(Player player) {
         this.uniqueName = player.getUniqueName();
+        this.playerReference = getPlayerReference();
         this.fullName = player.getPlayerInfo().getFullName();
         this.country = player.getPlayerInfo().getCountry();
         this.imageUrl = player.getPlayerInfo().getImageUrl();

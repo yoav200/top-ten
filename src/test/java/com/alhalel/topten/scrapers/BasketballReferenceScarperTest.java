@@ -22,7 +22,7 @@ class BasketballReferenceScarperTest {
     }
 
     @Test
-    void ScarperForMJ() throws IOException {
+    void scarperForMJ() throws IOException {
         PlayerItem build = PlayerItem.builder()
                 .uniqueName("jordami01")
                 .build();
@@ -33,7 +33,7 @@ class BasketballReferenceScarperTest {
     }
 
     @Test
-    void ScarperForDrJ() throws IOException {
+    void scarperForDrJ() throws IOException {
         PlayerItem build = PlayerItem.builder()
                 .uniqueName("ervinju01")
                 .build();
@@ -44,7 +44,7 @@ class BasketballReferenceScarperTest {
     }
 
     @Test
-    void ScarperForJA() throws IOException {
+    void scarperForJA() throws IOException {
         PlayerItem build = PlayerItem.builder()
                 .uniqueName("moranja01")
                 .build();

@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 public class NbaStatsScrapper {
 
-    private static final String PLAYER_URL = "player/%s/%s";
+    private static final String PLAYER_URL = "player/%s/career";
 
     private final ScraperConfig config;
 
@@ -33,8 +33,8 @@ public class NbaStatsScrapper {
 
     private ObjectMapper objectMapper;
 
-    public String getPlayerUrl(String playerId, String uniqueName) {
-        return config.getBasketballReferenceUrl() + String.format(PLAYER_URL, playerId, uniqueName);
+    public String getPlayerUrl(String playerId) {
+        return config.getBasketballReferenceUrl() + String.format(PLAYER_URL, playerId);
     }
 
     public List<NbaStatsPlayerData> loadPlayersDataFile() {

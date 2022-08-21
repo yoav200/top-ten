@@ -5,12 +5,8 @@ import com.google.common.io.Resources;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +24,32 @@ public class LocalResourceUtils {
 
     private static final Random random = new Random();
 
-    private final List<String> backgrounds = new ArrayList<>();
+    private final List<String> backgrounds = List.of(
+            "alex-george-J7qnlH2PUpg-unsplash.jpg",
+            "edgar-chaparro-kB5DnieBLtM-unsplash.jpg",
+            "jason-leung-nM2WEy42Npg-unsplash.jpg",
+            "tj-dragotta-Gl0jBJJTDWs-unsplash.jpg",
+            "tom-briskey-AddAnDkkovM-unsplash.jpg",
+            "WallpaperDog-10707280.jpg",
+            "WallpaperDog-10881787.jpg",
+            "WallpaperDog-10881795.jpg",
+            "WallpaperDog-10881797.jpg",
+            "WallpaperDog-10881820.jpg",
+            "WallpaperDog-10881823.jpg",
+            "WallpaperDog-10881829.jpg",
+            "WallpaperDog-10881832.jpg",
+            "WallpaperDog-10881867.jpg",
+            "WallpaperDog-10881895.jpg",
+            "WallpaperDog-10881996.jpg",
+            "WallpaperDog-14636.jpg",
+            "WallpaperDog-899041.jpg",
+            "WallpaperDog-963777.jpg",
+            "WallpaperDog-963786.jpg",
+            "WallpaperDog-963787.jpg",
+            "WallpaperDog-963800.jpg",
+            "WallpaperDog-963817.jpg",
+            "WallpaperDog-963900.jpg");
+
 
     public InputStream loadResourceFile(String path) throws IOException {
         return Resources.getResource(path).openStream();
@@ -49,32 +70,27 @@ public class LocalResourceUtils {
     }
 
     private List<String> getBackgrounds() {
-        if (backgrounds.isEmpty()) {
-            backgrounds.addAll(loadBackgrounds(STATIC_IMAGES_BGS));
-            loadBackgrounds("static/");
-            loadBackgrounds("data/");
-        }
         return backgrounds;
     }
 
-    private List<String> loadBackgrounds(String path) {
-        log.info("loading resources from path {}", path);
-        List<String> lines = new ArrayList<>();
-        try {
-            InputStream is = Resources.getResource(path).openStream();
-            try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
-                 BufferedReader reader = new BufferedReader(streamReader)) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    log.info(line);
-                    lines.add(line);
-                }
-            } finally {
-                log.info("loaded {} lines", lines.size());
-            }
-        } catch (Exception e) {
-            log.warn("Fail to load lines from path {}", path, e);
-        }
-        return lines;
-    }
+//    private List<String> loadBackgrounds(String path) {
+//        log.info("loading resources from path {}", path);
+//        List<String> lines = new ArrayList<>();
+//        try {
+//            InputStream is = Resources.getResource(path).openStream();
+//            try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
+//                 BufferedReader reader = new BufferedReader(streamReader)) {
+//                String line;
+//                while ((line = reader.readLine()) != null) {
+//                    log.info(line);
+//                    lines.add(line);
+//                }
+//            } finally {
+//                log.info("loaded {} lines", lines.size());
+//            }
+//        } catch (Exception e) {
+//            log.warn("Fail to load lines from path {}", path, e);
+//        }
+//        return lines;
+//    }
 }

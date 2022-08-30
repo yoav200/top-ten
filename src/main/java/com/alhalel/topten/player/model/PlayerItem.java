@@ -8,13 +8,12 @@ import lombok.Getter;
 public class PlayerItem {
 
     private String uniqueName;
+
+    private Integer playerId;
     private String fullName;
     private String yearsActive;
 
-    private String imageUrl;
-
     private boolean active;
-
 
     public String getId() {
         return uniqueName;

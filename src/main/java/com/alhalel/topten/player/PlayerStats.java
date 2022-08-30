@@ -68,6 +68,25 @@ public class PlayerStats {
 
     private double bpm;
 
+
+    public void update(PlayerStats stats) {
+        setGames(stats.games);
+        setPtsPerGame(stats.ptsPerGame);
+        setTrbPerGme(stats.trbPerGme);
+        setAstPerGame(stats.astPerGame);
+        setStlPerGame(stats.stlPerGame);
+        setBlkPerGame(stats.blkPerGame);
+        setTovPerGame(stats.tovPerGame);
+        setFgPct(stats.fgPct);
+        setFg3Pct(stats.fg3Pct);
+        setFtPct(stats.ftPct);
+        setEfgPct(stats.efgPct);
+        setPer(stats.per);
+        setWs(stats.ws);
+        setWsPer48(stats.wsPer48);
+        setBpm(stats.bpm);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

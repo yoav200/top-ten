@@ -85,6 +85,25 @@ public class PlayerAchievements {
         return getClass().hashCode();
     }
 
+    public void update(PlayerAchievements achievements) {
+        setChampionships(achievements.championships);
+        setChampionshipsAba(achievements.championshipsAba);
+        setFinalsMvp(achievements.finalsMvp);
+        setLeagueMvp(achievements.leagueMvp);
+        setScoringChamp(achievements.scoringChamp);
+        setReboundChamp(achievements.reboundChamp);
+        setAssistChamp(achievements.assistChamp);
+        setStealsChamp(achievements.stealsChamp);
+        setBlocksChamp(achievements.blocksChamp);
+        setDefensivePlayerOfTheYear(achievements.defensivePlayerOfTheYear);
+        setAllNba(achievements.allNba);
+        setAllDefensive(achievements.allDefensive);
+        setAllStar(achievements.allStar);
+        setAllStarMvp(achievements.allStarMvp);
+        setRookieOfTheYear(achievements.rookieOfTheYear);
+        setMostImprove(achievements.mostImprove);
+    }
+
     @Override
     public String toString() {
         return "PlayerAchievements{" +

@@ -18,7 +18,7 @@
 
             <div class="card mb-3">
                 <div class="row g-0 border">
-                    <div class="col-md-2">
+                    <div class="col-md-1 m-4">
                         <img th:if="${player.playerInfo.imageUrl}"
                              class="img-fluid rounded-start"
                              itemscope="image"
@@ -26,7 +26,7 @@
                              alt="Photo of ${player.playerInfo.fullName}" src="">
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="card-body">
                             <h3 class="card-title" th:text="${player.playerInfo.fullName}"></h3>
                             <table class="table card-text">
@@ -39,6 +39,24 @@
                                     <th scope="row">Years Active</th>
                                     <td><span th:text="${player.playerInfo.yearsActive}"></span></td>
                                 </tr>
+                                <tr>
+                                    <th scope="row">Position</th>
+                                    <td><span th:text="${player.playerInfo.position}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold">Height</span>
+                                        <span th:text="${player.playerInfo.height}"></span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold">Weight</span>
+                                        <span th:text="${player.playerInfo.weight}"></span>
+                                    </td>
+                                </tr>
+<!--                                <tr>-->
+<!--                                    <th scope="row">Collages</th>-->
+<!--                                    <td><span th:text="${player.playerInfo.colleges}"></span></td>-->
+<!--                                </tr>-->
                                 <tr>
                                     <th scope="row">Games Played (Season)</th>
                                     <td><span th:text="${player.getCareerPerGame.games}"></span></td>
@@ -61,15 +79,13 @@
                         </div>
                     </div>
 
-                    <div th:unless="${player.eligibleForSaving}" class="col-md-5">
-                        <div class="card-body">
+                    <div class="col-md-4 ms-5">
+                        <div class="card-body" th:unless="${player.eligibleForRanking}">
                             <h3 class="card-title">Ranking</h3>
                             <span class="card-text">This player is not eligible for Ranking</span>
                         </div>
-                    </div>
 
-                    <div th:if="${player.eligibleForSaving}" class="col-md-5">
-                        <div class="card-body">
+                        <div class="card-body" th:if="${player.eligibleForRanking}">
                             <h3 class="card-title">Ranking</h3>
                             <table class="table card-text">
                                 <tbody>
@@ -313,7 +329,7 @@
                         <i class='fas fa-external-link-alt'></i>
                         <a target="_blank" th:href="${playerData.externalLink2}" class="">NBA Stats</a>
                     </div>
-                    </p>
+
                 </div>
             </div>
 

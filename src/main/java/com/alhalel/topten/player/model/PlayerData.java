@@ -21,7 +21,7 @@ public class PlayerData {
 
     private boolean active;
 
-    private boolean eligibleForSaving;
+    private boolean eligibleForRanking;
 
     private double games;
 
@@ -49,7 +49,7 @@ public class PlayerData {
         this.imageUrl = player.getPlayerInfo().getImageUrl();
         this.yearsActive = player.getPlayerInfo().getYearsActive();
         this.active = player.getPlayerInfo().isActive();
-        this.eligibleForSaving = player.isEligibleForSaving();
+        this.eligibleForRanking = player.isEligibleForRanking();
         this.games = player.getCareerPerGame().getGames();
         this.ptsPerGame = player.getCareerPerGame().getPtsPerGame();
         this.trbPerGme = player.getCareerPerGame().getTrbPerGme();

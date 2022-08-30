@@ -29,14 +29,15 @@ import java.util.regex.Pattern;
 /**
  * a Scrapper for <a href="https://www.basketball-reference.com/">basketball-reference</a>
  * based on data from the Session Storage key: bbr__bbr__players__csv
- *
  */
 @Log4j2
 @Service
 @AllArgsConstructor
-public class BasketballReferenceScarper {
+public class BasketballReferenceScraper implements Scraper {
 
     private static final String COMMA_DELIMITER = ",";
+
+    private static final String PLAYERS_URL = "players/%s/";
 
     private static final String PLAYER_URL = "players/%s/%s.html";
 
@@ -66,13 +67,13 @@ public class BasketballReferenceScarper {
                 "playoffs_advanced",
                 PlayerStats.StatsFor.PLAYOFFS);
 
-
         Player player = new Player();
         player.setUniqueName(playerItem.getUniqueName());
-        player.setPlayerInfo(getPlayerInfo(playerItem, doc, "meta"));
-        player.setAchievements(getPlayerAchievements(doc, "bling"));
+        player.setPlayerReference(playerItem.getPlayerId());
+        player.setPlayerInfo(getPlayerInfo(playerItem, doc));
+        player.setAchievements(getPlayerAchievements(doc));
         player.setPlayerStats(Set.of(playerStats, playerPlayoffsStats));
-        player.setEligibleForSaving(playerStats.getGames() > config.getMinGamesLimit());
+        player.setEligibleForRanking(config.isEligibleForRanking(playerStats.getGames(), playerStats.getPer()));
 
         return player;
     }
@@ -82,31 +83,60 @@ public class BasketballReferenceScarper {
         return config.getBasketballReferenceUrl() + String.format(PLAYER_URL, letter, uniqueName);
     }
 
-    public PlayerInfo getPlayerInfo(PlayerItem playerItem, Document doc, String id) {
+    public PlayerInfo getPlayerInfo(PlayerItem playerItem, Document doc) {
         PlayerInfo.PlayerInfoBuilder infoBuilder = PlayerInfo.builder()
                 .fullName(playerItem.getFullName())
                 .yearsActive(playerItem.getYearsActive())
                 .active(playerItem.isActive());
 
-        Optional.ofNullable(doc.getElementById(id)).ifPresent(info -> {
+        Optional.ofNullable(doc.getElementById("meta")).ifPresent(info -> {
             // player image
             Optional.ofNullable(info.select("div.media-item img").first())
                     .ifPresent(element -> infoBuilder.imageUrl(element.attr("src")));
-
             // DOB
             Optional.ofNullable(info.getElementById("necro-birth"))
                     .ifPresent(element -> infoBuilder.DOB(element.attr("data-birth")));
-
-            //Elements elements = info.select("p");
         });
+
+        getExtraPlayerInfo(playerItem, infoBuilder);
 
         return infoBuilder.build();
     }
 
-    private PlayerAchievements getPlayerAchievements(Document doc, String id) {
+    private void getExtraPlayerInfo(PlayerItem playerItem, PlayerInfo.PlayerInfoBuilder infoBuilder) {
+
+        String letter = playerItem.getUniqueName().substring(0, 1);
+        String playersPage = config.getBasketballReferenceUrl() + String.format(PLAYERS_URL, letter);
+
+        try {
+            Document doc = Jsoup.connect(playersPage).get();
+
+            Optional.ofNullable(doc.getElementById("players"))
+                    .flatMap(table -> table.select("tbody tr").stream()
+                            .filter(tr -> tr.select("th").attr("data-append-csv").equalsIgnoreCase(playerItem.getUniqueName()))
+                            .findFirst()).ifPresent(tr -> {
+
+                        Optional<String> start = StringValue(tr.select("td[data-stat=year_min]"));
+                        Optional<String> end = StringValue(tr.select("td[data-stat=year_max]"));
+
+                        start.flatMap(s -> end.map(e -> s + "-" + e)).ifPresent(infoBuilder::yearsActive);
+
+                        StringValue(tr.select("td[data-stat=pos]")).ifPresent(infoBuilder::position);
+                        StringValue(tr.select("td[data-stat=height]")).ifPresent(infoBuilder::height);
+                        StringValue(tr.select("td[data-stat=weight]")).ifPresent(infoBuilder::weight);
+                        StringValue(tr.select("td[data-stat=birth_date]")).ifPresent(infoBuilder::DOB);
+                        StringValue(tr.select("td[data-stat=colleges]")).ifPresent(infoBuilder::colleges);
+                    });
+
+        } catch (Exception e) {
+            log.warn("Fail to get player {} extra info", playerItem.getUniqueName());
+        }
+    }
+
+    private PlayerAchievements getPlayerAchievements(Document doc) {
         PlayerAchievements.PlayerAchievementsBuilder builder = PlayerAchievements.builder();
 
-        Optional.ofNullable(doc.getElementById(id)).ifPresent(ul -> {
+        Optional.ofNullable(doc.getElementById("bling")).ifPresent(ul -> {
             for (Element item : ul.select("li")) {
                 String itemValue = item.text();
                 String award = "";
@@ -217,6 +247,10 @@ public class BasketballReferenceScarper {
         });
     }
 
+    private Optional<String> StringValue(Elements elements) {
+        return Optional.ofNullable(elements.first()).map(Element::text);
+    }
+
     private void downloadImage(String imageUrl, String filepath) throws IOException {
         //Open a URL Stream
         Connection.Response resultImageResponse = Jsoup
@@ -231,7 +265,13 @@ public class BasketballReferenceScarper {
         out.close();
     }
 
-    public List<PlayerItem> loadPlayersDataFile() {
+    @Override
+    public boolean isMain() {
+        return true;
+    }
+
+    @Override
+    public List<PlayerItem> loadPlayers() {
         List<PlayerItem> playerItems = new ArrayList<>();
 
         try (InputStream resourceAsStream = localResourceUtils.loadResourceFile(LocalResourceUtils.PLAYERS_DATA_FILE_1);
@@ -241,6 +281,7 @@ public class BasketballReferenceScarper {
                 String[] values = line.split(COMMA_DELIMITER);
                 PlayerItem playerItem = PlayerItem.builder()
                         .uniqueName(values[0])
+                        //.playerId()
                         .fullName(values[1])
                         .yearsActive(values[2])
                         .active(BooleanUtils.toBoolean(values[3]))

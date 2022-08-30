@@ -10,15 +10,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class BasketballReferenceScarperTest {
+class BasketballReferenceScraperTest {
 
-    private BasketballReferenceScarper scarper;
+    private BasketballReferenceScraper scarper;
 
     @BeforeEach
     void setUp() {
         ScraperConfig config = new ScraperConfig();
         config.setBasketballReferenceUrl("https://www.basketball-reference.com/");
-        scarper = new BasketballReferenceScarper(config, new LocalResourceUtils());
+        scarper = new BasketballReferenceScraper(config, new LocalResourceUtils());
     }
 
     @Test

@@ -49,7 +49,7 @@ public class PlayerInfo {
 
     private String height;
 
-    private String wight;
+    private String weight;
 
     private String draft;
 
@@ -59,8 +59,26 @@ public class PlayerInfo {
 
     private boolean active;
 
+    private String colleges;
+
     public String getImageUrl() {
         return StringUtils.defaultIfBlank(this.imageUrl, LocalResourceUtils.defaultPlayerAvatar());
+    }
+
+    public void update(PlayerInfo info) {
+        setFullName(info.fullName);
+        setYearsActive(info.yearsActive);
+        setActive(info.active);
+        setImageUrl(info.imageUrl);
+        setDOB(info.DOB);
+        setPosition(info.position);
+        setWeight(info.weight);
+        setHeight(info.height);
+        setColleges(info.colleges);
+        // do you believe in magic?
+        setNBADebut(info.NBADebut);
+        setCountry(info.country);
+        setDraft(info.draft);
     }
 
     @Override
@@ -88,7 +106,7 @@ public class PlayerInfo {
                 ", position='" + position + '\'' +
                 ", DOB='" + DOB + '\'' +
                 ", height='" + height + '\'' +
-                ", wight='" + wight + '\'' +
+                ", wight='" + weight + '\'' +
                 ", draft='" + draft + '\'' +
                 ", NBADebut='" + NBADebut + '\'' +
                 ", yearsActive='" + yearsActive + '\'' +

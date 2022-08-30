@@ -50,7 +50,7 @@ public class Player {
     private Set<PlayerStats> playerStats;
 
     @Transient
-    private boolean eligibleForSaving = true;
+    private boolean eligibleForRanking = true;
 
     public void setPlayerInfo(PlayerInfo playerInfo) {
         this.playerInfo = playerInfo;
@@ -79,6 +79,14 @@ public class Player {
         return getPlayerStats().stream()
                 .filter(s -> s.getStatsFor().equals(PlayerStats.StatsFor.PLAYOFFS))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("Player has no career stats"));
+    }
+
+    public void update(Player player) {
+        setPlayerReference(player.getPlayerReference());
+        player.getPlayerInfo().update(player.getPlayerInfo());
+        player.getAchievements().update(player.getAchievements());
+        player.getCareerPerGame().update(player.getCareerPerGame());
+        player.getPlayoffsPerGame().update(player.getPlayoffsPerGame());
     }
 
     @Override

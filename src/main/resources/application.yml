@@ -16,7 +16,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL81Dialect
-    show-sql: true
+    show-sql: false
     open-in-view: false
 
   flyway:
@@ -76,6 +76,9 @@ service:
     basketball-reference-url: "https://www.basketball-reference.com/"
     nba-stats: "https://www.nba.com/"
     min-games-limit: 82
+    min-per: 10
+    active-player-update-days: 7
+    inactive-player-update-days: 23
   players:
     random-fetch-size: 4
   ranking:

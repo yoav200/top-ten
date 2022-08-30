@@ -33,12 +33,12 @@ public class PlayersController {
 
 
     @GetMapping(value = {"", "/"})
-    public String players(Model model) {
-        return "players";
+    public String players() {
+        return "players/players";
     }
 
     @GetMapping("/{playerId}")
-    public String showPlayer(
+    public String player(
             @PathVariable("playerId") String playerId,
             Model model,
             Principal p) {
@@ -57,7 +57,7 @@ public class PlayersController {
 
         model.addAttribute("player", player);
         model.addAttribute("playerData", playersService.getPlayerData(player));
-        return "player";
+        return "players/player";
     }
 
     // ~ ============  JSON Response

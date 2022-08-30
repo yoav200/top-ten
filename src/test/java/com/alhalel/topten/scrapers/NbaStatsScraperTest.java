@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class NbaStatsScrapperTest {
+class NbaStatsScraperTest {
 
-    private NbaStatsScrapper scrapper;
+    private NbaStatsScraper scrapper;
 
     @BeforeEach
     void setUp() {
         ScraperConfig config = new ScraperConfig();
         config.setBasketballReferenceUrl("https://www.nba.com/stats/");
-        scrapper = new NbaStatsScrapper(config, new LocalResourceUtils(), new ObjectMapper());
+        scrapper = new NbaStatsScraper(config, new LocalResourceUtils(), new ObjectMapper());
     }
 
     @Test

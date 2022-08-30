@@ -73,7 +73,7 @@ public class RankingService {
             Player player,
             Integer rank) {
 
-        if (!player.isEligibleForSaving()) {
+        if (!player.isEligibleForRanking()) {
             throw new IllegalArgumentException("Player " + player.getPlayerInfo().getFullName() + " is not Eligible for ranking");
         }
 

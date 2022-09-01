@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${HEROKU_POSTGRESQL_AQUA_URL}
+    url: ${DATABASE_URL}
   jpa:
     hibernate:
       ddl-auto: none

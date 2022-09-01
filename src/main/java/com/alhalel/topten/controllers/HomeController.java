@@ -25,6 +25,11 @@ public class HomeController {
         return "Hello, World";
     }
 
+    @GetMapping(value = {"/login"})
+    String login() {
+        return "login";
+    }
+
     @GetMapping(value = {"/", "index"})
     String index(Model model) {
         MessageHolder messageHolder = new MessageHolder();

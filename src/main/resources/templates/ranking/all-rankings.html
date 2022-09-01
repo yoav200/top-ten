@@ -19,59 +19,65 @@
             </li>
         </ul>
 
-        <div class="p-4 mt-4 bg-light rounded-3">
-            <h3 th:if="${page.getTotalElements() > 0}">All Lists</h3>
-            <h3 th:if="${page.getTotalElements() == 0}">No lists yet...</h3>
-        </div>
-
-        <div th:if="${page.getTotalElements() == 0}" class="col mt-4 rounded-3"
-             th:style="'background-image: url(' + @{/static/bg} + ' ); background-size: 100% 100%; height:700px; border: 1px solid #000;'">
-        </div>
-
-        <div th:if="${page.getTotalElements() > 0}" class="p-4 mt-4 bg-light rounded-3">
-            <div class="row">
-                <div class="card p-0"
-                     th:each="rankList, iStat : ${page.content}"
-                     th:style="${iStat.odd}? 'font-weight: bold;'">
-
-                    <div class="card-header">
-                        List by:
-                        <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"
-                             style="width:75px;"/>
-                        <span th:text="${rankList.user.name}"></span>
-                    </div>
-
-                    <ul class="list-group list-group-flush list-group-horizontal">
-                        <li class="list-group-item list-group-item-action list-group-item-light"
-                            th:each="item,pStat : ${rankList.sortedRankListItems}"
-                            th:unless="${pStat.index > 5}">
-                            <i th:class="'fa-solid fa-'+${item.rank}" style='font-size:24px'></i>
-                            <img th:if="${item.player.playerInfo.imageUrl}"
-                                 class="img-fluid rounded-start"
-                                 th:src="${item.player.playerInfo.imageUrl}"
-                                 th:title="${item.player.playerInfo.fullName}"
-                                 style="width:90px; height: 134px">
-                        </li>
-                        <li class="list-group-item list-group-item-action list-group-item-light" style="width: 150px;">
-                            <a th:href="'/ranking/lists/' + ${rankList.id}"
-                               class="list-group-item rounded-3" aria-current="true">
-                                <img th:src="@{/images/player-icon.png}"
-                                     alt="Photo of Some player"
-                                     style="width: 130px;">
-                            </a>
-                        </li>
-                    </ul>
+        <div class="p-4 bg-light rounded-3">
+            <div th:if="${page.getTotalElements() == 0}">
+                <h3>No lists yet...</h3>
+                <div class="col mt-4"
+                     th:style="'background-image: url(' + @{/static/bg} + ' ); background-size: 100% 100%; height:700px; border: 1px solid #000;'">
                 </div>
             </div>
 
-            <ul class="pagination mt-3">
-                <li class="page-item" th:if="${page.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
-                    <a th:href="@{/ranking/lists(size=${page.size}, page=${pageNumber})}"
-                       th:text=${pageNumber}
-                       th:class="${pageNumber==page.number + 1} ? 'page-link active':'page-link'"></a>
-                </li>
-            </ul>
+            <div th:if="${page.getTotalElements() > 0}">
+                <h3 >All Lists</h3>
+
+                <div class="mt-4">
+                    <div class="row">
+                        <div class="card p-0"
+                             th:each="rankList, iStat : ${page.content}"
+                             th:style="${iStat.odd}? 'font-weight: bold;'">
+
+                            <div class="card-header">
+                                List by:
+                                <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"
+                                     style="width:75px;"/>
+                                <span th:text="${rankList.user.name}"></span>
+                            </div>
+
+                            <ul class="list-group list-group-flush list-group-horizontal">
+                                <li class="list-group-item list-group-item-action list-group-item-light"
+                                    th:each="item,pStat : ${rankList.sortedRankListItems}"
+                                    th:unless="${pStat.index > 5}">
+                                    <i th:class="'fa-solid fa-'+${item.rank}" style='font-size:24px'></i>
+                                    <img th:if="${item.player.playerInfo.imageUrl}"
+                                         class="img-fluid rounded-start"
+                                         th:src="${item.player.playerInfo.imageUrl}"
+                                         th:title="${item.player.playerInfo.fullName}"
+                                         style="width:90px; height: 134px">
+                                </li>
+                                <li class="list-group-item list-group-item-action list-group-item-light" style="width: 150px;">
+                                    <a th:href="'/ranking/lists/' + ${rankList.id}"
+                                       class="list-group-item rounded-3" aria-current="true">
+                                        <img th:src="@{/images/player-icon.png}"
+                                             alt="Photo of Some player"
+                                             style="width: 130px;">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <ul class="pagination mt-3">
+                        <li class="page-item" th:if="${page.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
+                            <a th:href="@{/ranking/lists(size=${page.size}, page=${pageNumber})}"
+                               th:text=${pageNumber}
+                               th:class="${pageNumber==page.number + 1} ? 'page-link active':'page-link'"></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
         </div>
+
 
 
         <div class="alert alert-success" role="alert">

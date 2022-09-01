@@ -18,7 +18,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http
                 .cors()
                     .and()
@@ -27,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/test", "/images/**", "/static/**", "/css/**")
+                    .antMatchers("/", "/login", "/test", "/images/**", "/static/**", "/css/**")
                         .permitAll()
                     .antMatchers("/terms", "/about", "/privacy", "/contact")
                         .permitAll()
@@ -37,14 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers(HttpMethod.GET, "/players", "/players/**")
                         .permitAll()
-                    .antMatchers(HttpMethod.GET, "/ranking/lists")
+                    .antMatchers(HttpMethod.GET, "/ranking/lists", "/ranking/lists/*")
                         .permitAll()
                     .anyRequest()
                         .authenticated();
 
         http
                 .oauth2Login()
-                    .loginPage("/")
+                    .loginPage("/login")
                     .authorizationEndpoint()
                         .baseUri("/oauth2/authorization")
                         .and()
@@ -53,7 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .and()
                     .userInfoEndpoint()
                         .userService(customOAuth2UserService);
-
 
         http
                 .logout()

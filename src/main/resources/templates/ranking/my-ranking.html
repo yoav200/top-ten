@@ -119,15 +119,10 @@
                                                     <span th:text="${rankItem.player.playerInfo.fullName}"></span>
                                                 </a>
                                             </h5>
-                                            <p class="card-text"
-                                               th:text="${rankItem.player.playerInfo.yearsActive}"></p>
                                             <p class="card-text">
-                                                <small class="text-muted"
-                                                       th:if="${rankItem.player.playerInfo.active}"
-                                                       th:text="Active"></small>
-                                                <small class="text-muted"
-                                                       th:unless="${rankItem.player.playerInfo.active}"
-                                                       th:text="Retired"></small>
+                                                <span th:text="${rankItem.player.playerInfo.yearsActive}" class="me-2"></span>
+                                                <i th:unless="${rankItem.player.playerInfo.active}" class="fa-solid fa-person-cane" title="Retired"></i>
+                                                <i th:if="${rankItem.player.playerInfo.active}" class="fa-solid fa-person-walking" title="Active"></i>
                                             </p>
                                         </div>
                                     </div>

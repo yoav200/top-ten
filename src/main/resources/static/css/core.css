@@ -173,7 +173,22 @@ body {
 
 .main-content {
     position: relative;
-    margin-top: 85px;
+    margin-top: 70px;
+    border: 1px solid white;
+}
+
+.ad-container-1 {
+    min-height: 80px;
+    margin-top: 30px;
+    margin-bottom:30px;
+    color: white;
+      background: repeating-linear-gradient(
+        45deg,
+        #606dbc,
+        #606dbc 10px,
+        #465298 10px,
+        #465298 20px
+      );
 }
 
 a.disabled{

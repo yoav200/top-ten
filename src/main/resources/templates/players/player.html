@@ -8,9 +8,7 @@
 
 <div layout:fragment="content">
     <div class="container">
-
-        <div th:if="${player}" class="p-4 mt-4 bg-light rounded-3">
-
+        <div th:if="${player}" class="p-4 bg-light rounded-3">
             <form id="update-rank-form" method="post" action="/ranking/">
                 <input type="hidden" id="playerId" name="playerId">
                 <input type="hidden" id="rank" name="rank">
@@ -39,7 +37,6 @@
                                     <th scope="row">Years Active</th>
                                     <td>
                                         <span th:text="${player.playerInfo.yearsActive}" class="me-2"></span>
-
                                         <i th:unless="${player.playerInfo.active}" class="fa-solid fa-person-cane" title="Retired"></i>
                                         <i th:if="${player.playerInfo.active}" class="fa-solid fa-person-walking" title="Active"></i>
                                     </td>

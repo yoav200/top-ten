@@ -101,21 +101,19 @@ public class PlayersService {
     }
 
     public List<PlayerData> getRandomPlayers(int number) {
-        int tries = 0;
-        int maxTries = number + 2;
 
-        List<PlayerData> players = new ArrayList<>();
-        List<String> keysAsArray = new ArrayList<>(playersItems.keySet());
+        List<String> playersUniqueNames = playerRepository.getPlayersUniqueNames();
 
-        while (players.size() < number && tries < maxTries) {
-            String uniqueName = keysAsArray.get(random.nextInt(keysAsArray.size()));
-            PlayerData playerData = getPlayerData(getPlayer(uniqueName));
-            if (playerData.isEligibleForRanking()) {
-                players.add(playerData);
-            }
-            tries++;
+        List<String> players = new ArrayList<>();
+
+        while (players.size() < number) {
+            String uniqueName = playersUniqueNames.get(random.nextInt(playersUniqueNames.size()));
+            players.add(uniqueName);
         }
-        return players;
+
+        return playerRepository.findByUniqueNameIn(players).stream()
+                .map(this::getPlayerData)
+                .collect(Collectors.toList());
     }
 
     public PlayerData getPlayerData(Player player) {

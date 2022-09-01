@@ -37,21 +37,24 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Years Active</th>
-                                    <td><span th:text="${player.playerInfo.yearsActive}"></span></td>
+                                    <td>
+                                        <span th:text="${player.playerInfo.yearsActive}" class="me-2"></span>
+
+                                        <i th:unless="${player.playerInfo.active}" class="fa-solid fa-person-cane" title="Retired"></i>
+                                        <i th:if="${player.playerInfo.active}" class="fa-solid fa-person-walking" title="Active"></i>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Position</th>
                                     <td><span th:text="${player.playerInfo.position}"></span></td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <span class="fw-bold">Height</span>
-                                        <span th:text="${player.playerInfo.height}"></span>
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold">Weight</span>
-                                        <span th:text="${player.playerInfo.weight}"></span>
-                                    </td>
+                                    <th>Height</th>
+                                    <td><span th:text="${player.playerInfo.height}"></span></td>
+                                </tr>
+                                <tr>
+                                    <th>Weight</th>
+                                    <td><span th:text="${player.playerInfo.weight}"></span></td>
                                 </tr>
 <!--                                <tr>-->
 <!--                                    <th scope="row">Collages</th>-->
@@ -61,25 +64,18 @@
                                     <th scope="row">Games Played (Season)</th>
                                     <td><span th:text="${player.getCareerPerGame.games}"></span></td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">Is Active</th>
-                                    <td>
-                                        <span th:if="${player.playerInfo.active}">Yes</span>
-                                        <span th:unless="${player.playerInfo.active}">No</span>
-                                    </td>
-                                </tr>
                                 </tbody>
                             </table>
 
                             <p class="card-text">
                                 <small class="text-muted">
-                                    Last updated <span th:text="${player.updateDateTime}"></span>
+                                    Last updated <span th:text="${#temporals.format(player.updateDateTime, 'yyyy-MM-dd HH:mm')}"></span>
                                 </small>
                             </p>
                         </div>
                     </div>
 
-                    <div class="col-md-4 ms-5">
+                    <div class="col-md-5 ms-5">
                         <div class="card-body" th:unless="${player.eligibleForRanking}">
                             <h3 class="card-title">Ranking</h3>
                             <span class="card-text">This player is not eligible for Ranking</span>

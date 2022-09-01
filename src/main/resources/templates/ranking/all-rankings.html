@@ -36,7 +36,8 @@
 
                     <div class="card-header">
                         List by:
-                        <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle" style="width:75px;"/>
+                        <img th:src="${rankList.user.imageUrl}" class="img-thumbnail rounded-circle"
+                             style="width:75px;"/>
                         <span th:text="${rankList.user.name}"></span>
                     </div>
 
@@ -70,8 +71,24 @@
                        th:class="${pageNumber==page.number + 1} ? 'page-link active':'page-link'"></a>
                 </li>
             </ul>
-
         </div>
+
+
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading"><i class="fa-solid fa-circle-info"></i> Heads up!</h4>
+            <p>
+                We are working on the next Ranker generation. Not just all time the greatest list, but you'll be able to create list by:
+                <ul>
+                    <li>position</li>
+                    <li>statistic threshold</li>
+                    <li>active - current players</li>
+                    <li>and more!</li>
+                </ul>
+            </p>
+            <hr>
+            <p class="mb-0">So stay tuned.</p>
+        </div>
+
     </div>
 </div>
 
@@ -81,6 +98,7 @@
     $(document).ready(function() {
         console.log("Ready!");
     });
+
     </script>
 
 </th:block>

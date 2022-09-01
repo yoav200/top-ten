@@ -153,6 +153,7 @@ public class BasketballReferenceScraper implements Scraper {
                     times = 1;
                 }
 
+                // TODO: 30/08/2022 add Hall of fame award
                 if ("NBA Champ".equalsIgnoreCase(award)) {
                     builder.championships(times);
                 } else if ("ABA Champ".equalsIgnoreCase(award)) {

@@ -82,11 +82,11 @@ public class Player {
     }
 
     public void update(Player player) {
-        setPlayerReference(player.getPlayerReference());
-        player.getPlayerInfo().update(player.getPlayerInfo());
-        player.getAchievements().update(player.getAchievements());
-        player.getCareerPerGame().update(player.getCareerPerGame());
-        player.getPlayoffsPerGame().update(player.getPlayoffsPerGame());
+        this.setPlayerReference(player.getPlayerReference());
+        this.getPlayerInfo().update(player.getPlayerInfo());
+        this.getAchievements().update(player.getAchievements());
+        this.getCareerPerGame().update(player.getCareerPerGame());
+        this.getPlayoffsPerGame().update(player.getPlayoffsPerGame());
     }
 
     @Override

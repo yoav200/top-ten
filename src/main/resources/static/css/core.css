@@ -195,3 +195,10 @@ a.disabled{
     pointer-events: none;
     cursor: default;
 }
+
+
+footer {
+    position: relative;
+    margin-top: 40px;
+    padding: 5px;
+}

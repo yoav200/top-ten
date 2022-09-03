@@ -5,50 +5,51 @@
 
 
 <div th:fragment="header">
-    <header>
+    <nav class="navbar navbar-expand-sm fixed-top">
+        <div class="container justify-content-center">
+            <a href="/" class="navbar-brand"><i class="fa fa-cube"></i>Nba<b>Ranker</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <nav class="navbar navbar-expand-sm fixed-top">
-            <div class="container justify-content-center">
-                <a href="/" class="navbar-brand"><i class="fa fa-cube"></i>Nba<b>Ranker</b></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
 
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <form id="select-player-header-form" method="get" class="navbar-form form-inline col-md-4"
+                      role="search">
+                    <select id="player-search-header" class="form-select me-4">
+                        <option value="">Search player</option>
+                    </select>
+                </form>
 
-                    <form id="select-player-header-form" method="get" class="navbar-form form-inline col-md-4" role="search">
-                        <select id="player-search-header" class="form-select me-4">
-                            <option value="">Search player</option>
-                        </select>
-                    </form>
+                <div class="navbar-nav ms-auto">
+                    <a href="/players" class="nav-item nav-link"><i
+                            class="fas fa-basketball-ball"></i><span>Players</span></a>
+                    <a href="/ranking/lists" class="nav-item nav-link"><i class="fas fa-users"></i><span>Ranking</span></a>
+                    <a href="/ranking/my-list" class="nav-item nav-link"><i
+                            class="fas fa-list-alt"></i><span>My Ranking</span></a>
 
-                    <div class="navbar-nav ms-auto">
-                        <a href="/players" class="nav-item nav-link"><i class="fas fa-basketball-ball"></i><span>Players</span></a>
-                        <a href="/ranking/lists" class="nav-item nav-link"><i class="fas fa-users"></i><span>Ranking</span></a>
-                        <a href="/ranking/my-list" class="nav-item nav-link"><i class="fas fa-list-alt"></i><span>My Ranking</span></a>
+                    <div sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:src="${#authentication.getPrincipal().getImageUrl()}"
+                                 th:title="${#authentication.getPrincipal().getName()}"
+                                 class="rounded-circle"
+                                 height="25"/></a>
 
-                        <div sec:authorize="isAuthenticated()" class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <img th:src="${#authentication.getPrincipal().getImageUrl()}"
-                                     th:title="${#authentication.getPrincipal().getName()}"
-                                     class="rounded-circle"
-                                     height="25"/></a>
-
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <span class="dropdown-item" th:text="${#authentication.getPrincipal().getName()}"></span>
-                                <div class="divider dropdown-divider"></div>
-                                <a href="/profile" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a>
-                                <div class="divider dropdown-divider"></div>
-                                <a th:href="@{/logout}" class="dropdown-item"><i class="fa fa-sign-out"></i> Logout</a>
-                            </div>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <span class="dropdown-item" th:text="${#authentication.getPrincipal().getName()}"></span>
+                            <div class="divider dropdown-divider"></div>
+                            <a href="/profile" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a>
+                            <div class="divider dropdown-divider"></div>
+                            <a th:href="@{/logout}" class="dropdown-item"><i class="fa fa-sign-out"></i> Logout</a>
                         </div>
-
                     </div>
+
                 </div>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 </div>
 
 

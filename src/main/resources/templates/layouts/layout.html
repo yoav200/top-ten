@@ -66,15 +66,16 @@
 
 <body>
 
-<div th:replace="fragments/header :: header">&nbsp;</div>
+<header>
+    <div class="header-container" th:replace="fragments/header :: header">&nbsp;</div>
+</header>
 
 <main>
 
+    <!-- messages container -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
         <div id="toast-container"></div>
         <script id="toast-template" type="template">
-
-            <!-- Then put toasts within -->
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
                     <i class="bi-gift-fill"></i>
@@ -84,16 +85,15 @@
                 </div>
                 <div class="toast-body">{{text}}</div>
             </div>
-
         </script>
     </div>
 
     <div class="main-content">
 
-        <div class="container border ad-container-1">
-            &nbsp;
-        </div>
+        <!-- ad place holder -->
+        <div class="container border ad-container-1">&nbsp;</div>
 
+        <!-- main content -->
         <div layout:fragment="content">
             <p>Body contents</p>
         </div>
@@ -101,7 +101,10 @@
     </div>
 </main>
 
-<div th:replace="fragments/footer :: footer">&nbsp;</div>
+<footer>
+    <div th:replace="fragments/footer :: footer">&nbsp;</div>
+</footer>
+
 
 <script th:inline="javascript">
 

@@ -23,7 +23,7 @@
             <div th:if="${page.getTotalElements() == 0}">
                 <h3>No lists yet...</h3>
                 <div class="col mt-4"
-                     th:style="'background-image: url(' + @{/static/bg} + ' ); background-size: 100% 100%; height:700px; border: 1px solid #000;'">
+                     th:style="'background-image: url(' + @{/static/bg} + ' ); background-size: 100% 100%; min-height:700px; border: 1px solid #000;'">
                 </div>
             </div>
 
@@ -47,19 +47,20 @@
                                 <li class="list-group-item list-group-item-action list-group-item-light"
                                     th:each="item,pStat : ${rankList.sortedRankListItems}"
                                     th:unless="${pStat.index > 5}">
-                                    <i th:class="'fa-solid fa-'+${item.rank}" style='font-size:24px'></i>
+                                    <i th:if="${item.rank < 5}" th:class="'fa-solid fa-'+${item.rank}" style='font-size:24px'></i>
+                                    <i th:if="${item.rank > 5}" th:class="'fa-solid fa-question'" style='font-size:24px'></i>
                                     <img th:if="${item.player.playerInfo.imageUrl}"
                                          class="img-fluid rounded-start"
                                          th:src="${item.player.playerInfo.imageUrl}"
-                                         th:title="${item.player.playerInfo.fullName}"
-                                         style="width:90px; height: 134px">
+                                         th:title="${item.player.playerInfo.fullName}">
                                 </li>
-                                <li class="list-group-item list-group-item-action list-group-item-light" style="width: 150px;">
+                                <li class="list-group-item list-group-item-action list-group-item-light">
+                                    <i class="fa-solid fa-question" style='font-size:24px'></i>
                                     <a th:href="'/ranking/lists/' + ${rankList.id}"
-                                       class="list-group-item rounded-3" aria-current="true">
-                                        <img th:src="@{/images/player-icon.png}"
-                                             alt="Photo of Some player"
-                                             style="width: 130px;">
+                                        aria-current="true">
+                                        <img th:src="@{/images/player-icon-2.png}"
+                                             class="img-fluid rounded-start"
+                                             alt="Photo of Some player">
                                     </a>
                                 </li>
                             </ul>

@@ -7,13 +7,68 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <div class="bg-light rounded-3 p-4">
+
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#player-by-letter">Players by letter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#random-players">Random Players</a>
+            </li>
+        </ul>
+
+        <div id="player-by-letter" class="bg-light rounded-3 p-4">
+            <h1 class="display-5 fw-bold">Letters</h1>
+
+            <a th:each="letter, iStat : ${letters}"
+               th:href="@{/players(letter=${letter})}"
+               th:text="${letter}"
+                class="me-2"></a>
+
+            <hr class="">
+
+            <div th:if="${playersData}">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Active years</th>
+                        <th scope="col">Active</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Height</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col">ppg</th>
+                        <th scope="col">apg</th>
+                        <th scope="col">rpg</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="player, iStat : ${playersData}">
+                        <th><a th:href="@{ '/players/'  + ${player.uniqueName}}"><span th:text="${player.fullName}"></span></a></th>
+                        <td><span th:text="${player.yearsActive}"></span></td>
+                        <td>
+                            <i th:unless="${player.active}" class="fa-solid fa-person-cane" title="Retired"></i>
+                            <i th:if="${player.active}" class="fa-solid fa-person-walking" title="Active"></i>
+                        </td>
+                        <td><span th:text="${player.position}"></span></td>
+                        <td><span th:text="${player.height}"></span></td>
+                        <td><span th:text="${player.weight}"></span></td>
+                        <td><span th:text="${player.ptsPerGame}"></span></td>
+                        <td><span th:text="${player.trbPerGme}"></span></td>
+                        <td><span th:text="${player.astPerGame}"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="random-players" class="bg-light rounded-3 p-4">
             <div class="container-fluid mb-4">
                 <h1 class="display-5 fw-bold">Random Players
-                    <a id="refresh-btn" href="#" class="btn btn btn-success btn-lg">
+                    <button id="refresh-btn" class="btn btn btn-success btn-lg">
                         <span class="fa-solid fa-arrows-rotate"></span> Refresh
-                    </a>
-                 </h1>
+                    </button>
+                </h1>
             </div>
 
             <div id="spinner" class="spinner-border m-5" role="status">
@@ -82,8 +137,8 @@
                     </div>
                 </script>
             </div>
-
         </div>
+
     </div>
 </div>
 
@@ -134,6 +189,7 @@
             loadRandomPlayers();
         });
     });
+
     </script>
 
 </th:block>

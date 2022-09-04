@@ -10,9 +10,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-18C8E92NNH');
-
     </script>
 
     <meta charset="utf-8">
@@ -56,11 +54,9 @@
             integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA=="
             crossorigin="anonymous"
             referrerpolicy="no-referrer"></script>
-
     <!-- AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6321929599596974"
             crossorigin="anonymous"></script>
-
 </head>
 
 
@@ -71,10 +67,23 @@
 </header>
 
 <main>
-
     <!-- messages container -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-        <div id="toast-container"></div>
+        <div id="toast-container">
+            <div th:if="${messageHolder}">
+                <div th:each="message, iStat : ${messageHolder.messages}"
+                     class="toast" role="alert" aria-live="assertive" aria-atomic="true" >
+                    <div class="toast-header">
+                        <i class="bi-gift-fill"></i>
+                        <strong class="me-auto" th:text="${message.title}"></strong>
+                        <small class="text-muted" th:text="${message.timeAgo}"></small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body" th:text="${message.text}"></div>
+                </div>
+            </div>
+        </div>
+
         <script id="toast-template" type="template">
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
@@ -107,7 +116,6 @@
 
 
 <script th:inline="javascript">
-
     function addError(errors) {
         $('#toast-container').empty()
 
@@ -145,15 +153,13 @@
         }).change(function() {
             $('#select-player-header-form').attr('action', "/players/" + this.value).submit();
         });
+
+        $(".toast").toast("show");
+
     });
-
-
-
-
 </script>
 
 <th:block layout:fragment="script"></th:block>
-
 
 </body>
 </html>

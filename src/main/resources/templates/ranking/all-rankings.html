@@ -48,7 +48,7 @@
                                     th:each="item,pStat : ${rankList.sortedRankListItems}"
                                     th:unless="${pStat.index > 5}">
                                     <i th:if="${item.rank < 5}" th:class="'fa-solid fa-'+${item.rank}" style='font-size:24px'></i>
-                                    <i th:if="${item.rank > 5}" th:class="'fa-solid fa-question'" style='font-size:24px'></i>
+                                    <i th:unless="${item.rank < 5}" th:class="'fa-solid fa-question'" style='font-size:24px'></i>
                                     <img th:if="${item.player.playerInfo.imageUrl}"
                                          class="img-fluid rounded-start"
                                          th:src="${item.player.playerInfo.imageUrl}"

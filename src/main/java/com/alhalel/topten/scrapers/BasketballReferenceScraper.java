@@ -10,6 +10,7 @@ import com.alhalel.topten.util.LocalResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 /**
@@ -292,6 +294,9 @@ public class BasketballReferenceScraper implements Scraper {
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
-        return playerItems;
+        return playerItems.stream()
+                .filter(playerItem -> StringUtils.defaultIfBlank(playerItem.getYearsActive(), "").length() > 4
+                        && StringUtils.defaultIfBlank(playerItem.getFullName(), "").length() > 4)
+                .collect(Collectors.toList());
     }
 }

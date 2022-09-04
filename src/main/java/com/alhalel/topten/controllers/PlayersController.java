@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,9 +34,34 @@ public class PlayersController {
 
 
     @GetMapping(value = {"", "/"})
-    public String players() {
+    public String players(@RequestParam(value = "letter", required = false) String letter, Model model) {
+
+        Map<String, List<PlayerItem>> collect = playersService.loadPlayersItems().stream()
+                .collect(Collectors.groupingBy(
+                        playerItem -> playerItem.getUniqueName().substring(0, 1).toLowerCase()));
+
+        List<String> letters = collect.keySet().stream()
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+
+        if (letter != null) {
+            Optional.ofNullable(collect.get(letter.toLowerCase())).ifPresent(playerItems -> {
+                List<PlayerData> playersData = playerItems.stream()
+                        .map(playerItem -> playersService.findPlayer(playerItem.getUniqueName())
+                                .map(PlayerData::new)
+                                .orElse(new PlayerData(playerItem)))
+                        .sorted()
+                        .collect(Collectors.toList());
+
+                model.addAttribute("playersData", playersData);
+            });
+        }
+        model.addAttribute("letters", letters);
+
         return "players/players";
     }
+
 
     @GetMapping("/{playerId}")
     public String player(

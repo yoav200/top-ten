@@ -1,21 +1,24 @@
 # Top Ten Ranker
 
 ### Next features:
-- [ ] load players list from DB to reduce memory fingerprint
-- [ ] filter list by relevant players
-- [ ] add contact us form
-- [ ] votes for comments
-- [ ] scrap for player position
+- [X] load players list from DB to reduce memory fingerprint
+- [ ] multiple lists by filter
+    - [ ] best player by position
+    - [ ] best scores, min 25 point per game
+    - [ ] best all around, min 18 pt 6 rb 6 ast
+    - [ ] best defender, min 1 steals or block leader, min 1 def player of the year
+- [X] add contact us form
+- [X] votes for comments
+- [X] scrap for player position
 - [ ] add option to search players with filters (by achievements, stats, position )
 - [ ] add option to crate multiple lists by position, MVPS, champions, defensive players...
-- [ ] add [google analytics](https://analytics.google.com/)
-- [ ] add [google ads](https://ads.google.com/home/)
+- [X] add [google analytics](https://analytics.google.com/)
+- [X] add [google ads](https://ads.google.com/home/)
 
 
 #### Admin features
 - [ ] set Editor's Choice list from web
 - [ ] hide comments from web
-- [ ] contact us list view
 - [ ] accounts view
 - [ ] disable accounts
 

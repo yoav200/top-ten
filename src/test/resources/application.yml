@@ -56,6 +56,17 @@ spring:
       cache:
         period: 0
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: top.ten.ranker@gmail.com
+    password: vfsyypsugejnjspj
+    properties:
+      mail:
+        smtp.auth: true
+        smtp.starttls.enable: true
+        smtp.timeout: 5000
+        smtp.writetimeout: 5000
 
 logging:
   level:
@@ -68,12 +79,15 @@ service:
   admin-users: yoav200@gmail.com, roey.alhalel@gmail.com
   scrapers:
     basketball-reference-url: "https://www.basketball-reference.com/"
-    nba-stats: "https://www.nba.com/stats/"
+    nba-stats: "https://www.nba.com/"
     min-games-limit: 82
+    min-per: 10
+    active-player-update-days: 7
+    inactive-player-update-days: 23
   players:
     random-fetch-size: 4
   ranking:
-    editors-choice: 432
+    editors-choice: 41
     min-ranking: 1
     max-ranking: 50
   social:

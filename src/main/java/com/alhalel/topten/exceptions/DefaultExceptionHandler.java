@@ -18,7 +18,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 
-
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public Object handleException(Exception exception, HttpServletRequest request) {
@@ -37,7 +36,7 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
             return messageHolder;
         } else {
             // return error page name
-            return new ModelAndView("error", Map.of("messages", messageHolder));
+            return new ModelAndView("error", Map.of("messageHolder", messageHolder));
         }
     }
 

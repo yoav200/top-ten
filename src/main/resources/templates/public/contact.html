@@ -8,7 +8,7 @@
 <div layout:fragment="content">
     <div class="container">
 
-        <div class="bg-light p-4 mt-4 rounded-3 row">
+        <div class="bg-light p-4 mt-4 rounded-3 border">
             <h1 class="display-5 fw-bold">Contact us</h1>
             <p class="w-responsive mx-auto mb-5">
                 Do you have any questions?
@@ -16,80 +16,67 @@
             </p>
         </div>
 
-
-        <div class="bg-light p-4 mt-4 rounded-3 row" style=" border: 1px solid #000;">
-
-            <!--Grid column-->
+        <div class="row bg-light p-4 mt-4 rounded-3 border">
             <div class="col-md-9 mb-md-0 mb-5">
-                <form id="contact-form" name="contact-form" action="" method="POST">
 
-                    <!--Grid row-->
+                <form th:action="@{/contact}" th:object="${contactUsModel}" method="post" class="form">
                     <div class="row">
-
-                        <!--Grid column-->
                         <div class="col-md-6">
                             <div class="md-form mb-0">
-                                <input type="text" id="name" name="name" class="form-control">
                                 <label for="name" class="">Your name</label>
+                                <input type="text" id="name" name="name" class="form-control" th:field="*{name}" placeholder="Name" />
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                             </div>
                         </div>
-                        <!--Grid column-->
-
-                        <!--Grid column-->
                         <div class="col-md-6">
                             <div class="md-form mb-0">
-                                <input type="text" id="email" name="email" class="form-control">
                                 <label for="email" class="">Your email</label>
+                                <input type="text" id="email" name="email" class="form-control" th:field="*{email}" placeholder="Email" />
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                             </div>
                         </div>
-                        <!--Grid column-->
                     </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
                     <div class="row">
                         <div class="col-md-12">
                             <div class="md-form mb-0">
-                                <input type="text" id="subject" name="subject" class="form-control">
                                 <label for="subject" class="">Subject</label>
+                                <input type="text" id="subject" name="subject" class="form-control" th:field="*{subject}" placeholder="Subject" />
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></div>
                             </div>
                         </div>
                     </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
                     <div class="row">
-
-                        <!--Grid column-->
                         <div class="col-md-12">
                             <div class="md-form">
-                                <textarea id="message" name="message" rows="2" class="form-control md-textarea"></textarea>
                                 <label for="message">Your message</label>
+                                <textarea id="message"
+                                          name="message" rows="2"
+                                          class="form-control md-textarea"
+                                          th:field="*{message}"></textarea>
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></div>
                             </div>
                         </div>
                     </div>
-                    <!--Grid row-->
 
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
                 </form>
 
-                <div class="text-center text-md-left">
-                    <a class="btn btn-primary" id="submit-form">Send</a>
-                </div>
             </div>
-            <!--Grid column-->
 
-            <!--Grid column-->
             <div class="col-md-3 text-center">
                 <ul class="list-unstyled mb-0">
                     <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                        <p>top.ten.ranker@gmail.com</p>
+                        <p><a href="mailto:top.ten.ranker@gmail.com">top.ten.ranker@gmail.com</a></p>
                     </li>
                 </ul>
             </div>
-            <!--Grid column-->
-
         </div>
 
+        <div class="mt-4 rounded-3"
+             th:style="'background-image: url(' + @{/static/bg} + ' ); background-size: 100% 100%; min-height:600px; border: 1px solid #000;'">
+        </div>
 
     </div>
 </div>
@@ -99,10 +86,6 @@
     <script th:inline="javascript">
     $(document).ready(function() {
         console.log("Ready!");
-
-        $("#submit-form").click(function(){
-            alert("Soon very soon!");
-        });
     })
     </script>
 </th:block>

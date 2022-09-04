@@ -69,6 +69,13 @@ public class PlayersService {
         return playersItems.values();
     }
 
+    public Optional<Player> findPlayer(String uniqueName) {
+        // validate uniqueName exist
+        PlayerItem item = Optional.ofNullable(playersItems.get(uniqueName))
+                .orElseThrow(() -> new IllegalArgumentException("Player not found"));
+        return playerRepository.findPlayerByUniqueName(item.getUniqueName());
+    }
+
     public Player getPlayer(String uniqueName) {
         // validate uniqueName exist
         PlayerItem item = Optional.ofNullable(playersItems.get(uniqueName))

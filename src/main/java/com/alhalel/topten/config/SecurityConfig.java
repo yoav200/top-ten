@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers(HttpMethod.GET, "/players", "/players/**")
                         .permitAll()
-                    .antMatchers(HttpMethod.GET, "/ranking/lists", "/ranking/lists/*")
+                    .antMatchers(HttpMethod.GET, "/ranking/lists")
                         .permitAll()
                     .anyRequest()
                         .authenticated();

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class PlayersController {
                         .map(playerItem -> playersService.findPlayer(playerItem.getUniqueName())
                                 .map(PlayerData::new)
                                 .orElse(new PlayerData(playerItem)))
-                        .sorted()
+                        .sorted(Comparator.comparing(PlayerData::getFullName))
                         .collect(Collectors.toList());
 
                 model.addAttribute("playersData", playersData);

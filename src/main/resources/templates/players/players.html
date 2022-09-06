@@ -23,28 +23,29 @@
             <a th:each="letter, iStat : ${letters}"
                th:href="@{/players(letter=${letter})}"
                th:text="${letter}"
-                class="me-2"></a>
+               th:class="${#strings.equals(#request.getParameter('letter'), letter)} ? 'me-2 fs-4' : 'me-2'"></a>
 
             <hr class="">
 
             <div th:if="${playersData}">
-                <table class="table">
+                <table id="players-table" class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Active years</th>
-                        <th scope="col">Active</th>
-                        <th scope="col">Position</th>
-                        <th scope="col">Height</th>
-                        <th scope="col">Weight</th>
-                        <th scope="col">ppg</th>
-                        <th scope="col">apg</th>
-                        <th scope="col">rpg</th>
+                        <th>Full Name</th>
+                        <th>Active years</th>
+                        <th>Active</th>
+                        <th>Position</th>
+                        <th>Height</th>
+                        <th>Weight</th>
+                        <th>ppg</th>
+                        <th>apg</th>
+                        <th>rpg</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="player, iStat : ${playersData}">
-                        <th><a th:href="@{ '/players/'  + ${player.uniqueName}}"><span th:text="${player.fullName}"></span></a></th>
+                        <th><a th:href="@{ '/players/'  + ${player.uniqueName}}"><span
+                                th:text="${player.fullName}"></span></a></th>
                         <td><span th:text="${player.yearsActive}"></span></td>
                         <td>
                             <i th:unless="${player.active}" class="fa-solid fa-person-cane" title="Retired"></i>
@@ -142,6 +143,7 @@
     </div>
 </div>
 
+
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
@@ -183,12 +185,16 @@
     $(function () {
         console.log("Ready!");
 
+        $('#players-table').DataTable();
+
         loadRandomPlayers();
 
         $('#refresh-btn').click(function () {
             loadRandomPlayers();
         });
     });
+
+
 
     </script>
 

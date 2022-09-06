@@ -19,6 +19,14 @@ import java.util.stream.Collectors;
 @Table(name = "rank_list")
 public class RankList {
 
+    public enum RankListType {
+        ALL_TIME_GREATEST,
+        ALL_TIME_GREATEST_GUARDS,
+        ALL_TIME_GREATEST_FORWARDS,
+        ALL_TIME_GREATEST_CENTERS,
+        BEST_ACTIVE_PLAYERS
+    }
+
     public enum RankListVisibility {
         PRIVATE, SHARE_ANONYMOUSLY, SHARE
     }
@@ -35,6 +43,10 @@ public class RankList {
 
     private String title;
 
+    @Column(name = "list_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RankListType listType;
+
     @Enumerated(EnumType.STRING)
     private RankListVisibility visibility = RankListVisibility.SHARE;
 
@@ -45,7 +57,6 @@ public class RankList {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "rank_list_id", referencedColumnName = "id")
     private Set<RankListItem> rankListItems;
-
 
     public Set<RankListItem> getRankListItems() {
         if (this.rankListItems == null) {

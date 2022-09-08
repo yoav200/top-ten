@@ -11,6 +11,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-18C8E92NNH');
+
     </script>
 
     <meta charset="utf-8">
@@ -57,14 +58,14 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"></script>
     <!-- bootstrap5 dataTables js cdn -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
 
     <!-- AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6321929599596974"
             crossorigin="anonymous"></script>
 </head>
-
 
 <body>
 
@@ -78,7 +79,7 @@
         <div id="toast-container">
             <div th:if="${messageHolder}">
                 <div th:each="message, iStat : ${messageHolder.messages}"
-                     class="toast" role="alert" aria-live="assertive" aria-atomic="true" >
+                     class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
                         <i class="bi-gift-fill"></i>
                         <strong class="me-auto" th:text="${message.title}"></strong>
@@ -106,10 +107,10 @@
     <div class="main-content">
 
         <!-- ad place holder -->
-        <div class="container border ad-container-1">&nbsp;</div>
+        <!-- <div class="container border ad-container-1">&nbsp;</div> -->
 
         <!-- main content -->
-        <div layout:fragment="content">
+        <div layout:fragment="content" class="mt-4">
             <p>Body contents</p>
         </div>
 
@@ -163,6 +164,7 @@
         $(".toast").toast("show");
 
     });
+
 </script>
 
 <th:block layout:fragment="script"></th:block>

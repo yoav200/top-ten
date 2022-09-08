@@ -35,13 +35,6 @@ public class PlayerData {
 
     private String externalLink2;
 
-    public PlayerData(PlayerItem playerItem) {
-        this.uniqueName = playerItem.getUniqueName();
-        this.fullName = playerItem.getFullName();
-        this.yearsActive = playerItem.getYearsActive();
-        this.active = playerItem.isActive();
-    }
-
     public PlayerData(Player player) {
         this.uniqueName = player.getUniqueName();
         this.playerReference = getPlayerReference();

@@ -36,7 +36,7 @@
         <div th:if="${rankList}">
             <div class="p-4 mt-4 bg-light rounded-3">
                 <div class="row">
-                    <h3 class="col-8">This is Your Ranking List</h3>
+                    <h3 class="col-8">This is Your <span th:text="${rankList.listType}"></span> Ranking List</h3>
                     <div class="col-4 text-end">
                         <div class="input-group mb-3">
                             <span class="input-group-text">List Visibility:</span>

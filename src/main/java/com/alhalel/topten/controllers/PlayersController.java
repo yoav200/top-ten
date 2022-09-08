@@ -50,14 +50,16 @@ public class PlayersController {
             Optional.ofNullable(collect.get(letter.toLowerCase())).ifPresent(playerItems -> {
                 List<PlayerData> playersData = playerItems.stream()
                         .map(playerItem -> playersService.findPlayer(playerItem.getUniqueName())
-                                .map(PlayerData::new)
-                                .orElse(new PlayerData(playerItem)))
+                                .map(PlayerData::new))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
                         .sorted(Comparator.comparing(PlayerData::getFullName))
                         .collect(Collectors.toList());
 
                 model.addAttribute("playersData", playersData);
             });
         }
+        model.addAttribute("selectedLetter", letter);
         model.addAttribute("letters", letters);
 
         return "players/players";

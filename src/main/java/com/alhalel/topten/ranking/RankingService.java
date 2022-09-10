@@ -107,6 +107,8 @@ public class RankingService {
     public RankList createRankingListForUser(User user) {
         RankList rankList = new RankList();
         rankList.setUser(user);
+        rankList.setVisibility(RankList.RankListVisibility.SHARE);
+        rankList.setListType(RankList.RankListType.ALL_TIME_GREATEST);
         rankList.setTitle("Default list for user");
         return rankListRepository.save(rankList);
     }

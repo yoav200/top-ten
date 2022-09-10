@@ -45,7 +45,7 @@ public class RankList {
 
     @Column(name = "list_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private RankListType listType;
+    private RankListType listType = RankListType.ALL_TIME_GREATEST;
 
     @Enumerated(EnumType.STRING)
     private RankListVisibility visibility = RankListVisibility.SHARE;

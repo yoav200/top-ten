@@ -92,14 +92,14 @@
                                 <tr>
                                     <th scope="row">High</th>
                                     <td>
-                                        <span th:if="${statistics.isValid}" th:text="${statistics.rankHigh}"></span>
+                                        <span th:if="${statistics.isValid}" th:text="${statistics.rankLow}"></span>
                                         <span th:unless="${statistics.isValid}" th:text="'N/A'"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Low</th>
                                     <td>
-                                        <span th:if="${statistics.isValid}" th:text="${statistics.rankLow}"></span>
+                                        <span th:if="${statistics.isValid}" th:text="${statistics.rankHigh}"></span>
                                         <span th:unless="${statistics.isValid}" th:text="'N/A'"></span>
                                     </td>
                                 </tr>

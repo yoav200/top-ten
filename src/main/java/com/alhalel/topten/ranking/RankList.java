@@ -20,11 +20,21 @@ import java.util.stream.Collectors;
 public class RankList {
 
     public enum RankListType {
-        ALL_TIME_GREATEST,
-        ALL_TIME_GREATEST_GUARDS,
-        ALL_TIME_GREATEST_FORWARDS,
-        ALL_TIME_GREATEST_CENTERS,
-        BEST_ACTIVE_PLAYERS
+        ALL_TIME_GREATEST("All Time Greatest"),
+        ALL_TIME_GREATEST_GUARDS("All Time Greatest Guards"),
+        ALL_TIME_GREATEST_FORWARDS("All Time Greatest Forwards"),
+        ALL_TIME_GREATEST_CENTERS("All Time Greatest Centers"),
+        BEST_ACTIVE_PLAYERS("Best Active players");
+
+        private final String title;
+
+        RankListType(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 
     public enum RankListVisibility {
